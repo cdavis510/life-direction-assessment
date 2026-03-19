@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-navy text-white font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-navy
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply bg-navy-light rounded-2xl p-6 border border-white/10;
+  }
+
+  .input-text {
+    @apply w-full bg-navy-lighter border border-white/20 rounded-xl px-4 py-3
+           text-white placeholder-white/40 focus:outline-none focus:border-white/50
+           focus:ring-1 focus:ring-white/30 resize-none transition-colors;
+  }
+
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest text-white/40;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+/* Slider styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.2);
+  outline: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.user-mekhi input[type='range']::-webkit-slider-thumb { background: #06B6D4; }
+.user-melvin input[type='range']::-webkit-slider-thumb { background: #8B5CF6; }
+.user-mom input[type='range']::-webkit-slider-thumb { background: #F43F5E; }
+
+/* Prose styling for AI results */
+.ai-result {
+  line-height: 1.75;
+}
+
+.ai-result h2 {
+  @apply text-lg font-bold mt-6 mb-2;
+}
+
+.ai-result h3 {
+  @apply text-base font-semibold mt-4 mb-1;
+}
+
+.ai-result ul {
+  @apply list-disc list-inside space-y-1 my-3;
+}
+
+.ai-result p {
+  @apply my-3;
+}
+
+.ai-result strong {
+  @apply font-semibold;
+}

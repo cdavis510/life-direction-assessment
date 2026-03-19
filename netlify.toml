@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Environment variables are set in Netlify dashboard, not here.
+# Required vars:
+#   ANTHROPIC_API_KEY
+#   ELEVENLABS_API_KEY
+#   ELEVENLABS_VOICE_ID_QUINN
+#   ELEVENLABS_VOICE_ID_KANE
+#   ELEVENLABS_VOICE_ID_CALEB
+#   TEXTBELT_API_KEY
+#   SENDGRID_API_KEY
+#   SENDGRID_FROM_EMAIL
+#   SENDGRID_FROM_NAME
+#   SITE_URL
+#   VITE_FIREBASE_API_KEY
+#   VITE_FIREBASE_PROJECT_ID
+#   VITE_FIREBASE_APP_ID

@@ -578,11 +578,14 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     return (
       <div style={{ display: 'grid', gap: 12 }}>
         {options.map((opt, i) => {
-          const selected = value === opt;
+          // opt can be a plain string (shared sections) or {label, points} object (mk_*/mv_* sections)
+          const label = typeof opt === 'object' && opt !== null ? opt.label : opt;
+          // Store by index; handles both object and string option formats for scoring
+          const selected = value === i;
           return (
             <button
               key={i}
-              onClick={() => onChange(opt)}
+              onClick={() => onChange(i)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 14,
                 padding: '16px 18px', borderRadius: 16, textAlign: 'left',
@@ -603,7 +606,7 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
               }}>
                 {selected && <span style={{ width: 8, height: 8, borderRadius: '50%', background: accent }} />}
               </span>
-              <span>{opt}</span>
+              <span>{label}</span>
             </button>
           );
         })}

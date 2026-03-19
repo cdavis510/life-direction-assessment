@@ -56,14 +56,24 @@ export default function ResultsReveal() {
         ]);
         const prev = sessions.filter(s => s.id !== sessionId && s.status === 'complete');
         setPreviousSessions(prev);
+
         const sections = USER_SECTIONS[userId];
         if (sections) {
           try {
-            const pkg = buildResultsPackage(answers, sections);
+            const pkg = buildResultsPackage(answers, sections, userId);
             setScores(pkg);
             saveSessionScores(userId, sessionId, pkg).catch(() => {});
           } catch {}
         }
+
+        // ── Cache check: use stored analysis if session is already complete ──
+        const currentSession = sessions.find(s => s.id === sessionId);
+        if (currentSession?.status === 'complete' && currentSession?.results) {
+          setAnalysis(currentSession.results);
+          setPhase('complete');
+          return;
+        }
+
         setPhase('complete');
         generateAnalysis(answers, prev);
       } catch {
@@ -646,33 +656,58 @@ function CareerTabContent({ tab, bp, cfg }) {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getResultCards(analysis, scores, cfg) {
   const defaults = [
-    { title: 'Reality Check', body: 'Loading your personalized analysis…' },
-    { title: 'Strengths', body: 'Identified from your answers…' },
-    { title: 'Risks', body: 'Areas flagged for your attention…' },
-    { title: 'Direction', body: 'Your path forward is being built…' },
-    { title: 'Next Steps', body: 'Specific actions identified…' },
-    { title: 'Growth Focus', body: 'Key development areas for you…' },
+    { title: 'Future Direction',    body: 'Your personalized analysis is loading…' },
+    { title: 'Strengths',           body: 'Identified from your answers…' },
+    { title: 'Patterns to Address', body: 'Areas flagged for your attention…' },
+    { title: 'Behavior vs. Dream',  body: 'The honest read on where you are…' },
+    { title: 'Next Steps',          body: 'Specific actions coming…' },
+    { title: 'Words for You',       body: 'Personal message incoming…' },
   ];
+
   if (!analysis) return defaults;
-  // Try to extract sections from the analysis text
-  const sections = [
-    { title: 'Reality Check', patterns: ['reality check', 'where you are', 'current state', 'honest assessment'] },
-    { title: 'Strengths', patterns: ['strength', 'what you do well', 'positive', 'capable'] },
-    { title: 'Risks', patterns: ['risk', 'concern', 'danger', 'warning', 'threat', 'avoidance'] },
-    { title: 'Direction', patterns: ['direction', 'path forward', 'where to go', 'career'] },
-    { title: 'Next Steps', patterns: ['next step', 'action', 'what to do', 'start with'] },
-    { title: 'Growth Focus', patterns: ['growth', 'develop', 'improve', 'build', 'focus on'] },
-  ];
-  return sections.map(s => {
-    const lower = analysis.toLowerCase();
-    for (const p of s.patterns) {
-      const idx = lower.indexOf(p);
-      if (idx !== -1) {
-        const snippet = analysis.substring(idx, idx + 200).split('\n')[0].replace(/[#*]/g, '').trim();
-        if (snippet.length > 20) return { title: s.title, body: snippet };
-      }
+
+  // Parse ## section headers from the structured AI output
+  const sectionMap = {};
+  const parts = analysis.split(/^## /m);
+  for (const part of parts) {
+    if (!part.trim()) continue;
+    const newlineIdx = part.indexOf('\n');
+    if (newlineIdx === -1) continue;
+    const header = part.slice(0, newlineIdx).trim().toLowerCase();
+    const body   = part.slice(newlineIdx + 1).trim();
+    sectionMap[header] = body;
+  }
+
+  function findSection(...keys) {
+    for (const k of keys) {
+      const kl = k.toLowerCase();
+      const match = Object.entries(sectionMap).find(([h]) => h.includes(kl));
+      if (match) return match[1];
     }
-    return defaults.find(d => d.title === s.title) || { title: s.title, body: '' };
+    return null;
+  }
+
+  function excerpt(text, maxChars = 260) {
+    if (!text) return '';
+    const clean = text.replace(/[#*_]/g, '').replace(/\n+/g, ' ').trim();
+    if (clean.length <= maxChars) return clean;
+    const cut = clean.slice(0, maxChars);
+    const lastPeriod = cut.lastIndexOf('.');
+    return lastPeriod > 60 ? cut.slice(0, lastPeriod + 1) : cut + '…';
+  }
+
+  const CARD_SPECS = [
+    { title: 'Future Direction',    keys: ['future identity'] },
+    { title: 'Strengths',           keys: ['strengths (what', 'strengths'] },
+    { title: 'Patterns to Address', keys: ['patterns holding', 'patterns to watch', 'patterns'] },
+    { title: 'Behavior vs. Dream',  keys: ['behavior vs', 'dream alert'] },
+    { title: 'Next Steps',          keys: ['recommended next', 'next steps'] },
+    { title: 'Words for You',       keys: ['words back', 'words for'] },
+  ];
+
+  return CARD_SPECS.map((spec, i) => {
+    const body = excerpt(findSection(...spec.keys));
+    return body ? { title: spec.title, body } : defaults[i];
   });
 }
 

@@ -53,7 +53,7 @@ export default function WelcomeScreen() {
   const [loading, setLoading] = useState(false);
   const [inProgressSession, setInProgressSession] = useState(null);
   const [hasCompletedSession, setHasCompletedSession] = useState(false);
-  const [checking, setChecking] = useState(true);
+  const [checking, setChecking] = useState(false);
   const [msgIndex, setMsgIndex] = useState(0);
   const [msgVisible, setMsgVisible] = useState(true);
   const intervalRef = useRef(null);
@@ -93,11 +93,16 @@ export default function WelcomeScreen() {
         navigate(`/assessment/${userId}/${inProgressSession.id}`);
         return;
       }
-      const sessionId = await createSession(userId);
+      const sessionId = await Promise.race([
+        createSession(userId),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000)),
+      ]);
       navigate(`/intro/${userId}/${sessionId}`);
     } catch (err) {
       console.error(err);
-      setLoading(false);
+      // Firestore unavailable — generate local session ID and continue
+      const localId = `local_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+      navigate(`/intro/${userId}/${localId}`);
     }
   }
 
@@ -183,10 +188,10 @@ export default function WelcomeScreen() {
                 textTransform: 'uppercase',
                 marginBottom: 12,
               }}>
-                Welcome Back
+                {hasCompletedSession ? 'Welcome Back' : 'Life Direction Assessment'}
               </div>
               <h1 style={{ fontSize: 44, lineHeight: 1.05, margin: 0, fontWeight: 900 }}>
-                Welcome back, {cfg.name}.
+                {hasCompletedSession ? `Welcome back, ${cfg.name}.` : `Welcome, ${cfg.name}.`}
               </h1>
             </div>
 
@@ -244,43 +249,40 @@ export default function WelcomeScreen() {
               </div>
             )}
 
-            {/* Returning user links */}
-            {hasCompletedSession && !checking && (
+            {/* All Features Navigation — only shown after initial assessment is complete */}
+            {hasCompletedSession && (
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20 }}>
-                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, marginBottom: 12 }}>Returning? Jump back in:</div>
+                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, marginBottom: 14, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: 'DM Mono, monospace' }}>
+                  Your Modules
+                </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <button
-                    onClick={() => navigate(`/weekly/${userId}`)}
-                    style={{
-                      padding: '12px 14px',
-                      borderRadius: 14,
-                      background: cfg.accentFaint,
-                      border: `1px solid ${cfg.accentBorder}`,
-                      color: '#E5E5E5',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: 13,
-                    }}
-                  >
-                    <div style={{ color: cfg.accent, fontWeight: 700, marginBottom: 3 }}>Weekly Check-In</div>
-                    <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>Sundays at 7pm · 5–10 min</div>
-                  </button>
-                  <button
-                    onClick={() => navigate(`/mini/${userId}`)}
-                    style={{
-                      padding: '12px 14px',
-                      borderRadius: 14,
-                      background: cfg.accentFaint,
-                      border: `1px solid ${cfg.accentBorder}`,
-                      color: '#E5E5E5',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: 13,
-                    }}
-                  >
-                    <div style={{ color: cfg.accent, fontWeight: 700, marginBottom: 3 }}>Monthly Check-In</div>
-                    <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>Track your growth</div>
-                  </button>
+                  {[
+                    { label: 'Weekly Skill',         sub: 'Sundays 7pm · Skill + outreach', path: `/weekly/${userId}`,    emoji: '💬' },
+                    { label: 'Monthly Check-In',     sub: 'Avatar-driven · 8 questions',    path: `/monthly/${userId}`,   emoji: '📊' },
+                    { label: 'Quarterly Assessment', sub: 'Deep eval · Dual AI report',     path: `/quarterly/${userId}`, emoji: '🎯' },
+                    { label: 'Skill Baseline Test',  sub: '60 questions · 6 categories',   path: `/skill-test/${userId}`,emoji: '🧠' },
+                  ].map(item => (
+                    <button
+                      key={item.label}
+                      onClick={() => navigate(item.path)}
+                      style={{
+                        padding: '12px 14px',
+                        borderRadius: 14,
+                        background: cfg.accentFaint,
+                        border: `1px solid ${cfg.accentBorder}`,
+                        color: '#E5E5E5',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        fontSize: 13,
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                        <span style={{ fontSize: 14 }}>{item.emoji}</span>
+                        <span style={{ color: cfg.accent, fontWeight: 700, fontSize: 12 }}>{item.label}</span>
+                      </div>
+                      <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11 }}>{item.sub}</div>
+                    </button>
+                  ))}
                 </div>
               </div>
             )}

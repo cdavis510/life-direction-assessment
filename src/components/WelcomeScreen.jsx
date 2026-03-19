@@ -1,20 +1,68 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createSession, getAllSessions, getLatestCompletedSession } from '../hooks/useFirestore';
 
-const USER_ACCENTS = {
-  mekhi: { text: 'text-mekhi', bg: 'bg-mekhi', border: 'border-mekhi', class: 'user-mekhi' },
-  melvin: { text: 'text-melvin', bg: 'bg-melvin', border: 'border-melvin', class: 'user-melvin' },
+const USER_CONFIG = {
+  mekhi: {
+    accent: '#00C8FF',
+    accentGlow: 'rgba(0,200,255,0.14)',
+    accentBorder: 'rgba(0,200,255,0.22)',
+    accentFaint: 'rgba(0,200,255,0.08)',
+    name: 'Mekhi',
+    avatarName: "Kane — Mekhi's Guide",
+    avatarImg: '/avatars/kane/portrait.jpg',
+    welcomeMessages: [
+      "Good to see you. Take your time and be real.",
+      "You showed up. That already means something.",
+      "No pressure. Just honesty. Let's go.",
+      "I'm here with you every step of the way.",
+      "This is your space. Be honest with yourself.",
+    ],
+    label: 'Sports & Media Careers',
+  },
+  melvin: {
+    accent: '#8B5CF6',
+    accentGlow: 'rgba(139,92,246,0.14)',
+    accentBorder: 'rgba(139,92,246,0.22)',
+    accentFaint: 'rgba(139,92,246,0.08)',
+    name: 'Melvin',
+    avatarName: "Caleb — Melvin's Guide",
+    avatarImg: '/avatars/caleb/portrait.jpg',
+    welcomeMessages: [
+      "Proud you're here. Let's see what you're made of.",
+      "Your future is being built right now. Stay focused.",
+      "Be real with yourself. That's where growth starts.",
+      "This is your space. No judgment — just truth.",
+      "You've got this. Let's build your blueprint.",
+    ],
+    label: 'Finance & Sports Business',
+  },
 };
 
 export default function WelcomeScreen() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const accent = USER_ACCENTS[userId] || USER_ACCENTS.mekhi;
+  const cfg = USER_CONFIG[userId] || USER_CONFIG.mekhi;
+
   const [loading, setLoading] = useState(false);
   const [inProgressSession, setInProgressSession] = useState(null);
   const [hasCompletedSession, setHasCompletedSession] = useState(false);
   const [checking, setChecking] = useState(true);
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [msgVisible, setMsgVisible] = useState(true);
+  const intervalRef = useRef(null);
+
+  // Rotate avatar messages
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setMsgVisible(false);
+      setTimeout(() => {
+        setMsgIndex(i => (i + 1) % cfg.welcomeMessages.length);
+        setMsgVisible(true);
+      }, 400);
+    }, 4000);
+    return () => clearInterval(intervalRef.current);
+  }, [cfg.welcomeMessages.length]);
 
   useEffect(() => {
     async function checkSessions() {
@@ -47,115 +95,272 @@ export default function WelcomeScreen() {
     }
   }
 
+  const btn = {
+    primary: {
+      background: cfg.accent,
+      color: '#03131A',
+      fontWeight: 700,
+      borderRadius: 14,
+      padding: '14px 24px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: 16,
+    },
+    secondary: {
+      background: 'rgba(255,255,255,0.04)',
+      color: '#EAEAEA',
+      fontWeight: 600,
+      borderRadius: 14,
+      padding: '14px 24px',
+      border: '1px solid rgba(255,255,255,0.1)',
+      cursor: 'pointer',
+      fontSize: 16,
+    },
+  };
+
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center px-4 py-12 ${accent.class}`}>
-      <div className="w-full max-w-2xl animate-fade-in">
+    <div style={{
+      minHeight: '100vh',
+      background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 24%), linear-gradient(180deg, #050505 0%, #0A0A0A 100%)`,
+      color: '#F5F5F5',
+      fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+      padding: '32px 24px',
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
 
-        {/* Back */}
-        <button
-          onClick={() => navigate('/')}
-          className="text-white/40 text-sm hover:text-white/70 mb-8 flex items-center gap-2 transition-colors"
-        >
-          ← Back
-        </button>
-
-        <div className="card border border-white/10">
-          <div className={`section-label ${accent.text} mb-6`}>Welcome</div>
-
-          <div className="space-y-5 text-white/85 leading-relaxed">
-            <p className={`text-2xl font-bold ${accent.text}`}>Welcome to Your Future Blueprint</p>
-
-            <p>This is not a test.</p>
-            <p>This is not about getting anything right or wrong.</p>
-            <p>And this is not something you can fail.</p>
-
-            <p>This is about <strong className="text-white">you</strong> — your life, your future, and who you want to become.</p>
-
-            <p>I'm here to help you build a clear picture of:</p>
-            <ul className="list-none space-y-1 pl-4">
-              <li className="flex items-start gap-2"><span className={accent.text}>–</span> the life you want</li>
-              <li className="flex items-start gap-2"><span className={accent.text}>–</span> the career you're aiming for</li>
-              <li className="flex items-start gap-2"><span className={accent.text}>–</span> and whether your current habits are helping you get there</li>
-            </ul>
-
-            <div className="border-l-2 border-white/20 pl-4 space-y-2">
-              <p>You don't need to impress me.</p>
-              <p>You don't need to give "perfect" answers.</p>
-            </div>
-
-            <p>The only thing that matters here is <strong className="text-white">honesty</strong>. Because the more honest you are, the more accurate and useful your results will be.</p>
-
-            <div className="bg-white/5 rounded-xl p-4 space-y-2">
-              <p>Some questions may feel easy.</p>
-              <p>Some may make you think.</p>
-              <p>Some may feel uncomfortable — and that's okay.</p>
-            </div>
-
-            <p>Take your time. Answer based on what's <em>actually</em> true for you right now — not what you think you should say.</p>
-
-            <p>Before we start, just remember this:</p>
-            <p className={`font-semibold text-lg ${accent.text}`}>The goal is not to judge you. The goal is to help you understand yourself — and build a path to the life you want.</p>
+        {/* Header */}
+        <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 36 }}>
+          <div style={{
+            display: 'inline-block',
+            padding: '8px 14px',
+            borderRadius: 999,
+            background: 'rgba(255,255,255,0.05)',
+            color: cfg.accent,
+            fontSize: 11,
+            letterSpacing: 1.4,
+            fontWeight: 800,
+            textTransform: 'uppercase',
+          }}>
+            Life Direction Assessment System
           </div>
+          <div style={{ color: '#6B7280', fontSize: 14 }}>
+            {cfg.name} · Private Area
+          </div>
+        </header>
 
-          <div className="mt-8 space-y-3">
+        {/* Two-column layout */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 0.9fr)',
+          gap: 28,
+          alignItems: 'start',
+        }}>
+
+          {/* LEFT — Main content */}
+          <div style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
+            borderRadius: 24,
+            padding: 36,
+            display: 'grid',
+            gap: 24,
+            alignContent: 'start',
+          }}>
+            {/* Label + Headline */}
+            <div>
+              <div style={{
+                color: cfg.accent,
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: 1.4,
+                textTransform: 'uppercase',
+                marginBottom: 12,
+              }}>
+                Welcome Back
+              </div>
+              <h1 style={{ fontSize: 44, lineHeight: 1.05, margin: 0, fontWeight: 900 }}>
+                Welcome back, {cfg.name}.
+              </h1>
+            </div>
+
+            {/* Description */}
+            <p style={{ color: '#D4D4D4', fontSize: 19, lineHeight: 1.7, margin: 0 }}>
+              This space is built to help you understand where you really are right now,
+              what may be holding you back, and what direction actually fits your future.
+            </p>
+
+            {/* What this covers */}
+            <div style={{
+              padding: 20,
+              borderRadius: 18,
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}>
+              <div style={{ fontSize: 13, color: cfg.accent, marginBottom: 12, fontWeight: 700, letterSpacing: 0.5 }}>
+                What this assessment helps uncover
+              </div>
+              <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 2, color: '#CFCFCF', fontSize: 16 }}>
+                <li>your mindset and habits</li>
+                <li>what is helping or hurting your progress</li>
+                <li>what direction fits your strengths and goals</li>
+              </ul>
+            </div>
+
+            {/* Buttons */}
             {checking ? (
-              <div className="h-12 bg-white/10 rounded-xl animate-pulse" />
+              <div style={{ height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.06)', animation: 'pulse 1.5s infinite' }} />
             ) : (
-              <>
-                {inProgressSession && (
-                  <div className="space-y-3">
+              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+                {inProgressSession ? (
+                  <>
                     <button
+                      style={btn.primary}
+                      disabled={loading}
                       onClick={() => handleBegin(false)}
-                      disabled={loading}
-                      className={`btn-primary w-full ${accent.bg} text-navy font-bold text-lg focus:ring-${userId}`}
                     >
-                      {loading ? 'Loading...' : 'Continue Where I Left Off'}
+                      {loading ? 'Loading…' : 'Continue Where I Left Off'}
                     </button>
                     <button
-                      onClick={() => handleBegin(true)}
+                      style={btn.secondary}
                       disabled={loading}
-                      className="btn-primary w-full bg-white/10 text-white/70 hover:bg-white/15"
+                      onClick={() => handleBegin(true)}
                     >
-                      Start a New Assessment
+                      Start New Assessment
                     </button>
-                  </div>
-                )}
-                {!inProgressSession && (
+                  </>
+                ) : (
                   <button
-                    onClick={() => handleBegin(false)}
+                    style={btn.primary}
                     disabled={loading}
-                    className={`btn-primary w-full ${accent.bg} text-navy font-bold text-lg`}
+                    onClick={() => handleBegin(false)}
                   >
-                    {loading ? 'Starting...' : "I'm Ready — Let's Begin"}
+                    {loading ? 'Starting…' : 'Begin Assessment'}
                   </button>
                 )}
-                {/* Quick links for returning users */}
-                {hasCompletedSession && (
-                  <div className="pt-2 space-y-2">
-                    <p className="text-white/30 text-xs text-center">Returning? Jump back in:</p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => navigate(`/weekly/${userId}`)}
-                        className="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-xs text-white/60 hover:text-white/80 text-left"
-                      >
-                        <span className={`block font-semibold mb-0.5 ${accent.text}`}>Weekly Check-In</span>
-                        <span className="text-white/30">Sundays at 7pm · 5–10 min</span>
-                      </button>
-                      <button
-                        onClick={() => navigate(`/mini/${userId}`)}
-                        className="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-xs text-white/60 hover:text-white/80 text-left"
-                      >
-                        <span className={`block font-semibold mb-0.5 ${accent.text}`}>Monthly Check-In</span>
-                        <span className="text-white/30">Track your growth</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </>
+              </div>
             )}
+
+            {/* Returning user links */}
+            {hasCompletedSession && !checking && (
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20 }}>
+                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, marginBottom: 12 }}>Returning? Jump back in:</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <button
+                    onClick={() => navigate(`/weekly/${userId}`)}
+                    style={{
+                      padding: '12px 14px',
+                      borderRadius: 14,
+                      background: cfg.accentFaint,
+                      border: `1px solid ${cfg.accentBorder}`,
+                      color: '#E5E5E5',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: 13,
+                    }}
+                  >
+                    <div style={{ color: cfg.accent, fontWeight: 700, marginBottom: 3 }}>Weekly Check-In</div>
+                    <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>Sundays at 7pm · 5–10 min</div>
+                  </button>
+                  <button
+                    onClick={() => navigate(`/mini/${userId}`)}
+                    style={{
+                      padding: '12px 14px',
+                      borderRadius: 14,
+                      background: cfg.accentFaint,
+                      border: `1px solid ${cfg.accentBorder}`,
+                      color: '#E5E5E5',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: 13,
+                    }}
+                  >
+                    <div style={{ color: cfg.accent, fontWeight: 700, marginBottom: 3 }}>Monthly Check-In</div>
+                    <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>Track your growth</div>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT — Avatar panel */}
+          <div style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.03) 100%)',
+            border: '1px solid rgba(255,255,255,0.09)',
+            borderRadius: 24,
+            padding: 24,
+            display: 'grid',
+            gap: 18,
+            alignContent: 'start',
+          }}>
+            <div style={{
+              fontSize: 11,
+              color: cfg.accent,
+              fontWeight: 800,
+              letterSpacing: 1.4,
+              textTransform: 'uppercase',
+            }}>
+              Your Guide
+            </div>
+
+            {/* Avatar portrait */}
+            <div style={{
+              borderRadius: 20,
+              overflow: 'hidden',
+              background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 40%), rgba(255,255,255,0.03)`,
+              border: `1px solid ${cfg.accentBorder}`,
+              minHeight: 280,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+            }}>
+              <img
+                src={cfg.avatarImg}
+                alt={cfg.avatarName}
+                style={{
+                  width: '100%',
+                  height: 300,
+                  objectFit: 'cover',
+                  objectPosition: 'top',
+                  display: 'block',
+                  borderRadius: 20,
+                }}
+                onError={e => { e.target.style.display = 'none'; }}
+              />
+            </div>
+
+            {/* Avatar name */}
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#F3F3F3' }}>{cfg.avatarName}</div>
+              <div style={{ color: '#9CA3AF', fontSize: 13, marginTop: 2 }}>Present, calm, encouraging.</div>
+            </div>
+
+            {/* Rotating message */}
+            <div style={{
+              padding: 18,
+              borderRadius: 16,
+              background: cfg.accentFaint,
+              border: `1px solid ${cfg.accentBorder}`,
+              color: '#F0FBFF',
+              fontSize: 16,
+              lineHeight: 1.65,
+              fontStyle: 'italic',
+              minHeight: 72,
+              transition: 'opacity 0.4s ease',
+              opacity: msgVisible ? 1 : 0,
+            }}>
+              "{cfg.welcomeMessages[msgIndex]}"
+            </div>
           </div>
         </div>
 
+        {/* Mobile: stack on small screens */}
+        <style>{`
+          @media (max-width: 768px) {
+            .welcome-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </div>
     </div>
   );

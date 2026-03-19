@@ -1,39 +1,47 @@
+// ─── SCREEN 07 — Completion Screen + SCREEN 08 — Results Dashboard ───────────
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAllAnswers, getAllSessions, completeSession, saveSessionScores } from '../hooks/useFirestore';
 import { getMekhiAnalysis } from '../agents/mekhiAgent';
 import { getMelvinAnalysis } from '../agents/melvinAgent';
-import {
-  buildResultsPackage,
-  getScoreLabel,
-} from '../engines/scoreEngine';
+import { buildResultsPackage, getScoreLabel } from '../engines/scoreEngine';
 import { USER_SECTIONS } from '../data/questions';
 import { CAREER_BLUEPRINTS } from '../data/careerBlueprintData';
 import LifestyleVisionCard from './LifestyleVisionCard';
 
-// ─── Accent config ─────────────────────────────────────────────────────────────
-const USER_ACCENT = {
-  mekhi: { text: 'text-mekhi', bg: 'bg-mekhi', class: 'user-mekhi', hex: '#06B6D4' },
-  melvin: { text: 'text-melvin', bg: 'bg-melvin', class: 'user-melvin', hex: '#8B5CF6' },
+const USER_CONFIG = {
+  mekhi: {
+    accent: '#00C8FF',
+    accentGlow: 'rgba(0,200,255,0.12)',
+    accentBorder: 'rgba(0,200,255,0.22)',
+    accentFaint: 'rgba(0,200,255,0.07)',
+    name: 'Mekhi',
+    avatarImg: '/avatars/kane/portrait.jpg',
+    avatarName: 'Kane',
+    completionMsg: '"This is where it gets real."',
+    summaryMsg: '"You\'re capable, but your habits need to catch up to your vision."',
+  },
+  melvin: {
+    accent: '#8B5CF6',
+    accentGlow: 'rgba(139,92,246,0.12)',
+    accentBorder: 'rgba(139,92,246,0.22)',
+    accentFaint: 'rgba(139,92,246,0.07)',
+    name: 'Melvin',
+    avatarImg: '/avatars/caleb/portrait.jpg',
+    avatarName: 'Caleb',
+    completionMsg: '"Now we build from here."',
+    summaryMsg: '"Your potential is real. Now it\'s time to act like it."',
+  },
 };
 
-const FOLLOWUP_QUESTIONS = [
-  'What part of this feels accurate to you?',
-  'What part do you disagree with?',
-  'What surprised you the most?',
-  'What is ONE thing you would want to improve first?',
-];
-
-// ─── Main Component ───────────────────────────────────────────────────────────
 export default function ResultsReveal() {
   const { userId, sessionId } = useParams();
   const navigate = useNavigate();
-  const accent = USER_ACCENT[userId] || USER_ACCENT.mekhi;
+  const cfg = USER_CONFIG[userId] || USER_CONFIG.mekhi;
 
-  const [phase, setPhase] = useState('loading'); // loading | intro | generating | results | followup
+  const [phase, setPhase] = useState('loading'); // loading | complete | generating | results
   const [analysis, setAnalysis] = useState('');
   const [scores, setScores] = useState(null);
-  const [followupAnswers, setFollowupAnswers] = useState({});
   const [error, setError] = useState('');
   const [previousSessions, setPreviousSessions] = useState([]);
 
@@ -46,46 +54,37 @@ export default function ResultsReveal() {
         ]);
         const prev = sessions.filter(s => s.id !== sessionId && s.status === 'complete');
         setPreviousSessions(prev);
-
-        // Compute scores immediately — synchronous
-        let pkg = null;
         const sections = USER_SECTIONS[userId];
         if (sections) {
           try {
-            pkg = buildResultsPackage(answers, sections);
+            const pkg = buildResultsPackage(answers, sections);
             setScores(pkg);
-            // Save to Firestore in background (non-blocking)
             saveSessionScores(userId, sessionId, pkg).catch(() => {});
-          } catch {
-            // scoring optional — don't block the flow
-          }
+          } catch {}
         }
-
-        setPhase('intro');
-
-        // Start AI analysis in background with score context
-        generateAnalysis(answers, prev, pkg);
-      } catch (err) {
-        setError('Something went wrong loading your results. Please try again.');
+        setPhase('complete');
+        generateAnalysis(answers, prev);
+      } catch {
+        setError('Something went wrong loading your results.');
         setPhase('results');
       }
     }
     load();
   }, [userId, sessionId]);
 
-  async function generateAnalysis(answers, prev, pkg) {
+  async function generateAnalysis(answers, prev) {
     try {
       const fn = userId === 'mekhi' ? getMekhiAnalysis : getMelvinAnalysis;
-      const result = await fn(answers, prev, pkg);
+      const result = await fn(answers, prev);
       setAnalysis(result);
       await completeSession(userId, sessionId, result);
     } catch {
       setAnalysis('');
-      setError('We encountered an issue generating your full analysis. Your answers have been saved. Please try again.');
+      setError('We had an issue generating your full analysis. Your answers are saved.');
     }
   }
 
-  function handleReveal() {
+  function handleViewResults() {
     if (analysis) {
       setPhase('results');
     } else {
@@ -94,762 +93,595 @@ export default function ResultsReveal() {
   }
 
   useEffect(() => {
-    if (phase === 'generating' && analysis) {
-      setPhase('results');
-    }
+    if (phase === 'generating' && analysis) setPhase('results');
   }, [phase, analysis]);
 
+  // ── Screen 07 — Completion ──
   if (phase === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white/40 text-center">
-          <div className="text-4xl mb-4">⏳</div>
-          <p>Loading your results...</p>
-        </div>
+      <div style={{
+        minHeight: '100vh', background: '#08080A',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter, sans-serif', fontSize: 14,
+      }}>
+        Loading your results…
       </div>
     );
   }
 
-  if (phase === 'intro') {
-    return <IntroScreen accent={accent} onReveal={handleReveal} userId={userId} />;
+  if (phase === 'complete') {
+    return (
+      <CompletionScreen
+        cfg={cfg}
+        previousSessions={previousSessions}
+        onViewResults={handleViewResults}
+      />
+    );
   }
 
   if (phase === 'generating') {
     return (
-      <div className={`min-h-screen flex items-center justify-center px-4 ${accent.class}`}>
-        <div className="text-center max-w-md">
-          <div className={`w-16 h-16 rounded-full ${accent.bg} opacity-30 animate-ping mx-auto mb-6`} />
-          <p className="text-white/70 text-lg mb-2">Building your blueprint...</p>
-          <p className="text-white/40 text-sm">This takes a moment. Your answers are being analyzed deeply.</p>
+      <div style={{
+        minHeight: '100vh',
+        background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 28%), #08080A`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: 'Inter, sans-serif', color: '#F5F5F5',
+      }}>
+        <div style={{ textAlign: 'center', maxWidth: 460 }}>
+          <div style={{
+            width: 56, height: 56, borderRadius: '50%',
+            background: cfg.accentFaint, border: `1px solid ${cfg.accentBorder}`,
+            margin: '0 auto 24px',
+            animation: 'pulse 2s ease-in-out infinite',
+          }} />
+          <style>{`@keyframes pulse { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.1)} }`}</style>
+          <p style={{ fontSize: 20, color: 'rgba(255,255,255,0.75)', marginBottom: 10 }}>
+            Building your blueprint…
+          </p>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)' }}>
+            Your answers are being analyzed. This takes a moment.
+          </p>
         </div>
       </div>
     );
   }
 
-  if (phase === 'results') {
-    return (
-      <ResultsScreen
-        accent={accent}
-        analysis={analysis}
-        scores={scores}
-        error={error}
-        userId={userId}
-        sessionId={sessionId}
-        previousSessions={previousSessions}
-        followupAnswers={followupAnswers}
-        setFollowupAnswers={setFollowupAnswers}
-        onFollowup={() => setPhase('followup')}
-        navigate={navigate}
-      />
-    );
-  }
-
-  if (phase === 'followup') {
-    return (
-      <FollowupScreen
-        accent={accent}
-        followupAnswers={followupAnswers}
-        setFollowupAnswers={setFollowupAnswers}
-        userId={userId}
-        navigate={navigate}
-      />
-    );
-  }
-
-  return null;
+  // ── Screen 08 — Results Dashboard ──
+  return (
+    <ResultsDashboard
+      cfg={cfg}
+      analysis={analysis}
+      scores={scores}
+      error={error}
+      userId={userId}
+      sessionId={sessionId}
+      previousSessions={previousSessions}
+      navigate={navigate}
+    />
+  );
 }
 
-// ─── Intro Screen ─────────────────────────────────────────────────────────────
-function IntroScreen({ accent, onReveal, userId }) {
+// ─── Screen 07 — Completion Screen ───────────────────────────────────────────
+function CompletionScreen({ cfg, previousSessions, onViewResults }) {
   const [canReveal, setCanReveal] = useState(false);
-
   useEffect(() => {
     const t = setTimeout(() => setCanReveal(true), 3000);
     return () => clearTimeout(t);
   }, []);
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center px-4 ${accent.class}`}>
-      <div className="w-full max-w-xl text-center animate-fade-in">
-        <div className={`text-5xl mb-6 font-bold ${accent.text}`}>✦</div>
-        <h1 className="text-3xl font-bold mb-6 text-white">Your Future Blueprint — Results</h1>
-        <div className="card border border-white/10 text-left space-y-4 text-white/80 leading-relaxed mb-8">
-          <p>Take a moment before reading this.</p>
-          <p>What you're about to see is not a judgment. It's a <strong className="text-white">reflection</strong> — based on your answers — of where you are right now and where you said you want to go.</p>
-          <p>Nothing here is permanent. Nothing here defines you. This is simply a starting point.</p>
-          <p className={`font-semibold text-lg ${accent.text}`}>You have vision. And that matters — because not everyone does.</p>
+    <div style={{
+      minHeight: '100vh',
+      background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 28%), #08080A`,
+      color: '#F5F5F5',
+      fontFamily: 'Inter, sans-serif',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 32,
+    }}>
+      <div style={{ maxWidth: 860, width: '100%' }}>
+        <div style={{
+          textAlign: 'center',
+          borderRadius: 24,
+          padding: '44px 40px',
+          background: `radial-gradient(circle at top, ${cfg.accentFaint}, rgba(255,255,255,0.02))`,
+          border: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase' }}>
+            Assessment Complete
+          </div>
+          <h1 style={{ fontSize: 44, margin: '16px 0 14px', fontWeight: 900 }}>
+            You finished, {cfg.name}.
+          </h1>
+          <p style={{ color: '#CDCDCD', fontSize: 19, maxWidth: 580, margin: '0 auto', lineHeight: 1.7 }}>
+            You showed up and answered honestly. That matters.{' '}
+            {previousSessions.length > 0 ? `This is assessment #${previousSessions.length + 1}.` : 'Your results are ready.'}
+          </p>
+
+          {/* Avatar message */}
+          <div style={{
+            margin: '28px auto 0',
+            maxWidth: 400,
+            padding: '18px 22px',
+            borderRadius: 16,
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            color: '#EAEAEA',
+            fontSize: 17,
+            fontStyle: 'italic',
+          }}>
+            {cfg.completionMsg}
+          </div>
+
+          <div style={{ marginTop: 28 }}>
+            <button
+              onClick={onViewResults}
+              disabled={!canReveal}
+              style={{
+                background: canReveal ? cfg.accent : 'rgba(255,255,255,0.08)',
+                color: canReveal ? '#03131A' : 'rgba(255,255,255,0.4)',
+                fontWeight: 700, borderRadius: 14,
+                padding: '16px 36px', border: 'none',
+                cursor: canReveal ? 'pointer' : 'not-allowed',
+                fontSize: 17, transition: 'all 0.3s',
+              }}
+            >
+              {canReveal ? 'View My Results →' : 'Preparing your results…'}
+            </button>
+          </div>
         </div>
-        <button
-          onClick={onReveal}
-          disabled={!canReveal}
-          className={`btn-primary ${accent.bg} text-navy font-bold px-10 py-4 text-base`}
-        >
-          {canReveal ? 'Show Me My Blueprint →' : 'Preparing your results...'}
-        </button>
       </div>
     </div>
   );
 }
 
-// ─── Results Screen ───────────────────────────────────────────────────────────
-function ResultsScreen({ accent, analysis, scores, error, userId, sessionId, previousSessions, navigate, onFollowup }) {
-  const name = userId === 'mekhi' ? 'Mekhi' : 'Melvin';
+// ─── Screen 08 — Results Dashboard ───────────────────────────────────────────
+function ResultsDashboard({ cfg, analysis, scores, error, userId, sessionId, previousSessions, navigate }) {
+  const completedDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <div className={`min-h-screen ${accent.class}`}>
-      <div className="max-w-3xl mx-auto px-4 py-12">
+    <div style={{
+      minHeight: '100vh',
+      background: '#08080A',
+      color: '#F5F5F5',
+      fontFamily: 'Inter, sans-serif',
+      padding: '40px 24px',
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gap: 28 }}>
 
         {/* Header */}
-        <div className="text-center mb-10">
-          <div className={`section-label ${accent.text} mb-2`}>Your Blueprint</div>
-          <h1 className="text-3xl font-bold text-white">{name}'s Future Blueprint</h1>
-          {previousSessions.length > 0 && (
-            <p className="text-white/40 text-sm mt-2">
-              Assessment #{previousSessions.length + 1} — you can compare your growth over time
-            </p>
-          )}
-        </div>
-
-        {/* Score Dashboard — only shown when scores are computed */}
-        {scores && <ScoreDashboard scores={scores} accent={accent} userId={userId} />}
-
-        {/* AI Analysis */}
-        <div className="card border border-white/10 mt-6">
-          <p className={`font-semibold ${accent.text} mb-4 text-sm uppercase tracking-widest`}>
-            Your Full Analysis
-          </p>
-          {error && !analysis && (
-            <div className="bg-white/5 rounded-xl p-4 text-white/60 text-sm">{error}</div>
-          )}
-          {analysis ? (
-            <div
-              className="ai-result text-white/85"
-              dangerouslySetInnerHTML={{ __html: formatAnalysis(analysis) }}
-            />
-          ) : (
-            <div className="flex items-center gap-3 py-6">
-              <div className={`w-4 h-4 rounded-full ${accent.bg} opacity-60 animate-pulse`} />
-              <p className="text-white/40 text-sm">Analysis is being generated...</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+          <div>
+            <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 8 }}>
+              Private Results
             </div>
-          )}
+            <h1 style={{ fontSize: 42, margin: 0, fontWeight: 900 }}>{cfg.name}'s Results</h1>
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, paddingTop: 8 }}>
+            Completed {completedDate}
+            {previousSessions.length > 0 && (
+              <div style={{ fontSize: 12, marginTop: 4 }}>Assessment #{previousSessions.length + 1}</div>
+            )}
+          </div>
         </div>
 
-        {/* Career Blueprint — full expanded view */}
+        {/* Two-column main layout */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,0.85fr) minmax(0,1.15fr)', gap: 24, alignItems: 'start' }}>
+
+          {/* LEFT — Avatar summary */}
+          <div style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 22,
+            padding: 24,
+            display: 'grid',
+            gap: 18,
+            alignContent: 'start',
+          }}>
+            {/* Portrait */}
+            <div style={{
+              borderRadius: 18,
+              overflow: 'hidden',
+              background: `radial-gradient(circle at top, ${cfg.accentFaint}, transparent)`,
+              border: `1px solid ${cfg.accentBorder}`,
+              height: 200,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <img
+                src={cfg.avatarImg}
+                alt={cfg.avatarName}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                onError={e => { e.target.style.display = 'none'; }}
+              />
+            </div>
+
+            <div style={{ fontSize: 13, color: cfg.accent, fontWeight: 700 }}>
+              {cfg.avatarName} — Your Guide
+            </div>
+
+            {/* Summary quote */}
+            <div style={{
+              padding: '16px 18px',
+              borderRadius: 16,
+              background: 'rgba(255,255,255,0.04)',
+              color: '#F2F2F2',
+              lineHeight: 1.7,
+              fontSize: 15,
+              fontStyle: 'italic',
+            }}>
+              {cfg.summaryMsg}
+            </div>
+
+            {/* Score if available */}
+            {scores && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontSize: 48, fontWeight: 900, color: '#F5F5F5', lineHeight: 1 }}>{scores.overallScore}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 18, marginBottom: 4 }}>/100</span>
+                  <span style={{
+                    marginLeft: 'auto',
+                    padding: '4px 12px', borderRadius: 999, fontSize: 12, fontWeight: 700,
+                    background: scores.riskLevel === 'High' ? 'rgba(239,68,68,0.15)' : scores.riskLevel === 'Medium' ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)',
+                    color: scores.riskLevel === 'High' ? '#FCA5A5' : scores.riskLevel === 'Medium' ? '#FCD34D' : '#6EE7B7',
+                  }}>
+                    {scores.riskLevel} Risk
+                  </span>
+                </div>
+                <div style={{ height: 6, borderRadius: 999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+                  <div style={{ width: `${scores.overallScore}%`, height: '100%', background: cfg.accent, transition: 'width 1s ease' }} />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT — 6 Result Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            {getResultCards(analysis, scores, cfg).map((card, i) => (
+              <div key={i} style={{
+                padding: 22, borderRadius: 20,
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                minHeight: 160,
+              }}>
+                <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 12 }}>
+                  {card.title}
+                </div>
+                <div style={{ color: '#F1F1F1', lineHeight: 1.75, fontSize: 15 }}>
+                  {card.body}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Score Dimensions */}
+        {scores?.cores && <ScoreDimensions scores={scores} cfg={cfg} />}
+
+        {/* Full AI Analysis */}
+        {(analysis || error) && (
+          <div style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 22, padding: 30,
+          }}>
+            <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 18 }}>
+              Your Full Analysis
+            </div>
+            {error && !analysis && (
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 15 }}>{error}</div>
+            )}
+            {analysis ? (
+              <div
+                style={{ color: 'rgba(255,255,255,0.82)', lineHeight: 1.8, fontSize: 16 }}
+                dangerouslySetInnerHTML={{ __html: formatAnalysis(analysis) }}
+              />
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 0' }}>
+                <div style={{ width: 14, height: 14, borderRadius: '50%', background: cfg.accent, opacity: 0.6, animation: 'pulse 1.5s infinite' }} />
+                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14 }}>Analysis generating…</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Career Blueprint */}
         {scores?.careerMatches?.length > 0 && (
-          <CareerBlueprintSection matches={scores.careerMatches} accent={accent} />
+          <CareerBlueprintSection matches={scores.careerMatches} cfg={cfg} />
         )}
 
         {/* Lifestyle Vision */}
         {scores?.lifestyleBudget && (
-          <div className="mt-6">
-            <LifestyleVisionCard lifestyleBudget={scores.lifestyleBudget} accent={accent} />
-          </div>
-        )}
-
-        {/* College Path */}
-        {scores?.collegeRec && (
-          <CollegePathCard rec={scores.collegeRec} accent={accent} />
+          <LifestyleVisionCard lifestyleBudget={scores.lifestyleBudget} accent={{ hex: cfg.accent, text: '', bg: '', class: '' }} />
         )}
 
         {/* Final thought */}
-        <div className="card border border-white/10 mt-8 text-center">
-          <p className="text-white/60 text-sm leading-relaxed">
-            <strong className="text-white">Final Thought</strong><br /><br />
+        <div style={{
+          padding: '32px 28px',
+          borderRadius: 22,
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          textAlign: 'center',
+        }}>
+          <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 16, lineHeight: 1.9, margin: 0 }}>
+            <strong style={{ color: '#F5F5F5' }}>Final Thought</strong><br /><br />
             You said you want a certain kind of life.<br />
             This is your opportunity to decide:<br />
-            <span className={`font-semibold ${accent.text}`}>
+            <span style={{ color: cfg.accent, fontWeight: 700 }}>
               Is that life worth the effort it will take to get there?
             </span>
           </p>
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-8">
-          <button
-            onClick={onFollowup}
-            className={`btn-primary flex-1 ${accent.bg} text-navy font-bold`}
-          >
-            Answer Reflection Questions →
-          </button>
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <button
             onClick={() => navigate(`/history/${userId}`)}
-            className="btn-primary flex-1 bg-white/10 text-white hover:bg-white/15"
+            style={{
+              flex: 1, minWidth: 200,
+              background: 'rgba(255,255,255,0.05)',
+              color: '#EAEAEA', fontWeight: 600, borderRadius: 14,
+              padding: '14px 22px', border: '1px solid rgba(255,255,255,0.1)',
+              cursor: 'pointer', fontSize: 15,
+            }}
           >
             View Session History
           </button>
-        </div>
-
-        <div className="text-center mt-6">
           <button
-            onClick={() => navigate('/')}
-            className="text-white/30 text-sm hover:text-white/60 transition-colors"
+            onClick={() => navigate(`/welcome/${userId}`)}
+            style={{
+              flex: 1, minWidth: 200,
+              background: cfg.accent,
+              color: '#03131A', fontWeight: 700, borderRadius: 14,
+              padding: '14px 22px', border: 'none',
+              cursor: 'pointer', fontSize: 15,
+            }}
           >
-            ← Back to Home
+            Back to Home →
           </button>
         </div>
+
       </div>
     </div>
   );
 }
 
-// ─── Score Dashboard ──────────────────────────────────────────────────────────
-function ScoreDashboard({ scores, accent, userId }) {
-  const { overallScore, cores, flags, riskLevel, trajectory, lifestyleBudget } = scores;
-
-  const riskColors = {
-    Low: 'text-emerald-400',
-    Medium: 'text-amber-400',
-    High: 'text-red-400',
-  };
-
-  const trajectoryColors = {
-    Improving: 'text-emerald-400',
-    Stable: 'text-amber-400',
-    Declining: 'text-red-400',
-  };
-
+// ─── Score Dimensions ─────────────────────────────────────────────────────────
+function ScoreDimensions({ scores, cfg }) {
+  const { cores, flags } = scores;
+  const dims = [
+    { key: 'goalAlignment', label: 'Goal Alignment' },
+    { key: 'responsibility', label: 'Responsibility' },
+    { key: 'independence', label: 'Independence' },
+    { key: 'confidence', label: 'Confidence' },
+    { key: 'commitment', label: 'Commitment' },
+    { key: 'avoidanceRisk', label: 'Avoidance Risk', invert: true },
+  ];
   return (
-    <div className="space-y-4">
-      {/* Risk alert for high risk */}
-      {riskLevel === 'High' && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-red-950 border border-red-800">
-          <span className="text-red-400 text-lg mt-0.5">⚠</span>
-          <div>
-            <p className="text-red-300 text-sm font-semibold">High Risk Detected</p>
-            <p className="text-red-400 text-sm mt-0.5">
-              Multiple areas require immediate attention — not next month.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Overall score + trajectory */}
-      <div className="card border border-white/10">
-        <div className="flex items-center justify-between mb-4">
-          <p className={`text-xs font-semibold uppercase tracking-widest ${accent.text}`}>
-            Overall Blueprint Score
-          </p>
-          <span className={`text-xs font-medium ${trajectoryColors[trajectory] || 'text-white/40'}`}>
-            {trajectory === 'Improving' ? '↑' : trajectory === 'Declining' ? '↓' : '→'} {trajectory}
-          </span>
-        </div>
-        <div className="flex items-end gap-3 mb-4">
-          <span className="text-5xl font-bold text-white">{overallScore}</span>
-          <span className="text-white/30 text-xl mb-1">/100</span>
-          <span className={`ml-auto text-sm font-semibold px-3 py-1 rounded-full ${
-            riskLevel === 'High' ? 'bg-red-900 text-red-300' :
-            riskLevel === 'Medium' ? 'bg-amber-900 text-amber-300' :
-            'bg-emerald-900 text-emerald-300'
-          }`}>
-            {riskLevel} Risk
-          </span>
-        </div>
-        {/* Score bar */}
-        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-1000"
-            style={{ width: `${overallScore}%`, backgroundColor: accent.hex }}
-          />
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 24 }}>
+      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: 24 }}>
+        <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 18 }}>Core Dimensions</div>
+        <div style={{ display: 'grid', gap: 14 }}>
+          {dims.map(({ key, label, invert }) => {
+            const val = cores[key];
+            if (val === null || val === undefined) return null;
+            const pct = Math.round((val / 10) * 100);
+            const display = invert ? 100 - pct : pct;
+            const color = display >= 60 ? '#10B981' : display >= 40 ? '#F59E0B' : '#EF4444';
+            return (
+              <div key={key}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+                  <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13 }}>{label}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>{getScoreLabel(invert ? 10 - val : val)}</span>
+                </div>
+                <div style={{ height: 6, borderRadius: 999, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+                  <div style={{ width: `${display}%`, height: '100%', background: color }} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* 6 Core Dimensions */}
-      {cores && (
-        <div className="card border border-white/10">
-          <p className={`text-xs font-semibold uppercase tracking-widest ${accent.text} mb-4`}>
-            Core Dimensions
-          </p>
-          <div className="space-y-3">
-            {[
-              { key: 'goalAlignment', label: 'Goal Alignment' },
-              { key: 'responsibility', label: 'Responsibility' },
-              { key: 'independence', label: 'Independence' },
-              { key: 'confidence', label: 'Confidence' },
-              { key: 'commitment', label: 'Commitment' },
-              { key: 'avoidanceRisk', label: 'Avoidance Risk', invert: true },
-            ].map(({ key, label, invert }) => {
-              const val = cores[key];
-              if (val === null || val === undefined) return null;
-              const pct = Math.round((val / 10) * 100);
-              const displayPct = invert ? 100 - pct : pct;
-              const barColor = displayPct >= 60 ? '#10B981' : displayPct >= 40 ? '#F59E0B' : '#EF4444';
-              const scoreLabel = getScoreLabel(invert ? 10 - val : val);
-              return (
-                <div key={key}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-white/70 text-sm">{label}</span>
-                    <span className="text-xs text-white/40">{scoreLabel}</span>
-                  </div>
-                  <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-700"
-                      style={{ width: `${displayPct}%`, backgroundColor: barColor }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Red Flags */}
       {flags?.length > 0 && (
-        <div className="card border border-red-900/50 bg-red-950/30">
-          <p className="text-xs font-semibold uppercase tracking-widest text-red-400 mb-3">
-            Areas Requiring Attention
-          </p>
-          <div className="space-y-2">
+        <div style={{ background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 22, padding: 24 }}>
+          <div style={{ color: '#FCA5A5', fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 18 }}>Areas Needing Attention</div>
+          <div style={{ display: 'grid', gap: 14 }}>
             {flags.slice(0, 4).map(flag => (
-              <div key={flag.id} className="flex items-start gap-2">
-                <span className={`flex-shrink-0 mt-0.5 w-2 h-2 rounded-full ${
-                  flag.severity === 'high' ? 'bg-red-400' : 'bg-amber-400'
-                }`} />
+              <div key={flag.id} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', marginTop: 5, flexShrink: 0, background: flag.severity === 'high' ? '#EF4444' : '#F59E0B' }} />
                 <div>
-                  <p className="text-white/80 text-sm font-medium">{flag.label}</p>
-                  <p className="text-white/40 text-xs leading-snug">{flag.message}</p>
+                  <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 600 }}>{flag.label}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, marginTop: 2, lineHeight: 1.5 }}>{flag.message}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       )}
-
-      {/* Lifestyle Budget */}
-      {lifestyleBudget && (
-        <div className="card border border-white/10">
-          <p className={`text-xs font-semibold uppercase tracking-widest ${accent.text} mb-3`}>
-            Target Lifestyle Reality Check
-          </p>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-white/60 text-sm capitalize">{lifestyleBudget.tier} lifestyle</span>
-            <span className="text-white font-bold">${lifestyleBudget.totalMonthly.toLocaleString()}/mo</span>
-          </div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-white/40 text-xs">Annual income needed</span>
-            <span className="text-white/70 text-sm">${lifestyleBudget.requiredAnnual.toLocaleString()}/yr</span>
-          </div>
-          <p className="text-white/40 text-xs leading-snug">{lifestyleBudget.note}</p>
-        </div>
-      )}
     </div>
   );
 }
 
-// ─── Career Blueprint Section ─────────────────────────────────────────────────
-function CareerBlueprintSection({ matches, accent }) {
+// ─── Career Blueprint ─────────────────────────────────────────────────────────
+function CareerBlueprintSection({ matches, cfg }) {
   const [activeCareer, setActiveCareer] = useState(0);
-  const [activeTab, setActiveTab] = useState('overview'); // overview | companies | degree | masters
-
-  // Enrich each match with full blueprint data
-  const enriched = matches.map(m => ({
-    ...m,
-    blueprint: CAREER_BLUEPRINTS[m.id] || null,
-  }));
-
+  const [activeTab, setActiveTab] = useState('overview');
+  const enriched = matches.map(m => ({ ...m, blueprint: CAREER_BLUEPRINTS[m.id] || null }));
   const current = enriched[activeCareer];
   const bp = current?.blueprint;
 
   return (
-    <div className="mt-6 space-y-4">
-      <div className="card border border-white/10">
-        <p className={`text-xs font-semibold uppercase tracking-widest ${accent.text} mb-1`}>
-          Your Career Blueprint
-        </p>
-        <p className="text-white/50 text-xs mb-4">
-          4 matched careers in sports — USA + Canada. Tap each to see the full path: degree, semester classes, salary, companies, and masters track.
-        </p>
-
-        {/* Career selector tabs */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          {enriched.map((c, i) => (
-            <button
-              key={c.id || i}
-              onClick={() => { setActiveCareer(i); setActiveTab('overview'); }}
-              className={`p-3 rounded-xl border text-left transition-all ${
-                activeCareer === i
-                  ? 'border-white/30 bg-white/10'
-                  : 'border-white/10 bg-white/5 hover:bg-white/8'
-              }`}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span
-                  className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                  style={{
-                    backgroundColor: i === 0 ? accent.hex : 'rgba(255,255,255,0.15)',
-                    color: i === 0 ? '#111' : '#fff',
-                  }}
-                >
-                  {i + 1}
-                </span>
-                {i === 0 && <span className="text-xs text-white/40">#1 Match</span>}
-              </div>
-              <p className="text-white text-xs font-semibold leading-snug">
-                {bp?.title || c.title}
-              </p>
-            </button>
-          ))}
-        </div>
-
-        {/* Career detail tabs */}
-        {bp && (
-          <>
-            <div className="flex gap-1 mb-4 border-b border-white/10 pb-2 overflow-x-auto">
-              {['overview', 'companies', 'degree', 'masters'].map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                    activeTab === tab
-                      ? 'text-white'
-                      : 'text-white/40 hover:text-white/70'
-                  }`}
-                  style={activeTab === tab ? { backgroundColor: accent.hex, color: '#111' } : {}}
-                >
-                  {tab === 'overview' ? 'Overview' :
-                   tab === 'companies' ? 'Companies' :
-                   tab === 'degree' ? 'Degree Plan' : 'Masters Path'}
-                </button>
-              ))}
+    <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 22, padding: 28 }}>
+      <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 6 }}>Your Career Blueprint</div>
+      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, marginBottom: 20, marginTop: 0 }}>
+        Matched careers in sports. Tap each to see the full path: degree, classes, salary, companies, and masters track.
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+        {enriched.map((c, i) => (
+          <button key={i} onClick={() => { setActiveCareer(i); setActiveTab('overview'); }} style={{
+            padding: 14, borderRadius: 16, textAlign: 'left', cursor: 'pointer',
+            background: activeCareer === i ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${activeCareer === i ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.07)'}`,
+          }}>
+            <div style={{ fontSize: 11, color: activeCareer === i ? cfg.accent : 'rgba(255,255,255,0.3)', fontWeight: 700, marginBottom: 5 }}>
+              {i === 0 ? '#1 Match' : `Match ${i + 1}`}
             </div>
-
-            {/* OVERVIEW TAB */}
-            {activeTab === 'overview' && (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-white font-bold text-base mb-1">{bp.title}</p>
-                  {bp.alternativeTitles && (
-                    <p className="text-white/40 text-xs">Also called: {bp.alternativeTitles.slice(0, 2).join(', ')}</p>
-                  )}
-                </div>
-
-                <div className="p-3 rounded-xl bg-white/5">
-                  <p className="text-xs font-semibold text-white/40 mb-1 uppercase tracking-wide">Why This Fits You</p>
-                  <p className="text-white/80 text-sm leading-relaxed">{bp.whyThisFits}</p>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">What You Do Every Day</p>
-                  <ul className="space-y-1.5">
-                    {bp.dayToDay.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-white/70">
-                        <span style={{ color: accent.hex }} className="flex-shrink-0 mt-0.5">—</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">Salary Over Time</p>
-                  <div className="space-y-2">
-                    {Object.values(bp.salary).map((level, i) => (
-                      <div key={i} className="flex items-center justify-between p-2.5 rounded-lg bg-white/5">
-                        <div>
-                          <p className="text-white text-xs font-semibold">{level.title}</p>
-                          <p className="text-white/30 text-xs">{level.years}</p>
-                        </div>
-                        <p className="text-white font-bold text-sm" style={{ color: accent.hex }}>{level.range}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">Perks of This Career</p>
-                  <ul className="space-y-1.5">
-                    {bp.perks.map((perk, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-white/70">
-                        <span className="text-emerald-400 flex-shrink-0">✓</span>
-                        <span>{perk}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">Career Promotion Path</p>
-                  <div className="space-y-2">
-                    {bp.promotionPath.map((step, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <div
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                          style={{
-                            backgroundColor: i === 0 ? 'rgba(255,255,255,0.1)' : i === bp.promotionPath.length - 1 ? accent.hex : 'rgba(255,255,255,0.06)',
-                            color: i === bp.promotionPath.length - 1 ? '#111' : '#fff',
-                          }}
-                        >
-                          {step.level}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-white text-xs font-semibold">{step.title}</p>
-                          <p className="text-white/30 text-xs">{step.when}</p>
-                        </div>
-                        <p className="text-white/60 text-xs font-medium">{step.salary}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* COMPANIES TAB */}
-            {activeTab === 'companies' && (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wide">🇺🇸 USA Companies</p>
-                  <div className="space-y-2">
-                    {bp.usCompanies.map((co, i) => (
-                      <div key={i} className="p-3 rounded-xl bg-white/5 border border-white/8">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="text-white text-sm font-semibold">{co.name}</p>
-                            <p className="text-white/40 text-xs">{co.location}</p>
-                            <p className="text-white/30 text-xs mt-0.5">{co.type}</p>
-                          </div>
-                          <a
-                            href={`https://${co.url}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs px-2 py-1 rounded-lg flex-shrink-0 transition-colors hover:opacity-80"
-                            style={{ backgroundColor: accent.hex, color: '#111', fontWeight: 600 }}
-                          >
-                            Jobs →
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-3 uppercase tracking-wide">🇨🇦 Canada Companies</p>
-                  <div className="space-y-2">
-                    {bp.canadaCompanies.map((co, i) => (
-                      <div key={i} className="p-3 rounded-xl bg-white/5 border border-white/8">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="text-white text-sm font-semibold">{co.name}</p>
-                            <p className="text-white/40 text-xs">{co.location}</p>
-                            <p className="text-white/30 text-xs mt-0.5">{co.type}</p>
-                          </div>
-                          <a
-                            href={`https://${co.url}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs px-2 py-1 rounded-lg flex-shrink-0 transition-colors hover:opacity-80"
-                            style={{ backgroundColor: '#8B5CF6', color: '#fff', fontWeight: 600 }}
-                          >
-                            Jobs →
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* DEGREE PLAN TAB */}
-            {activeTab === 'degree' && bp.undergraduatePlan && (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-white font-bold text-sm mb-0.5">{bp.undergraduatePlan.degree}</p>
-                  <p className="text-white/40 text-xs">{bp.undergraduatePlan.totalCredits} total credits — 4 years — 8 semesters</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">Required Degree</p>
-                  <p className="text-white/70 text-sm mb-1">{bp.requiredDegree.undergraduate}</p>
-                  {bp.requiredDegree.certifications?.length > 0 && (
-                    <div className="mt-2">
-                      <p className="text-xs text-white/30 mb-1">Also get these certifications:</p>
-                      {bp.requiredDegree.certifications.map((cert, i) => (
-                        <p key={i} className="text-xs text-white/50 flex items-center gap-1.5">
-                          <span style={{ color: accent.hex }}>+</span> {cert}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-3">
-                  <p className="text-xs font-semibold text-white/40 uppercase tracking-wide">Semester-by-Semester Class Plan</p>
-                  {bp.undergraduatePlan.semesters.map((sem, i) => (
-                    <div key={i} className="border border-white/10 rounded-xl overflow-hidden">
-                      <div className="flex items-center justify-between px-3 py-2 bg-white/5">
-                        <p className="text-white text-xs font-bold">{sem.term}</p>
-                        <span className="text-white/30 text-xs">{sem.credits} credits</span>
-                      </div>
-                      <div className="px-3 py-2">
-                        <p className="text-white/40 text-xs mb-2 italic">{sem.focus}</p>
-                        <ul className="space-y-1">
-                          {sem.courses.map((course, j) => (
-                            <li key={j} className="text-xs text-white/70 flex items-center gap-1.5">
-                              <span style={{ color: accent.hex }} className="flex-shrink-0">·</span>
-                              {course}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* MASTERS TAB */}
-            {activeTab === 'masters' && bp.mastersPath && (
-              <div className="space-y-4">
-                <div className="p-3 rounded-xl bg-white/5">
-                  <p className="text-white font-bold text-sm mb-1">{bp.mastersPath.degree}</p>
-                  <p className="text-white/40 text-xs mb-2">{bp.mastersPath.duration}</p>
-                  <p className="text-white/70 text-sm leading-relaxed">{bp.mastersPath.whyGetIt}</p>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">What This Degree Unlocks</p>
-                  {bp.mastersPath.rolesUnlocked.map((role, i) => (
-                    <div key={i} className="flex items-center justify-between p-2.5 rounded-lg bg-white/5 mb-2">
-                      <p className="text-white text-xs font-semibold">{role.title}</p>
-                      <p className="text-xs font-bold" style={{ color: accent.hex }}>{role.salary}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-white/40 mb-2 uppercase tracking-wide">Top Programs</p>
-                  {bp.mastersPath.topPrograms.map((prog, i) => (
-                    <p key={i} className="text-xs text-white/60 flex items-center gap-1.5 mb-1.5">
-                      <span style={{ color: accent.hex }}>·</span> {prog}
-                    </p>
-                  ))}
-                </div>
-
-                {bp.mastersPath.semesterPlan && (
-                  <div className="space-y-3">
-                    <p className="text-xs font-semibold text-white/40 uppercase tracking-wide">Masters Class Plan</p>
-                    {bp.mastersPath.semesterPlan.map((sem, i) => (
-                      <div key={i} className="border border-white/10 rounded-xl overflow-hidden">
-                        <div className="px-3 py-2 bg-white/5">
-                          <p className="text-white text-xs font-bold">{sem.term}</p>
-                        </div>
-                        <div className="px-3 py-2">
-                          <ul className="space-y-1">
-                            {sem.courses.map((course, j) => (
-                              <li key={j} className="text-xs text-white/70 flex items-center gap-1.5">
-                                <span style={{ color: accent.hex }} className="flex-shrink-0">·</span>
-                                {course}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </>
-        )}
+            <div style={{ color: '#F1F1F1', fontSize: 13, fontWeight: 600 }}>{c.blueprint?.title || c.title}</div>
+          </button>
+        ))}
       </div>
-    </div>
-  );
-}
-
-// ─── College Path Card ────────────────────────────────────────────────────────
-function CollegePathCard({ rec, accent }) {
-  const pathColors = { A: '#10B981', B: '#F59E0B', C: '#3B82F6', D: '#EF4444' };
-  const color = pathColors[rec.path] || accent.hex;
-
-  return (
-    <div className="card border border-white/10 mt-6">
-      <div className="flex items-center gap-3 mb-3">
-        <span
-          className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm"
-          style={{ backgroundColor: color, color: '#111' }}
-        >
-          {rec.path}
-        </span>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40">Recommended Path</p>
-          <p className="text-white font-semibold text-sm">{rec.label}</p>
-        </div>
-      </div>
-      <p className="text-white/60 text-sm leading-relaxed mb-4">{rec.reasoning}</p>
-      {rec.nextSteps?.length > 0 && (
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-2">Next Steps</p>
-          <ol className="space-y-1.5">
-            {rec.nextSteps.map((step, i) => (
-              <li key={i} className="flex gap-2 text-xs text-white/60">
-                <span style={{ color }} className="font-bold flex-shrink-0">{i + 1}.</span>
-                <span>{step}</span>
-              </li>
+      {bp && (
+        <>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 20, overflowX: 'auto' }}>
+            {['overview','companies','degree','masters'].map(tab => (
+              <button key={tab} onClick={() => setActiveTab(tab)} style={{
+                padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                cursor: 'pointer', whiteSpace: 'nowrap', border: 'none',
+                background: activeTab === tab ? cfg.accent : 'rgba(255,255,255,0.06)',
+                color: activeTab === tab ? '#03131A' : 'rgba(255,255,255,0.5)',
+              }}>
+                {tab === 'overview' ? 'Overview' : tab === 'companies' ? 'Companies' : tab === 'degree' ? 'Degree Plan' : 'Masters Path'}
+              </button>
             ))}
-          </ol>
-        </div>
+          </div>
+          <CareerTabContent tab={activeTab} bp={bp} cfg={cfg} />
+        </>
       )}
     </div>
   );
 }
 
-// ─── Followup Screen ──────────────────────────────────────────────────────────
-function FollowupScreen({ accent, followupAnswers, setFollowupAnswers, userId, navigate }) {
-  return (
-    <div className={`min-h-screen ${accent.class} px-4 py-12`}>
-      <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-2">Your Reflection</h2>
-        <p className="text-white/40 text-sm mb-6">Take a moment to answer honestly — these help build your next session's context.</p>
-        <div className="space-y-6">
-          {FOLLOWUP_QUESTIONS.map((q, i) => (
-            <div key={i} className="card border border-white/10">
-              <p className={`font-medium mb-3 ${accent.text}`}>{i + 1}. {q}</p>
-              <textarea
-                className="input-text min-h-[80px]"
-                placeholder="Your honest answer..."
-                value={followupAnswers[i] || ''}
-                onChange={e => setFollowupAnswers(prev => ({ ...prev, [i]: e.target.value }))}
-                rows={3}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col gap-3 mt-6">
-          <button
-            onClick={() => navigate(`/mini/${userId}`)}
-            className={`btn-primary w-full ${accent.bg} text-navy font-bold`}
-          >
-            Go to Weekly Check-In →
-          </button>
-          <button
-            onClick={() => navigate(`/mini/${userId}`)}
-            className="btn-primary w-full bg-white/10 text-white hover:bg-white/15"
-          >
-            Go to Monthly Check-In
-          </button>
-          <button
-            onClick={() => navigate('/')}
-            className="text-white/30 text-sm text-center hover:text-white/60 transition-colors"
-          >
-            Back to Home
-          </button>
-        </div>
+function CareerTabContent({ tab, bp, cfg }) {
+  if (tab === 'overview') return (
+    <div style={{ display: 'grid', gap: 20 }}>
+      <div>
+        <div style={{ color: '#F5F5F5', fontWeight: 700, fontSize: 16, marginBottom: 4 }}>{bp.title}</div>
+        {bp.alternativeTitles && <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Also: {bp.alternativeTitles.slice(0,2).join(', ')}</div>}
       </div>
+      {bp.whyThisFits && (
+        <div style={{ padding: 16, borderRadius: 14, background: 'rgba(255,255,255,0.04)' }}>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Why This Fits You</div>
+          <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{bp.whyThisFits}</p>
+        </div>
+      )}
+      {bp.salary && (
+        <div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>Salary Over Time</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {Object.values(bp.salary).map((level, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', borderRadius: 12, background: 'rgba(255,255,255,0.04)' }}>
+                <div>
+                  <div style={{ color: '#F5F5F5', fontSize: 13, fontWeight: 600 }}>{level.title}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>{level.years}</div>
+                </div>
+                <div style={{ color: cfg.accent, fontWeight: 700, fontSize: 14 }}>{level.range}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
+  if (tab === 'companies') return (
+    <div style={{ display: 'grid', gap: 20 }}>
+      {[{ label: '🇺🇸 USA', data: bp.usCompanies }, { label: '🇨🇦 Canada', data: bp.canadaCompanies }].map(({ label, data }) => data?.length > 0 && (
+        <div key={label}>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>{label}</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {data.map((co, i) => (
+              <div key={i} style={{ padding: '12px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                <div>
+                  <div style={{ color: '#F5F5F5', fontSize: 14, fontWeight: 600 }}>{co.name}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>{co.location} · {co.type}</div>
+                </div>
+                <a href={`https://${co.url}`} target="_blank" rel="noopener noreferrer" style={{ padding: '6px 12px', borderRadius: 8, background: cfg.accent, color: '#03131A', fontWeight: 700, fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Jobs →</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+  if (tab === 'degree' && bp.undergraduatePlan) return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ color: '#F5F5F5', fontWeight: 700 }}>{bp.undergraduatePlan.degree}</div>
+      <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>{bp.undergraduatePlan.totalCredits} credits · 4 years · 8 semesters</div>
+      {bp.undergraduatePlan.semesters?.map((sem, i) => (
+        <div key={i} style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, overflow: 'hidden' }}>
+          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '10px 16px', display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ color: '#F5F5F5', fontWeight: 700, fontSize: 13 }}>{sem.term}</span>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>{sem.credits} credits</span>
+          </div>
+          <div style={{ padding: '12px 16px' }}>
+            {sem.focus && <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, fontStyle: 'italic', marginBottom: 8 }}>{sem.focus}</div>}
+            {sem.courses?.map((c, j) => (
+              <div key={j} style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13, display: 'flex', gap: 8, marginBottom: 4 }}>
+                <span style={{ color: cfg.accent }}>·</span>{c}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+  if (tab === 'masters' && bp.mastersPath) return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ padding: 16, borderRadius: 14, background: 'rgba(255,255,255,0.04)' }}>
+        <div style={{ color: '#F5F5F5', fontWeight: 700, marginBottom: 4 }}>{bp.mastersPath.degree}</div>
+        <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, marginBottom: 10 }}>{bp.mastersPath.duration}</div>
+        <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{bp.mastersPath.whyGetIt}</p>
+      </div>
+      {bp.mastersPath.rolesUnlocked?.map((role, i) => (
+        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 12, background: 'rgba(255,255,255,0.04)' }}>
+          <span style={{ color: '#F5F5F5', fontSize: 14, fontWeight: 600 }}>{role.title}</span>
+          <span style={{ color: cfg.accent, fontWeight: 700 }}>{role.salary}</span>
+        </div>
+      ))}
+    </div>
+  );
+  return null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+function getResultCards(analysis, scores, cfg) {
+  const defaults = [
+    { title: 'Reality Check', body: 'Loading your personalized analysis…' },
+    { title: 'Strengths', body: 'Identified from your answers…' },
+    { title: 'Risks', body: 'Areas flagged for your attention…' },
+    { title: 'Direction', body: 'Your path forward is being built…' },
+    { title: 'Next Steps', body: 'Specific actions identified…' },
+    { title: 'Growth Focus', body: 'Key development areas for you…' },
+  ];
+  if (!analysis) return defaults;
+  // Try to extract sections from the analysis text
+  const sections = [
+    { title: 'Reality Check', patterns: ['reality check', 'where you are', 'current state', 'honest assessment'] },
+    { title: 'Strengths', patterns: ['strength', 'what you do well', 'positive', 'capable'] },
+    { title: 'Risks', patterns: ['risk', 'concern', 'danger', 'warning', 'threat', 'avoidance'] },
+    { title: 'Direction', patterns: ['direction', 'path forward', 'where to go', 'career'] },
+    { title: 'Next Steps', patterns: ['next step', 'action', 'what to do', 'start with'] },
+    { title: 'Growth Focus', patterns: ['growth', 'develop', 'improve', 'build', 'focus on'] },
+  ];
+  return sections.map(s => {
+    const lower = analysis.toLowerCase();
+    for (const p of s.patterns) {
+      const idx = lower.indexOf(p);
+      if (idx !== -1) {
+        const snippet = analysis.substring(idx, idx + 200).split('\n')[0].replace(/[#*]/g, '').trim();
+        if (snippet.length > 20) return { title: s.title, body: snippet };
+      }
+    }
+    return defaults.find(d => d.title === s.title) || { title: s.title, body: '' };
+  });
+}
+
 function formatAnalysis(text) {
   return text
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>(\n|$))+/g, match => `<ul>${match}</ul>`)
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/^(?!<[hul])(.+)$/gm, '<p>$1</p>')
-    .replace(/<p><\/p>/g, '')
-    .replace(/<p>(<[hul])/g, '$1')
-    .replace(/(<\/[hul][^>]*>)<\/p>/g, '$1');
+    .replace(/^## (.+)$/gm, '<h2 style="color:#F5F5F5;font-size:18px;margin:24px 0 10px">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 style="color:#F5F5F5;font-size:16px;margin:18px 0 8px">$1</h3>')
+    .replace(/^- (.+)$/gm, '<li style="margin-bottom:6px">$1</li>')
+    .replace(/(<li[^>]*>.*<\/li>(\n|$))+/g, match => `<ul style="padding-left:20px;margin:10px 0">${match}</ul>`)
+    .replace(/\n\n/g, '</p><p style="margin:12px 0">')
+    .replace(/^(?!<[hul])(.+)$/gm, '<p style="margin:12px 0">$1</p>')
+    .replace(/<p[^>]*><\/p>/g, '');
 }

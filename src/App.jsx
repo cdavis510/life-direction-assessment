@@ -4,6 +4,7 @@ import { ToastProvider } from './components/Toast';
 import MobileNav from './components/MobileNav';
 import LoginScreen from './components/LoginScreen';
 import WelcomeScreen from './components/WelcomeScreen';
+import AssessmentIntro from './components/AssessmentIntro';
 import Assessment from './components/Assessment';
 import ResultsReveal from './components/ResultsReveal';
 import MomDashboard from './components/MomDashboard';
@@ -45,8 +46,9 @@ export default function App() {
 
           {/* Protected */}
           <Route path="/" element={<RequireAuth><Navigate to="/login" replace /></RequireAuth>} />
-          <Route path="/welcome/:userId"               element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
-          <Route path="/assessment/:userId/:sessionId" element={<RequireAuth><Assessment /></RequireAuth>} />
+          <Route path="/welcome/:userId"                    element={<RequireAuth><WelcomeScreen /></RequireAuth>} />
+          <Route path="/intro/:userId/:sessionId"          element={<RequireAuth><AssessmentIntro /></RequireAuth>} />
+          <Route path="/assessment/:userId/:sessionId"     element={<RequireAuth><Assessment /></RequireAuth>} />
           <Route path="/results/:userId/:sessionId"    element={<RequireAuth><ResultsReveal /></RequireAuth>} />
           <Route path="/dashboard"                     element={<RequireAuth><MomDashboard /></RequireAuth>} />
           <Route path="/history/:userId"               element={<RequireAuth><SessionHistory /></RequireAuth>} />

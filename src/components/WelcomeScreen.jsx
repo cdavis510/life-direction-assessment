@@ -88,7 +88,7 @@ export default function WelcomeScreen() {
         return;
       }
       const sessionId = await createSession(userId);
-      navigate(`/assessment/${userId}/${sessionId}`);
+      navigate(`/intro/${userId}/${sessionId}`);
     } catch (err) {
       console.error(err);
       setLoading(false);

@@ -1,22 +1,61 @@
+// ─── SCREEN 04 — Question Screen + Screen 06 — Save Progress Modal ───────────
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { USER_SECTIONS, PAUSE_MESSAGES } from '../data/questions';
-import { saveAnswer, updateSessionProgress, completeSession, getSession, getAllAnswers } from '../hooks/useFirestore';
-import QuestionCard from './QuestionCard';
-import PauseBreath from './PauseBreath';
+import { USER_SECTIONS } from '../data/questions';
+import { saveAnswer, updateSessionProgress, getSession, getAllAnswers } from '../hooks/useFirestore';
 
-const USER_ACCENT = {
-  mekhi: { text: 'text-mekhi', bg: 'bg-mekhi', border: 'border-mekhi', class: 'user-mekhi', hex: '#06B6D4' },
-  melvin: { text: 'text-melvin', bg: 'bg-melvin', border: 'border-melvin', class: 'user-melvin', hex: '#8B5CF6' },
+// ─── User config ──────────────────────────────────────────────────────────────
+const USER_CONFIG = {
+  mekhi: {
+    accent: '#00C8FF',
+    accentGlow: 'rgba(0,200,255,0.12)',
+    accentBorder: 'rgba(0,200,255,0.20)',
+    accentFaint: 'rgba(0,200,255,0.07)',
+    name: 'Mekhi',
+    avatarImg: '/avatars/kane/portrait.jpg',
+    avatarName: 'Kane',
+    supportMessages: [
+      "You're doing fine. Keep going.",
+      "Take your time with this one.",
+      "Be honest — that's all that matters.",
+      "No wrong answers here.",
+      "Stay focused. You've got this.",
+      "Think about what's actually true for you.",
+      "Every answer moves you forward.",
+      "Real talk only. I got you.",
+      "You're further along than you think.",
+      "Keep it real. That's the whole point.",
+    ],
+  },
+  melvin: {
+    accent: '#8B5CF6',
+    accentGlow: 'rgba(139,92,246,0.12)',
+    accentBorder: 'rgba(139,92,246,0.20)',
+    accentFaint: 'rgba(139,92,246,0.07)',
+    name: 'Melvin',
+    avatarImg: '/avatars/caleb/portrait.jpg',
+    avatarName: 'Caleb',
+    supportMessages: [
+      "Stay with it. You've got this.",
+      "Honest answers only. That's it.",
+      "Think carefully. No rush.",
+      "Your future depends on your honesty.",
+      "Keep going. You're building something real.",
+      "This matters. Stay focused.",
+      "Every question brings you closer.",
+      "Be real with yourself right now.",
+      "You're doing the work. Keep it up.",
+      "Almost there. Stay honest.",
+    ],
+  },
 };
 
 export default function Assessment() {
   const { userId, sessionId } = useParams();
   const navigate = useNavigate();
-  const accent = USER_ACCENT[userId] || USER_ACCENT.mekhi;
+  const cfg = USER_CONFIG[userId] || USER_CONFIG.mekhi;
   const sections = USER_SECTIONS[userId] || USER_SECTIONS.mekhi;
 
-  // Flatten all questions with section info
   const allQuestions = sections.flatMap(section =>
     section.questions.map(q => ({ ...q, sectionId: section.id, sectionTitle: section.title }))
   );
@@ -24,15 +63,19 @@ export default function Assessment() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [showPause, setShowPause] = useState(false);
-  const [pauseMessage, setPauseMessage] = useState('');
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nextEnabled, setNextEnabled] = useState(false);
+  const [showPause, setShowPause] = useState(false);
+  const [pauseNextSection, setPauseNextSection] = useState('');
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [msgIndex, setMsgIndex] = useState(0);
+  const [msgVisible, setMsgVisible] = useState(true);
   const timerRef = useRef(null);
+  const msgTimerRef = useRef(null);
 
-  // Restore progress on mount
+  // Restore progress
   useEffect(() => {
     async function restore() {
       try {
@@ -42,8 +85,7 @@ export default function Assessment() {
         ]);
         if (savedAnswers) setAnswers(savedAnswers);
         if (session?.currentQuestion) {
-          const idx = Math.min(session.currentQuestion, totalQuestions - 1);
-          setCurrentIndex(idx);
+          setCurrentIndex(Math.min(session.currentQuestion, totalQuestions - 1));
         }
       } catch {}
       setLoading(false);
@@ -51,18 +93,7 @@ export default function Assessment() {
     restore();
   }, [userId, sessionId, totalQuestions]);
 
-  const currentQuestion = allQuestions[currentIndex];
-  const currentAnswer = answers[currentQuestion?.id];
-  const currentSection = sections.find(s => s.id === currentQuestion?.sectionId);
-
-  // Calculate progress per section for smooth bar
-  const sectionIdx = sections.findIndex(s => s.id === currentQuestion?.sectionId);
-  const questionsBeforeCurrentSection = sections
-    .slice(0, sectionIdx)
-    .reduce((acc, s) => acc + s.questions.length, 0);
-  const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
-
-  // Enforce 4-second minimum delay before Next
+  // 4-second minimum before Next
   useEffect(() => {
     setNextEnabled(false);
     clearTimeout(timerRef.current);
@@ -70,30 +101,51 @@ export default function Assessment() {
     return () => clearTimeout(timerRef.current);
   }, [currentIndex]);
 
+  // Rotate support messages
+  useEffect(() => {
+    msgTimerRef.current = setInterval(() => {
+      setMsgVisible(false);
+      setTimeout(() => {
+        setMsgIndex(i => (i + 1) % cfg.supportMessages.length);
+        setMsgVisible(true);
+      }, 350);
+    }, 5000);
+    return () => clearInterval(msgTimerRef.current);
+  }, [cfg.supportMessages.length]);
+
+  const currentQuestion = allQuestions[currentIndex];
+  const currentSection = sections.find(s => s.id === currentQuestion?.sectionId);
+  const currentAnswer = answers[currentQuestion?.id];
+  const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
+  const sectionIdx = sections.findIndex(s => s.id === currentQuestion?.sectionId);
+
   const handleAnswerChange = useCallback((value) => {
     const qId = allQuestions[currentIndex].id;
     setAnswers(prev => ({ ...prev, [qId]: value }));
   }, [currentIndex, allQuestions]);
 
-  const handleSaveAnswer = useCallback(async (questionId, value) => {
-    setSaving(true);
-    try {
-      await saveAnswer(userId, sessionId, questionId, value);
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 2000);
-    } catch {}
-    setSaving(false);
-  }, [userId, sessionId]);
-
+  // Auto-save on answer change
   useEffect(() => {
     const qId = allQuestions[currentIndex]?.id;
     const answer = answers[qId];
-    if (answer !== undefined && answer !== '' && answer !== null) {
-      handleSaveAnswer(qId, answer);
+    if (answer === undefined || answer === '' || answer === null) return;
+    let cancelled = false;
+    async function save() {
+      setSaving(true);
+      try {
+        await saveAnswer(userId, sessionId, qId, answer);
+        if (!cancelled) {
+          setJustSaved(true);
+          setTimeout(() => setJustSaved(false), 2000);
+        }
+      } catch {}
+      if (!cancelled) setSaving(false);
     }
+    save();
+    return () => { cancelled = true; };
   }, [answers]);
 
-  function isLastQuestionInSection(idx) {
+  function isLastInSection(idx) {
     const q = allQuestions[idx];
     if (!q) return false;
     const next = allQuestions[idx + 1];
@@ -102,34 +154,21 @@ export default function Assessment() {
 
   async function handleNext() {
     if (!nextEnabled) return;
-
-    const lastInSection = isLastQuestionInSection(currentIndex);
-    const isLastQuestion = currentIndex === totalQuestions - 1;
-
-    // Save progress
+    const isLast = currentIndex === totalQuestions - 1;
+    const lastInSection = isLastInSection(currentIndex);
     try {
       await updateSessionProgress(userId, sessionId, { currentQuestion: currentIndex + 1 });
     } catch {}
-
-    if (isLastQuestion) {
-      // Complete assessment
+    if (isLast) {
       navigate(`/results/${userId}/${sessionId}`);
       return;
     }
-
     if (lastInSection) {
-      // Show pause screen between sections
-      const msg = PAUSE_MESSAGES[Math.floor(Math.random() * PAUSE_MESSAGES.length)];
-      setPauseMessage(msg);
+      const nextSection = sections[sectionIdx + 1];
+      setPauseNextSection(nextSection?.title || '');
       setShowPause(true);
       return;
     }
-
-    setCurrentIndex(prev => prev + 1);
-  }
-
-  function handleContinueFromPause() {
-    setShowPause(false);
     setCurrentIndex(prev => prev + 1);
   }
 
@@ -137,140 +176,492 @@ export default function Assessment() {
     if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
   }
 
+  function handleSaveExit() {
+    setShowSaveModal(true);
+  }
+
+  const hasAnswer = currentAnswer !== undefined && currentAnswer !== '' && currentAnswer !== null;
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white/40">Loading your assessment...</div>
+      <div style={{
+        minHeight: '100vh', background: '#050505', display: 'flex',
+        alignItems: 'center', justifyContent: 'center',
+        color: 'rgba(255,255,255,0.3)', fontFamily: 'Inter, sans-serif', fontSize: 14,
+      }}>
+        Loading your assessment…
       </div>
     );
   }
 
   if (showPause) {
-    const nextSection = sections[sectionIdx + 1];
     return (
-      <PauseBreath
-        message={pauseMessage}
-        nextSectionTitle={nextSection?.title}
-        accent={accent}
-        onContinue={handleContinueFromPause}
+      <SectionTransition
+        cfg={cfg}
+        nextSectionTitle={pauseNextSection}
+        onContinue={() => { setShowPause(false); setCurrentIndex(prev => prev + 1); }}
       />
     );
   }
 
-  const hasAnswer = currentAnswer !== undefined && currentAnswer !== '' && currentAnswer !== null;
-
   return (
-    <div className={`min-h-screen flex flex-col ${accent.class}`} style={{ backgroundColor: '#0E0C0A' }}>
+    <div style={{
+      minHeight: '100vh',
+      background: '#08080A',
+      color: '#F5F5F5',
+      fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
+    }}>
 
-      {/* ── Premium Progress Header ── */}
-      <div className="fixed top-0 left-0 right-0 z-50">
-        {/* Thin glow progress bar */}
-        <div className="relative h-0.5" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}>
-          <div
-            className="absolute h-full rounded-full transition-all duration-700 ease-out"
-            style={{ width: `${progress}%`, backgroundColor: accent.hex, boxShadow: `0 0 8px ${accent.hex}` }}
-          />
+      {/* ── Fixed Header ── */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+        background: 'rgba(8,8,10,0.96)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        {/* Progress bar */}
+        <div style={{ height: 3, background: 'rgba(255,255,255,0.06)' }}>
+          <div style={{
+            height: '100%',
+            width: `${progress}%`,
+            background: cfg.accent,
+            boxShadow: `0 0 10px ${cfg.accent}`,
+            transition: 'width 0.6s ease',
+          }} />
         </div>
-
-        <div
-          className="px-4 py-3 flex items-center justify-between backdrop-blur-sm"
-          style={{ backgroundColor: '#0E0C0Af5' }}
-        >
+        <div style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p
-              className="font-bold mb-0.5"
-              style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.08em', color: accent.hex, fontSize: 15 }}
-            >
+            <div style={{ color: cfg.accent, fontSize: 12, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase' }}>
               {currentSection?.title}
-            </p>
-            <p className="text-white/25 text-xs">
-              {currentIndex + 1} / {totalQuestions} questions
-            </p>
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, marginTop: 2 }}>
+              Question {currentIndex + 1} of {totalQuestions}
+            </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            {/* Save status */}
-            {saving && (
-              <span className="text-white/30 text-xs font-mono animate-pulse">saving…</span>
-            )}
-            {justSaved && !saving && (
-              <span className="text-xs flex items-center gap-1 animate-fade-in" style={{ color: accent.hex }}>
-                <span>✓</span> saved
-              </span>
-            )}
-
-            {/* Progress pill */}
-            <div
-              className="px-3 py-1 rounded-full text-xs font-bold"
-              style={{ backgroundColor: `${accent.hex}18`, color: accent.hex }}
-            >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            {saving && <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12 }}>saving…</span>}
+            {justSaved && !saving && <span style={{ color: cfg.accent, fontSize: 12 }}>✓ saved</span>}
+            <div style={{
+              padding: '5px 12px', borderRadius: 999,
+              background: cfg.accentFaint,
+              border: `1px solid ${cfg.accentBorder}`,
+              color: cfg.accent, fontSize: 12, fontWeight: 800,
+            }}>
               {Math.round(progress)}%
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Question ── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 pt-28 pb-36">
-        <div className="w-full max-w-2xl">
-          {/* Section + subsection label */}
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-0.5 h-5 rounded-full" style={{ backgroundColor: accent.hex, opacity: 0.6 }} />
-            <p
-              className="text-xs uppercase tracking-widest font-bold"
-              style={{ color: `${accent.hex}90`, fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.1em', fontSize: 13 }}
-            >
-              {currentSection?.title}
-              {currentQuestion?.subsection ? ` · Part ${currentQuestion.subsection}` : ''}
-            </p>
-          </div>
+      {/* ── Body ── */}
+      <div style={{ paddingTop: 90, paddingBottom: 100, padding: '90px 24px 100px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0,1.45fr) minmax(0,0.55fr)',
+            gap: 24,
+            alignItems: 'start',
+          }}>
 
-          <QuestionCard
-            key={currentQuestion.id}
-            question={currentQuestion}
-            value={currentAnswer}
-            onChange={handleAnswerChange}
-            accent={accent}
-          />
+            {/* LEFT — Question */}
+            <div style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 22,
+              padding: 32,
+            }}>
+              <h2 style={{ fontSize: 32, lineHeight: 1.25, margin: '0 0 10px', fontWeight: 800, color: '#F5F5F5' }}>
+                {currentQuestion?.text}
+              </h2>
+              {currentQuestion?.subsectionName && (
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14, margin: '0 0 28px' }}>
+                  {currentQuestion.subsectionName}
+                </p>
+              )}
+
+              <QuestionInput
+                question={currentQuestion}
+                value={currentAnswer}
+                onChange={handleAnswerChange}
+                accent={cfg.accent}
+                accentFaint={cfg.accentFaint}
+                accentBorder={cfg.accentBorder}
+              />
+
+              {/* Navigation */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 32, flexWrap: 'wrap' }}>
+                <button
+                  onClick={handleBack}
+                  disabled={currentIndex === 0}
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    color: currentIndex === 0 ? 'rgba(255,255,255,0.2)' : '#EAEAEA',
+                    fontWeight: 600, borderRadius: 14, padding: '13px 20px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    cursor: currentIndex === 0 ? 'not-allowed' : 'pointer', fontSize: 14,
+                  }}
+                >
+                  ← Back
+                </button>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <button
+                    onClick={handleSaveExit}
+                    style={{
+                      background: 'rgba(255,255,255,0.04)',
+                      color: '#EAEAEA', fontWeight: 600, borderRadius: 14,
+                      padding: '13px 18px', border: '1px solid rgba(255,255,255,0.08)',
+                      cursor: 'pointer', fontSize: 14,
+                    }}
+                  >
+                    Save & Exit
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={!nextEnabled || !hasAnswer}
+                    style={{
+                      background: !nextEnabled || !hasAnswer ? `${cfg.accent}30` : cfg.accent,
+                      color: !nextEnabled || !hasAnswer ? cfg.accent : '#03131A',
+                      fontWeight: 700, borderRadius: 14, padding: '13px 24px',
+                      border: 'none', cursor: !nextEnabled || !hasAnswer ? 'not-allowed' : 'pointer',
+                      fontSize: 15, opacity: !nextEnabled || !hasAnswer ? 0.6 : 1,
+                    }}
+                  >
+                    {!nextEnabled ? 'Take your time…' : currentIndex === totalQuestions - 1 ? 'See My Results →' : 'Next →'}
+                  </button>
+                </div>
+              </div>
+              {!nextEnabled && (
+                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12, textAlign: 'center', marginTop: 10 }}>
+                  Reflect for a moment before moving on
+                </p>
+              )}
+            </div>
+
+            {/* RIGHT — Support Panel */}
+            <div style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 22,
+              padding: 22,
+              display: 'grid',
+              gap: 16,
+              alignContent: 'start',
+              position: 'sticky',
+              top: 90,
+            }}>
+              <div style={{ fontSize: 11, color: cfg.accent, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase' }}>
+                Support Panel
+              </div>
+
+              {/* Avatar portrait */}
+              <div style={{
+                borderRadius: 18,
+                overflow: 'hidden',
+                background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 40%)`,
+                border: `1px solid ${cfg.accentBorder}`,
+                height: 180,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <img
+                  src={cfg.avatarImg}
+                  alt={cfg.avatarName}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                  onError={e => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.style.background = `radial-gradient(circle, ${cfg.accentGlow}, transparent)`;
+                  }}
+                />
+              </div>
+
+              {/* Rotating message */}
+              <div style={{
+                padding: 16,
+                borderRadius: 16,
+                background: 'rgba(255,255,255,0.04)',
+                color: '#EDEDED',
+                lineHeight: 1.65,
+                fontSize: 15,
+                fontStyle: 'italic',
+                minHeight: 64,
+                transition: 'opacity 0.35s ease',
+                opacity: msgVisible ? 1 : 0,
+              }}>
+                "{cfg.supportMessages[msgIndex]}"
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ── Navigation ── */}
-      <div
-        className="fixed bottom-0 left-0 right-0 px-4 py-4 backdrop-blur-sm border-t"
-        style={{ backgroundColor: '#0E0C0Af5', borderColor: 'rgba(255,255,255,0.06)' }}
-      >
-        <div className="max-w-2xl mx-auto flex items-center gap-3">
-          {currentIndex > 0 && (
-            <button
-              onClick={handleBack}
-              className="px-5 py-3 rounded-2xl text-white/40 hover:text-white/70 font-medium transition-colors text-sm"
-            >
-              ← Back
-            </button>
-          )}
-          <button
-            onClick={handleNext}
-            disabled={!nextEnabled || !hasAnswer}
-            className="flex-1 py-3 rounded-2xl font-bold text-base transition-all duration-200 disabled:opacity-35"
+      {/* ── Save & Exit Modal (Screen 06) ── */}
+      {showSaveModal && (
+        <SaveModal
+          cfg={cfg}
+          onKeepGoing={() => setShowSaveModal(false)}
+          onDashboard={() => navigate(`/welcome/${userId}`)}
+        />
+      )}
+    </div>
+  );
+}
+
+// ─── Question Input — handles all question types ──────────────────────────────
+function QuestionInput({ question, value, onChange, accent, accentFaint, accentBorder }) {
+  if (!question) return null;
+  const type = question.type;
+
+  // Text / open answer
+  if (type === 'text' || type === 'open') {
+    return (
+      <textarea
+        placeholder="Take your time. Write what's actually true for you…"
+        value={value || ''}
+        onChange={e => onChange(e.target.value)}
+        rows={5}
+        style={{
+          width: '100%', boxSizing: 'border-box',
+          borderRadius: 16, border: `1px solid ${value ? accent + '50' : 'rgba(255,255,255,0.1)'}`,
+          background: 'rgba(255,255,255,0.04)', color: '#F5F5F5',
+          padding: '16px 18px', outline: 'none', fontSize: 16,
+          lineHeight: 1.7, resize: 'vertical', minHeight: 150,
+          fontFamily: 'Inter, sans-serif',
+        }}
+      />
+    );
+  }
+
+  // Slider
+  if (type === 'slider') {
+    const min = question.min || 1;
+    const max = question.max || 10;
+    const current = value ?? Math.round((min + max) / 2);
+    const pct = ((current - min) / (max - min)) * 100;
+    const labels = { 1:'Not at all', 2:'Barely', 3:'A little', 4:'Somewhat', 5:'In the middle', 6:'Mostly', 7:'Pretty well', 8:'Very much', 9:'Almost fully', 10:'Completely' };
+    return (
+      <div style={{ display: 'grid', gap: 20 }}>
+        <div style={{ textAlign: 'center', padding: '16px 0' }}>
+          <div style={{ fontSize: 72, fontWeight: 900, color: accent, lineHeight: 1 }}>{current}</div>
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 15, marginTop: 6 }}>{labels[current] || ''}</div>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <div style={{ height: 8, borderRadius: 999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+            <div style={{ width: `${pct}%`, height: '100%', background: accent, transition: 'width 0.15s' }} />
+          </div>
+          <input
+            type="range" min={min} max={max} value={current}
+            onChange={e => onChange(Number(e.target.value))}
             style={{
-              backgroundColor: !nextEnabled || !hasAnswer ? `${accent.hex}30` : accent.hex,
-              color: !nextEnabled || !hasAnswer ? accent.hex : '#0E0C0A',
+              position: 'absolute', top: -4, left: 0, right: 0,
+              width: '100%', opacity: 0, height: 16, cursor: 'pointer',
+            }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.25)', fontSize: 12, marginTop: 8 }}>
+            <span>{question.minLabel || min}</span>
+            <span>{question.maxLabel || max}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Multiple choice — likert, multiple, forced_choice, scenario (with options)
+  if (type === 'multiple' || type === 'likert' || type === 'forced_choice' ||
+      (type === 'scenario' && question.options)) {
+    const options = question.options || [];
+    return (
+      <div style={{ display: 'grid', gap: 12 }}>
+        {options.map((opt, i) => {
+          const selected = value === opt;
+          return (
+            <button
+              key={i}
+              onClick={() => onChange(opt)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                padding: '16px 18px', borderRadius: 16, textAlign: 'left',
+                background: selected ? `${accent}15` : 'rgba(255,255,255,0.025)',
+                border: `1.5px solid ${selected ? accent + '70' : 'rgba(255,255,255,0.09)'}`,
+                color: selected ? '#F5F5F5' : 'rgba(255,255,255,0.65)',
+                fontSize: 16, cursor: 'pointer',
+                transform: selected ? 'translateX(4px)' : 'none',
+                transition: 'all 0.15s ease',
+                boxShadow: selected ? `0 0 20px ${accent}15` : 'none',
+              }}
+            >
+              <span style={{
+                width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                border: `2px solid ${selected ? accent : 'rgba(255,255,255,0.2)'}`,
+                background: selected ? `${accent}25` : 'transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {selected && <span style={{ width: 8, height: 8, borderRadius: '50%', background: accent }} />}
+              </span>
+              <span>{opt}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // Scenario with no options — text input
+  return (
+    <textarea
+      placeholder="Describe what you would do…"
+      value={value || ''}
+      onChange={e => onChange(e.target.value)}
+      rows={5}
+      style={{
+        width: '100%', boxSizing: 'border-box',
+        borderRadius: 16, border: `1px solid ${value ? accent + '50' : 'rgba(255,255,255,0.1)'}`,
+        background: 'rgba(255,255,255,0.04)', color: '#F5F5F5',
+        padding: '16px 18px', outline: 'none', fontSize: 16,
+        lineHeight: 1.7, resize: 'vertical', minHeight: 150,
+        fontFamily: 'Inter, sans-serif',
+      }}
+    />
+  );
+}
+
+// ─── Screen 05 — Section Transition ──────────────────────────────────────────
+function SectionTransition({ cfg, nextSectionTitle, onContinue }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 5000);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 26%), #08080A`,
+      color: '#F5F5F5',
+      fontFamily: 'Inter, sans-serif',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 32,
+    }}>
+      <div style={{ maxWidth: 860, width: '100%' }}>
+        <div style={{
+          textAlign: 'center',
+          padding: 40,
+          borderRadius: 24,
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1.4 }}>
+            Section Complete
+          </div>
+          <h2 style={{ fontSize: 38, margin: '16px 0 10px', fontWeight: 900 }}>
+            You're making progress.
+          </h2>
+          {nextSectionTitle && (
+            <p style={{ color: '#C9C9C9', fontSize: 18, maxWidth: 520, margin: '0 auto' }}>
+              Next section: {nextSectionTitle}
+            </p>
+          )}
+
+          {/* Avatar message */}
+          <div style={{
+            margin: '28px auto 0',
+            maxWidth: 360,
+            padding: '16px 20px',
+            borderRadius: 16,
+            background: cfg.accentFaint,
+            border: `1px solid ${cfg.accentBorder}`,
+            color: '#EAFBFF',
+            fontSize: 16,
+            fontStyle: 'italic',
+          }}>
+            "Stay focused."
+          </div>
+
+          <div style={{ marginTop: 28 }}>
+            <button
+              onClick={onContinue}
+              disabled={!ready}
+              style={{
+                background: ready ? cfg.accent : 'rgba(255,255,255,0.08)',
+                color: ready ? '#03131A' : 'rgba(255,255,255,0.4)',
+                fontWeight: 700, borderRadius: 14,
+                padding: '15px 36px', border: 'none',
+                cursor: ready ? 'pointer' : 'not-allowed',
+                fontSize: 16, transition: 'all 0.3s',
+              }}
+            >
+              {ready ? 'Continue' : 'One moment…'}
+            </button>
+          </div>
+          {!ready && (
+            <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12, marginTop: 12 }}>
+              Take a breath before the next section
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 06 — Save Progress Modal ─────────────────────────────────────────
+function SaveModal({ cfg, onKeepGoing, onDashboard }) {
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 100,
+      background: 'rgba(0,0,0,0.75)',
+      backdropFilter: 'blur(8px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 24,
+    }}>
+      <div style={{
+        background: '#0E0E12',
+        border: '1px solid rgba(255,255,255,0.1)',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
+        borderRadius: 24,
+        padding: 36,
+        maxWidth: 520,
+        width: '100%',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          width: 52, height: 52, borderRadius: '50%',
+          background: cfg.accentFaint,
+          border: `1px solid ${cfg.accentBorder}`,
+          margin: '0 auto 20px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 22,
+        }}>
+          ✓
+        </div>
+        <h2 style={{ margin: '0 0 12px', fontSize: 32, fontWeight: 900 }}>Progress Saved</h2>
+        <p style={{ color: '#C4C4C4', fontSize: 17, margin: '0 0 28px', lineHeight: 1.6 }}>
+          Your answers are saved. You can come back anytime and pick up right where you left off.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <button
+            onClick={onDashboard}
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              color: '#EAEAEA', fontWeight: 600, borderRadius: 14,
+              padding: '14px 22px', border: '1px solid rgba(255,255,255,0.1)',
+              cursor: 'pointer', fontSize: 15,
             }}
           >
-            {!nextEnabled
-              ? 'Take your time…'
-              : currentIndex === totalQuestions - 1
-              ? 'See My Results →'
-              : 'Next Question →'
-            }
+            Return to Home
+          </button>
+          <button
+            onClick={onKeepGoing}
+            style={{
+              background: cfg.accent,
+              color: '#03131A', fontWeight: 700, borderRadius: 14,
+              padding: '14px 22px', border: 'none',
+              cursor: 'pointer', fontSize: 15,
+            }}
+          >
+            Keep Going
           </button>
         </div>
-        {!nextEnabled && (
-          <p className="text-center text-white/20 text-xs mt-2 font-mono">
-            Reflect for a moment before moving on
-          </p>
-        )}
       </div>
     </div>
   );

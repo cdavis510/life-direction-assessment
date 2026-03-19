@@ -13,6 +13,7 @@ import MiniAssessment from './components/MiniAssessment';
 import WeeklyCheckin from './components/WeeklyCheckin';
 import AgentSelect from './components/ai-agents/AgentSelect';
 import AvatarScreen from './components/ai-agents/AvatarScreen';
+import ResultsPreview from './components/ai-agents/ResultsPreview';
 import { useAuth } from './hooks/useAuth';
 
 // Redirects to /login if not authenticated
@@ -57,6 +58,7 @@ export default function App() {
           <Route path="/weekly"                        element={<RequireAuth><WeeklyCheckin /></RequireAuth>} />
           <Route path="/agents"                        element={<RequireAuth><AgentSelect /></RequireAuth>} />
           <Route path="/agents/:agentId"               element={<RequireAuth><AvatarScreen /></RequireAuth>} />
+          <Route path="/agents/results-preview"        element={<RequireAuth><ResultsPreview /></RequireAuth>} />
           <Route path="*"                              element={<Navigate to="/login" replace />} />
         </Routes>
         <MobileNav />

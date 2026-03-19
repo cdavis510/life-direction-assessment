@@ -1,4 +1,30 @@
 // ─── SCREEN 04 — Question Screen + Screen 06 — Save Progress Modal ───────────
+//
+// DYNAMIC QUESTION ENGINE
+// ─────────────────────────────────────────────────────────────────────────────
+// Questions are loaded from src/data/questions.js → USER_SECTIONS[userId]
+// Each section has: { id, title, questions: [...] }
+// Each question has: { id, type, text, options?, min?, max?, subsectionName? }
+//
+// Supported question types:
+//   text          → free text textarea
+//   open          → free text textarea (alias)
+//   multiple      → single-select choice list (radio)
+//   likert        → single-select 1-5 agreement scale (radio)
+//   forced_choice → single-select, pick one (radio)
+//   scenario      → single-select if options[], else textarea
+//   slider        → numeric range (min/max configurable per question)
+//   multi_select  → multi-select checkboxes (select all that apply)
+//   yes_no        → two-button Yes/No shorthand
+//
+// Answers saved to: Firestore → users/{userId}/sessions/{sessionId}/answers
+// Progress saved to: Firestore → users/{userId}/sessions/{sessionId}
+// Restore on mount: pulls session.currentQuestion + all saved answers
+//
+// AI-READY: Questions can be injected from any source (static array, API, or
+// Claude-generated). To add AI-adaptive questions, push to USER_SECTIONS or
+// build a separate dynamic section loader.
+// ─────────────────────────────────────────────────────────────────────────────
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { USER_SECTIONS } from '../data/questions';
@@ -180,7 +206,10 @@ export default function Assessment() {
     setShowSaveModal(true);
   }
 
-  const hasAnswer = currentAnswer !== undefined && currentAnswer !== '' && currentAnswer !== null;
+  // multi_select stores an array — treat empty array as no answer
+  const hasAnswer = Array.isArray(currentAnswer)
+    ? currentAnswer.length > 0
+    : currentAnswer !== undefined && currentAnswer !== '' && currentAnswer !== null;
 
   if (loading) {
     return (
@@ -412,7 +441,7 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
   if (!question) return null;
   const type = question.type;
 
-  // Text / open answer
+  // ── Text / open answer ────────────────────────────────────────────────────
   if (type === 'text' || type === 'open') {
     return (
       <textarea
@@ -432,13 +461,17 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // Slider
+  // ── Slider (scale) ────────────────────────────────────────────────────────
   if (type === 'slider') {
     const min = question.min || 1;
     const max = question.max || 10;
     const current = value ?? Math.round((min + max) / 2);
     const pct = ((current - min) / (max - min)) * 100;
-    const labels = { 1:'Not at all', 2:'Barely', 3:'A little', 4:'Somewhat', 5:'In the middle', 6:'Mostly', 7:'Pretty well', 8:'Very much', 9:'Almost fully', 10:'Completely' };
+    const labels = {
+      1: 'Not at all', 2: 'Barely', 3: 'A little', 4: 'Somewhat',
+      5: 'In the middle', 6: 'Mostly', 7: 'Pretty well', 8: 'Very much',
+      9: 'Almost fully', 10: 'Completely',
+    };
     return (
       <div style={{ display: 'grid', gap: 20 }}>
         <div style={{ textAlign: 'center', padding: '16px 0' }}>
@@ -452,10 +485,7 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
           <input
             type="range" min={min} max={max} value={current}
             onChange={e => onChange(Number(e.target.value))}
-            style={{
-              position: 'absolute', top: -4, left: 0, right: 0,
-              width: '100%', opacity: 0, height: 16, cursor: 'pointer',
-            }}
+            style={{ position: 'absolute', top: -4, left: 0, width: '100%', opacity: 0, height: 16, cursor: 'pointer' }}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,0.25)', fontSize: 12, marginTop: 8 }}>
             <span>{question.minLabel || min}</span>
@@ -466,7 +496,82 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // Multiple choice — likert, multiple, forced_choice, scenario (with options)
+  // ── Yes / No ──────────────────────────────────────────────────────────────
+  if (type === 'yes_no') {
+    return (
+      <div style={{ display: 'flex', gap: 14 }}>
+        {['Yes', 'No'].map(opt => {
+          const selected = value === opt;
+          return (
+            <button
+              key={opt}
+              onClick={() => onChange(opt)}
+              style={{
+                flex: 1, padding: '20px 16px', borderRadius: 16, fontSize: 18, fontWeight: 700,
+                cursor: 'pointer', transition: 'all 0.15s',
+                background: selected ? `${accent}18` : 'rgba(255,255,255,0.03)',
+                border: `2px solid ${selected ? accent : 'rgba(255,255,255,0.1)'}`,
+                color: selected ? accent : 'rgba(255,255,255,0.6)',
+                boxShadow: selected ? `0 0 24px ${accent}20` : 'none',
+              }}
+            >
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ── Multi-select — select all that apply ─────────────────────────────────
+  if (type === 'multi_select') {
+    const options = question.options || [];
+    const selected = Array.isArray(value) ? value : [];
+    function toggle(opt) {
+      if (selected.includes(opt)) {
+        onChange(selected.filter(v => v !== opt));
+      } else {
+        onChange([...selected, opt]);
+      }
+    }
+    return (
+      <div style={{ display: 'grid', gap: 10 }}>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, margin: '0 0 6px' }}>Select all that apply</p>
+        {options.map((opt, i) => {
+          const isSelected = selected.includes(opt);
+          return (
+            <button
+              key={i}
+              onClick={() => toggle(opt)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                padding: '15px 18px', borderRadius: 16, textAlign: 'left',
+                background: isSelected ? `${accent}15` : 'rgba(255,255,255,0.025)',
+                border: `1.5px solid ${isSelected ? accent + '70' : 'rgba(255,255,255,0.09)'}`,
+                color: isSelected ? '#F5F5F5' : 'rgba(255,255,255,0.65)',
+                fontSize: 16, cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                boxShadow: isSelected ? `0 0 20px ${accent}15` : 'none',
+              }}
+            >
+              {/* Checkbox indicator */}
+              <span style={{
+                width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+                border: `2px solid ${isSelected ? accent : 'rgba(255,255,255,0.2)'}`,
+                background: isSelected ? accent : 'transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {isSelected && <span style={{ color: '#03131A', fontSize: 13, fontWeight: 900, lineHeight: 1 }}>✓</span>}
+              </span>
+              <span>{opt}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ── Single-select: multiple, likert, forced_choice, scenario w/ options ──
   if (type === 'multiple' || type === 'likert' || type === 'forced_choice' ||
       (type === 'scenario' && question.options)) {
     const options = question.options || [];
@@ -506,7 +611,7 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // Scenario with no options — text input
+  // ── Scenario / fallback — text input ─────────────────────────────────────
   return (
     <textarea
       placeholder="Describe what you would do…"

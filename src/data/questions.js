@@ -1,3 +1,27 @@
+// ─── MEKHI-SPECIFIC SECTION IMPORTS (500-question bank) ──────────────────────
+import { MEKHI_SECTION_1 }  from './mekhiSection1.js';
+import { MEKHI_SECTION_2 }  from './mekhiSection2.js';
+import { MEKHI_SECTION_3 }  from './mekhiSection3.js';
+import { MEKHI_SECTION_4 }  from './mekhiSection4.js';
+import { MEKHI_SECTION_5 }  from './mekhiSection5.js';
+import { MEKHI_SECTION_6 }  from './mekhiSection6.js';
+import { MEKHI_SECTION_7 }  from './mekhiSection7.js';
+import { MEKHI_SECTION_8 }  from './mekhiSection8.js';
+import { MEKHI_SECTION_9 }  from './mekhiSection9.js';
+import { MEKHI_SECTION_10 } from './mekhiSection10.js';
+
+// Wrap Mekhi raw arrays in section objects
+const MK1  = { id: 'mekhi_section1',  title: 'Self-Awareness & Current Reality',       questions: MEKHI_SECTION_1  };
+const MK2  = { id: 'mekhi_section2',  title: 'Ownership & Accountability',              questions: MEKHI_SECTION_2  };
+const MK3  = { id: 'mekhi_section3',  title: 'Habits & Consistency',                    questions: MEKHI_SECTION_3  };
+const MK4  = { id: 'mekhi_section4',  title: 'Time, Focus & Follow-Through',            questions: MEKHI_SECTION_4  };
+const MK5  = { id: 'mekhi_section5',  title: 'Academic Recovery & Learning Behaviors',  questions: MEKHI_SECTION_5  };
+const MK6  = { id: 'mekhi_section6',  title: 'Emotional Regulation & Stress',           questions: MEKHI_SECTION_6  };
+const MK7  = { id: 'mekhi_section7',  title: 'Support, Communication & Boundaries',     questions: MEKHI_SECTION_7  };
+const MK8  = { id: 'mekhi_section8',  title: 'Resilience & Change Readiness',           questions: MEKHI_SECTION_8  };
+const MK9  = { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivation',     questions: MEKHI_SECTION_9  };
+const MK10 = { id: 'mekhi_section10', title: 'Integrity, Honesty & Contradiction Checks', questions: MEKHI_SECTION_10 };
+
 // ─── MELVIN-SPECIFIC SECTION IMPORTS ─────────────────────────────────────────
 import { MELVIN_SECTION_1 } from './melvinQuestions.js';
 import { MELVIN_SECTION_2 } from './melvinSection2.js';
@@ -2214,11 +2238,8 @@ export const MINI_ASSESSMENT = {
 
 export const USER_SECTIONS = {
   mekhi: [
-    SECTION_A, SECTION_B, SECTION_C, SECTION_D,
-    SECTION_E, SECTION_F, SECTION_G, SECTION_H,
-    SECTION_1, SECTION_2, SECTION_3, SECTION_4,
-    SECTION_5, SECTION_6, SECTION_7,
-    MEKHI_COLLEGE_SECTION, SECTION_I,
+    MK1, MK2, MK3, MK4, MK5,
+    MK6, MK7, MK8, MK9, MK10,
   ],
   melvin: [
     MELVIN_SECTION_1,

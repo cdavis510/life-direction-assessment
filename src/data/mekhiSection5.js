@@ -1,4 +1,4 @@
-// Section 5: Academic Recovery & Learning Behaviors (68 questions)
+// Academic Recovery & Learning Behaviors (68 questions)
 export const MEKHI_SECTION_5 = [
 {
   id: "mk_193",

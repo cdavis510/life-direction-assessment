@@ -1,4 +1,4 @@
-// Section 10: Integrity, Honesty & Contradiction Checks (48 questions)
+// Integrity, Honesty & Contradiction Checks (48 questions)
 export const MEKHI_SECTION_10 = [
 {
   id: "mk_433",

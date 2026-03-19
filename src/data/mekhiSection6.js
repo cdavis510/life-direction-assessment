@@ -1,4 +1,4 @@
-// Section 6: Emotional Regulation & Stress (48 questions)
+// Emotional Regulation & Stress (48 questions)
 export const MEKHI_SECTION_6 = [
 {
   id: "mk_241",

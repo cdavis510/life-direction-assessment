@@ -1,4 +1,4 @@
-// Section 3: Habits & Consistency (48 questions)
+// Habits & Consistency (48 questions)
 export const MEKHI_SECTION_3 = [
 {
   id: "mk_097",

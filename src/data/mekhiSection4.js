@@ -1,4 +1,4 @@
-// Section 4: Time, Focus & Follow-Through (48 questions)
+// Time, Focus & Follow-Through (48 questions)
 export const MEKHI_SECTION_4 = [
 {
   id: "mk_145",

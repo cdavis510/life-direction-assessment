@@ -1,4 +1,4 @@
-// Section 9: Future Vision, Purpose & Motivation (48 questions)
+// Future Vision, Purpose & Motivation (48 questions)
 export const MEKHI_SECTION_9 = [
 {
   id: "mk_385",

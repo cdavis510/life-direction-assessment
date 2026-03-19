@@ -1,4 +1,4 @@
-// Section 8: Resilience & Change Readiness (48 questions)
+// Resilience & Change Readiness (48 questions)
 export const MEKHI_SECTION_8 = [
 {
   id: "mk_337",

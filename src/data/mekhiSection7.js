@@ -1,4 +1,4 @@
-// Section 7: Support, Communication & Boundaries (48 questions)
+// Support, Communication & Boundaries (48 questions)
 export const MEKHI_SECTION_7 = [
 {
   id: "mk_289",

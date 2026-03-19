@@ -1,4 +1,4 @@
-// Section 2: Ownership & Accountability (48 questions)
+// Ownership & Accountability (48 questions)
 export const MEKHI_SECTION_2 = [
 {
   id: "mk_049",

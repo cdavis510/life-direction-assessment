@@ -9,18 +9,20 @@ import { MEKHI_SECTION_7 }  from './mekhiSection7.js';
 import { MEKHI_SECTION_8 }  from './mekhiSection8.js';
 import { MEKHI_SECTION_9 }  from './mekhiSection9.js';
 import { MEKHI_SECTION_10 } from './mekhiSection10.js';
+import { MEKHI_SECTION_11 } from './mekhiSection11.js';
 
 // Wrap Mekhi raw arrays in section objects
-const MK1  = { id: 'mekhi_section1',  title: 'Self-Awareness & Current Reality',       questions: MEKHI_SECTION_1  };
-const MK2  = { id: 'mekhi_section2',  title: 'Ownership & Accountability',              questions: MEKHI_SECTION_2  };
-const MK3  = { id: 'mekhi_section3',  title: 'Habits & Consistency',                    questions: MEKHI_SECTION_3  };
-const MK4  = { id: 'mekhi_section4',  title: 'Time, Focus & Follow-Through',            questions: MEKHI_SECTION_4  };
-const MK5  = { id: 'mekhi_section5',  title: 'Academic Recovery & Learning Behaviors',  questions: MEKHI_SECTION_5  };
-const MK6  = { id: 'mekhi_section6',  title: 'Emotional Regulation & Stress',           questions: MEKHI_SECTION_6  };
-const MK7  = { id: 'mekhi_section7',  title: 'Support, Communication & Boundaries',     questions: MEKHI_SECTION_7  };
-const MK8  = { id: 'mekhi_section8',  title: 'Resilience & Change Readiness',           questions: MEKHI_SECTION_8  };
-const MK9  = { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivation',     questions: MEKHI_SECTION_9  };
+const MK1  = { id: 'mekhi_section1',  title: 'Self-Awareness & Current Reality',         questions: MEKHI_SECTION_1  };
+const MK2  = { id: 'mekhi_section2',  title: 'Ownership & Accountability',                questions: MEKHI_SECTION_2  };
+const MK3  = { id: 'mekhi_section3',  title: 'Habits & Consistency',                      questions: MEKHI_SECTION_3  };
+const MK4  = { id: 'mekhi_section4',  title: 'Time, Focus & Follow-Through',              questions: MEKHI_SECTION_4  };
+const MK5  = { id: 'mekhi_section5',  title: 'Academic Recovery & Learning Behaviors',    questions: MEKHI_SECTION_5  };
+const MK6  = { id: 'mekhi_section6',  title: 'Emotional Regulation & Stress',             questions: MEKHI_SECTION_6  };
+const MK7  = { id: 'mekhi_section7',  title: 'Support, Communication & Boundaries',       questions: MEKHI_SECTION_7  };
+const MK8  = { id: 'mekhi_section8',  title: 'Resilience & Change Readiness',             questions: MEKHI_SECTION_8  };
+const MK9  = { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivation',       questions: MEKHI_SECTION_9  };
 const MK10 = { id: 'mekhi_section10', title: 'Integrity, Honesty & Contradiction Checks', questions: MEKHI_SECTION_10 };
+const MK11 = { id: 'mekhi_section11', title: 'Truth Detection & Integrity Layer',         questions: MEKHI_SECTION_11 };
 
 // ─── MELVIN-SPECIFIC SECTION IMPORTS ─────────────────────────────────────────
 import { MELVIN_SECTION_1 } from './melvinQuestions.js';
@@ -2239,7 +2241,7 @@ export const MINI_ASSESSMENT = {
 export const USER_SECTIONS = {
   mekhi: [
     MK1, MK2, MK3, MK4, MK5,
-    MK6, MK7, MK8, MK9, MK10,
+    MK6, MK7, MK8, MK9, MK10, MK11,
   ],
   melvin: [
     MELVIN_SECTION_1,

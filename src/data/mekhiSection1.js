@@ -1,4 +1,4 @@
-// Section 1: Self-Awareness & Current Reality (48 questions)
+// Self-Awareness & Current Reality (48 questions)
 export const MEKHI_SECTION_1 = [
 {
   id: "mk_001",

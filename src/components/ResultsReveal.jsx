@@ -20,17 +20,19 @@ const USER_CONFIG = {
     avatarName: 'Kane',
     completionMsg: '"This is where it gets real."',
     summaryMsg: '"You\'re capable, but your habits need to catch up to your vision."',
+    completionSub: 'You showed up and answered honestly. That matters.',
   },
   melvin: {
-    accent: '#8B5CF6',
-    accentGlow: 'rgba(139,92,246,0.12)',
-    accentBorder: 'rgba(139,92,246,0.22)',
-    accentFaint: 'rgba(139,92,246,0.07)',
+    accent: '#7C4DFF',
+    accentGlow: 'rgba(124,77,255,0.12)',
+    accentBorder: 'rgba(124,77,255,0.22)',
+    accentFaint: 'rgba(124,77,255,0.07)',
     name: 'Melvin',
     avatarImg: '/avatars/caleb/portrait.jpg',
     avatarName: 'Caleb',
-    completionMsg: '"Now we build from here."',
-    summaryMsg: '"Your potential is real. Now it\'s time to act like it."',
+    completionMsg: '"Now let\'s turn insight into direction."',
+    summaryMsg: '"You have vision, but consistency will decide how far you go."',
+    completionSub: 'You showed up, thought it through, and finished strong. Your results are ready.',
   },
 };
 
@@ -193,8 +195,8 @@ function CompletionScreen({ cfg, previousSessions, onViewResults }) {
             You finished, {cfg.name}.
           </h1>
           <p style={{ color: '#CDCDCD', fontSize: 19, maxWidth: 580, margin: '0 auto', lineHeight: 1.7 }}>
-            You showed up and answered honestly. That matters.{' '}
-            {previousSessions.length > 0 ? `This is assessment #${previousSessions.length + 1}.` : 'Your results are ready.'}
+            {cfg.completionSub}{' '}
+            {previousSessions.length > 0 ? `This is assessment #${previousSessions.length + 1}.` : ''}
           </p>
 
           {/* Avatar message */}

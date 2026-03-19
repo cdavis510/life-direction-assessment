@@ -24,25 +24,31 @@ const MK9  = { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivatio
 const MK10 = { id: 'mekhi_section10', title: 'Integrity, Honesty & Contradiction Checks', questions: MEKHI_SECTION_10 };
 const MK11 = { id: 'mekhi_section11', title: 'Truth Detection & Integrity Layer',         questions: MEKHI_SECTION_11 };
 
-// ─── MELVIN-SPECIFIC SECTION IMPORTS ─────────────────────────────────────────
-import { MELVIN_SECTION_1 } from './melvinQuestions.js';
-import { MELVIN_SECTION_2 } from './melvinSection2.js';
-import { MELVIN_SECTION_3 } from './melvinSection3.js';
-import { MELVIN_SECTION_4 } from './melvinSection4.js';
-import { MELVIN_SECTION_5 } from './melvinSection5.js';
-import { MELVIN_SECTION_6 } from './melvinSection6.js';
-import { MELVIN_SECTION_7 } from './melvinSection7.js';
-import { MELVIN_SECTION_8 } from './melvinSection8.js';
-import { MELVIN_SECTION_9 } from './melvinSection9.js';
-import { MELVIN_SECTION_10 } from './melvinSection10.js';
-import { MELVIN_SECTION_11 } from './melvinSection11.js';
+// ─── MELVIN-SPECIFIC SECTION IMPORTS (520-question bank) ─────────────────────
+import { MELVIN_S1 }  from './melvinS1.js';
+import { MELVIN_S2 }  from './melvinS2.js';
+import { MELVIN_S3 }  from './melvinS3.js';
+import { MELVIN_S4 }  from './melvinS4.js';
+import { MELVIN_S5 }  from './melvinS5.js';
+import { MELVIN_S6 }  from './melvinS6.js';
+import { MELVIN_S7 }  from './melvinS7.js';
+import { MELVIN_S8 }  from './melvinS8.js';
+import { MELVIN_S9 }  from './melvinS9.js';
+import { MELVIN_S10 } from './melvinS10.js';
+import { MELVIN_S11 } from './melvinS11.js';
 
-// Sections 7–11 export raw question arrays — wrap them in section objects
-const MS7 = { id: 'melvin_section7',  title: 'Communication & Self-Advocacy', questions: MELVIN_SECTION_7 };
-const MS8 = { id: 'melvin_section8',  title: 'Social Judgment & Environment',  questions: MELVIN_SECTION_8 };
-const MS9 = { id: 'melvin_section9',  title: 'College Readiness & Independence', questions: MELVIN_SECTION_9 };
-const MS10 = { id: 'melvin_section10', title: 'Career Alignment',               questions: MELVIN_SECTION_10 };
-const MS11 = { id: 'melvin_section11', title: 'Life Vision & Blueprint',         questions: MELVIN_SECTION_11 };
+// Wrap Melvin raw arrays in section objects
+const MV1  = { id: 'melvin_section1',  title: 'Self-Awareness & Current Reality',         questions: MELVIN_S1  };
+const MV2  = { id: 'melvin_section2',  title: 'Ownership & Accountability',                questions: MELVIN_S2  };
+const MV3  = { id: 'melvin_section3',  title: 'Habits & Consistency',                      questions: MELVIN_S3  };
+const MV4  = { id: 'melvin_section4',  title: 'Time, Focus & Follow-Through',              questions: MELVIN_S4  };
+const MV5  = { id: 'melvin_section5',  title: 'Academic Recovery & Learning Behaviors',    questions: MELVIN_S5  };
+const MV6  = { id: 'melvin_section6',  title: 'Emotional Regulation & Stress',             questions: MELVIN_S6  };
+const MV7  = { id: 'melvin_section7',  title: 'Support, Communication & Boundaries',       questions: MELVIN_S7  };
+const MV8  = { id: 'melvin_section8',  title: 'Resilience & Change Readiness',             questions: MELVIN_S8  };
+const MV9  = { id: 'melvin_section9',  title: 'Future Vision, Purpose & Motivation',       questions: MELVIN_S9  };
+const MV10 = { id: 'melvin_section10', title: 'Integrity, Honesty & Contradiction Checks', questions: MELVIN_S10 };
+const MV11 = { id: 'melvin_section11', title: 'Truth Detection & Integrity Layer',         questions: MELVIN_S11 };
 
 // ─── SHARED QUESTIONS (used by both Mekhi and Melvin) ───────────────────────
 
@@ -2244,13 +2250,8 @@ export const USER_SECTIONS = {
     MK6, MK7, MK8, MK9, MK10, MK11,
   ],
   melvin: [
-    MELVIN_SECTION_1,
-    MELVIN_SECTION_2,
-    MELVIN_SECTION_3,
-    MELVIN_SECTION_4,
-    MELVIN_SECTION_5,
-    MELVIN_SECTION_6,
-    MS7, MS8, MS9, MS10, MS11,
+    MV1, MV2, MV3, MV4, MV5,
+    MV6, MV7, MV8, MV9, MV10, MV11,
   ],
 };
 

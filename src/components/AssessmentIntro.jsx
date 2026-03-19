@@ -10,15 +10,27 @@ const USER_CONFIG = {
     name: 'Mekhi',
     avatarImg: '/avatars/kane/portrait.jpg',
     avatarMsg: '"Just be real. That\'s all."',
+    introCopy: [
+      'This is not a test.',
+      'You do not need perfect answers.',
+      'You just need honest ones.',
+    ],
+    introSub: 'This assessment helps us better understand your mindset, your habits, your direction, and what may need to change for you to move forward.',
   },
   melvin: {
-    accent: '#8B5CF6',
-    accentGlow: 'rgba(139,92,246,0.12)',
-    accentBorder: 'rgba(139,92,246,0.22)',
-    accentFaint: 'rgba(139,92,246,0.07)',
+    accent: '#7C4DFF',
+    accentGlow: 'rgba(124,77,255,0.12)',
+    accentBorder: 'rgba(124,77,255,0.22)',
+    accentFaint: 'rgba(124,77,255,0.07)',
     name: 'Melvin',
     avatarImg: '/avatars/caleb/portrait.jpg',
-    avatarMsg: '"Be honest. That\'s the only rule."',
+    avatarMsg: '"Be honest. Build from there."',
+    introCopy: [
+      'This is not about being perfect.',
+      'It is about being honest and aware.',
+      'That is what makes the results useful.',
+    ],
+    introSub: 'This assessment helps uncover your mindset, your consistency, your strengths, and the direction that can best support your future.',
   },
 };
 
@@ -76,12 +88,11 @@ export default function AssessmentIntro() {
             </h1>
 
             <div style={{ display: 'grid', gap: 16, fontSize: 20, lineHeight: 1.75, color: '#E8E8E8' }}>
-              <p style={{ margin: 0 }}>This is not a test.</p>
-              <p style={{ margin: 0 }}>You do not need perfect answers.</p>
-              <p style={{ margin: 0 }}>You just need honest ones.</p>
+              {cfg.introCopy.map(line => (
+                <p key={line} style={{ margin: 0 }}>{line}</p>
+              ))}
               <p style={{ margin: 0, color: '#C0C0C0', fontSize: 18 }}>
-                This assessment helps us better understand your mindset, your habits,
-                your direction, and what may need to change for you to move forward.
+                {cfg.introSub}
               </p>
             </div>
 

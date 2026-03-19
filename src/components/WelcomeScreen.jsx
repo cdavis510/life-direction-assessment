@@ -19,23 +19,29 @@ const USER_CONFIG = {
       "This is your space. Be honest with yourself.",
     ],
     label: 'Sports & Media Careers',
+    subtitle: 'Present, calm, encouraging.',
+    description: 'This space is built to help you understand where you really are right now, what may be holding you back, and what direction actually fits your future.',
+    bullets: ['your mindset and habits', 'what is helping or hurting your progress', 'what direction fits your strengths and goals'],
   },
   melvin: {
-    accent: '#8B5CF6',
-    accentGlow: 'rgba(139,92,246,0.14)',
-    accentBorder: 'rgba(139,92,246,0.22)',
-    accentFaint: 'rgba(139,92,246,0.08)',
+    accent: '#7C4DFF',
+    accentGlow: 'rgba(124,77,255,0.14)',
+    accentBorder: 'rgba(124,77,255,0.22)',
+    accentFaint: 'rgba(124,77,255,0.08)',
     name: 'Melvin',
     avatarName: "Caleb — Melvin's Guide",
     avatarImg: '/avatars/caleb/portrait.jpg',
     welcomeMessages: [
-      "Proud you're here. Let's see what you're made of.",
+      "Good to see you. Let's get clear and keep moving.",
       "Your future is being built right now. Stay focused.",
-      "Be real with yourself. That's where growth starts.",
+      "Be honest and aware. That is what makes results useful.",
       "This is your space. No judgment — just truth.",
-      "You've got this. Let's build your blueprint.",
+      "Vision without consistency is just a wish. Let's build both.",
     ],
     label: 'Finance & Sports Business',
+    subtitle: 'Present, steady, future-focused.',
+    description: 'This space is built to help you get clear, stay honest, and understand what strengths, habits, and decisions can move your future forward.',
+    bullets: ['how you think under pressure', 'what is helping or slowing your growth', 'what path best fits your goals and potential'],
   },
 };
 
@@ -186,8 +192,7 @@ export default function WelcomeScreen() {
 
             {/* Description */}
             <p style={{ color: '#D4D4D4', fontSize: 19, lineHeight: 1.7, margin: 0 }}>
-              This space is built to help you understand where you really are right now,
-              what may be holding you back, and what direction actually fits your future.
+              {cfg.description}
             </p>
 
             {/* What this covers */}
@@ -201,9 +206,7 @@ export default function WelcomeScreen() {
                 What this assessment helps uncover
               </div>
               <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 2, color: '#CFCFCF', fontSize: 16 }}>
-                <li>your mindset and habits</li>
-                <li>what is helping or hurting your progress</li>
-                <li>what direction fits your strengths and goals</li>
+                {cfg.bullets.map(b => <li key={b}>{b}</li>)}
               </ul>
             </div>
 
@@ -333,7 +336,7 @@ export default function WelcomeScreen() {
             {/* Avatar name */}
             <div>
               <div style={{ fontWeight: 700, fontSize: 16, color: '#F3F3F3' }}>{cfg.avatarName}</div>
-              <div style={{ color: '#9CA3AF', fontSize: 13, marginTop: 2 }}>Present, calm, encouraging.</div>
+              <div style={{ color: '#9CA3AF', fontSize: 13, marginTop: 2 }}>{cfg.subtitle}</div>
             </div>
 
             {/* Rotating message */}

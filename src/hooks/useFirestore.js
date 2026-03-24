@@ -128,6 +128,20 @@ export async function getMomDashboardData() {
   return snap.exists() ? snap.data() : null;
 }
 
+// ─── Mom Son Scripts ──────────────────────────────────────────────────────────
+// Firestore path: momScripts/{userId}
+
+export async function saveMomScript(userId, scriptData) {
+  const ref = doc(db, 'momScripts', userId);
+  await setDoc(ref, { ...scriptData, updatedAt: serverTimestamp() });
+}
+
+export async function getMomScript(userId) {
+  const ref = doc(db, 'momScripts', userId);
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data() : null;
+}
+
 // ─── User Profile ─────────────────────────────────────────────────────────────
 
 export async function saveUserProfile(userId, profile) {
@@ -166,6 +180,32 @@ export async function getWeeklyResets(userId, count = 4) {
   const q = query(ref, orderBy('createdAt', 'desc'), limit(count));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+// ─── Non-blocking session completion ─────────────────────────────────────────
+// Call this immediately when the user finishes the assessment,
+// before AI generation starts. Marks status=complete so mom can see it instantly.
+
+export async function completeSessionImmediate(userId, sessionId) {
+  const sessionRef = doc(db, 'users', userId, 'sessions', sessionId);
+  await updateDoc(sessionRef, {
+    status: 'complete',
+    analysisStatus: 'pending',
+    blueprintStatus: 'pending',
+    completedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+// ─── Write AI generation result back to Firebase ──────────────────────────────
+// fields: { analysis, analysisStatus, blueprintStatus, analysisError, analysisCompletedAt }
+
+export async function saveAnalysisResult(userId, sessionId, fields) {
+  const sessionRef = doc(db, 'users', userId, 'sessions', sessionId);
+  // Also mirror to legacy `results` field so existing mom-dashboard reads still work
+  const payload = { ...fields, updatedAt: serverTimestamp() };
+  if (fields.analysis) payload.results = fields.analysis;
+  await updateDoc(sessionRef, payload);
 }
 
 // ─── Last Activity ────────────────────────────────────────────────────────────

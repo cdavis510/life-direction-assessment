@@ -650,8 +650,12 @@ export async function getMekhiAnalysis(answers, previousSessions = []) {
     },
   ];
 
+  console.log('[mekhiAgent] fetch start');
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 24000);
+  const timeoutId = setTimeout(() => {
+    console.warn('[mekhiAgent] fetch timeout — aborting');
+    controller.abort();
+  }, 24000);
 
   let response;
   try {
@@ -666,12 +670,37 @@ export async function getMekhiAnalysis(answers, previousSessions = []) {
       }),
       signal: controller.signal,
     });
-  } finally {
+  } catch (err) {
     clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      console.error('[mekhiAgent] fetch aborted (timeout)');
+      throw new Error('Blueprint generation timed out. Please retry.');
+    }
+    console.error('[mekhiAgent] fetch error:', err.message);
+    throw err;
+  }
+  clearTimeout(timeoutId);
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => '(unreadable)');
+    console.error('[mekhiAgent] non-200 response:', response.status, body);
+    throw new Error(`Analysis request failed (${response.status}): ${body}`);
   }
 
-  if (!response.ok) throw new Error('Failed to get analysis');
-  const data = await response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch (err) {
+    console.error('[mekhiAgent] JSON parse failure:', err.message);
+    throw new Error('Failed to parse analysis response.');
+  }
+
+  if (!data?.content) {
+    console.error('[mekhiAgent] missing content in response:', JSON.stringify(data));
+    throw new Error('Analysis response was empty.');
+  }
+
+  console.log('[mekhiAgent] fetch success, content length:', data.content.length);
   return data.content;
 }
 

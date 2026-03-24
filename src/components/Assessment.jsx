@@ -1,36 +1,9 @@
 // ─── SCREEN 04 — Question Screen + Screen 06 — Save Progress Modal ───────────
-//
-// DYNAMIC QUESTION ENGINE
-// ─────────────────────────────────────────────────────────────────────────────
-// Questions are loaded from src/data/questions.js → USER_SECTIONS[userId]
-// Each section has: { id, title, questions: [...] }
-// Each question has: { id, type, text, options?, min?, max?, subsectionName? }
-//
-// Supported question types:
-//   text          → free text textarea
-//   open          → free text textarea (alias)
-//   multiple      → single-select choice list (radio)
-//   likert        → single-select 1-5 agreement scale (radio)
-//   forced_choice → single-select, pick one (radio)
-//   scenario      → single-select if options[], else textarea
-//   slider        → numeric range (min/max configurable per question)
-//   multi_select  → multi-select checkboxes (select all that apply)
-//   yes_no        → two-button Yes/No shorthand
-//
-// Answers saved to: Firestore → users/{userId}/sessions/{sessionId}/answers
-// Progress saved to: Firestore → users/{userId}/sessions/{sessionId}
-// Restore on mount: pulls session.currentQuestion + all saved answers
-//
-// AI-READY: Questions can be injected from any source (static array, API, or
-// Claude-generated). To add AI-adaptive questions, push to USER_SECTIONS or
-// build a separate dynamic section loader.
-// ─────────────────────────────────────────────────────────────────────────────
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { USER_SECTIONS } from '../data/questions';
-import { saveAnswer, updateSessionProgress, getSession, getAllAnswers } from '../hooks/useFirestore';
+import { saveAnswer, updateSessionProgress, getSession, getAllAnswers, completeSessionImmediate } from '../hooks/useFirestore';
 
-// ─── User config ──────────────────────────────────────────────────────────────
 const USER_CONFIG = {
   mekhi: {
     accent: '#00C8FF',
@@ -83,27 +56,29 @@ export default function Assessment() {
   const sections = USER_SECTIONS[userId] || USER_SECTIONS.mekhi;
 
   const allQuestions = sections.flatMap(section =>
-    section.questions.map(q => ({ ...q, sectionId: section.id, sectionTitle: section.title }))
+    section.questions.filter(Boolean).map(q => ({ ...q, sectionId: section.id, sectionTitle: section.title }))
   );
   const totalQuestions = allQuestions.length;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [saving, setSaving] = useState(false);
-  const [justSaved, setJustSaved] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [nextEnabled, setNextEnabled] = useState(false);
-  const [showPause, setShowPause] = useState(false);
-  const [pauseNextSection, setPauseNextSection] = useState('');
-  const [showSaveModal, setShowSaveModal] = useState(false);
-  const [msgIndex, setMsgIndex] = useState(0);
-  const [msgVisible, setMsgVisible] = useState(true);
-  const timerRef = useRef(null);
+  const [currentIndex, setCurrentIndex]         = useState(0);
+  const [answers, setAnswers]                   = useState({});
+  const [saving, setSaving]                     = useState(false);
+  const [justSaved, setJustSaved]               = useState(false);
+  const [loading, setLoading]                   = useState(true);
+  const [nextEnabled, setNextEnabled]           = useState(false);
+  const [showPause, setShowPause]               = useState(false);
+  const [pauseNextSection, setPauseNextSection] = useState(null);
+  const [showSaveModal, setShowSaveModal]       = useState(false);
+  const [showSectionIntro, setShowSectionIntro] = useState(false);
+  const [msgIndex, setMsgIndex]                 = useState(0);
+  const [msgVisible, setMsgVisible]             = useState(true);
+  const timerRef    = useRef(null);
   const msgTimerRef = useRef(null);
 
   // Restore progress
   useEffect(() => {
     async function restore() {
+      let restoredIndex = 0;
       try {
         const [session, savedAnswers] = await Promise.all([
           getSession(userId, sessionId),
@@ -111,19 +86,22 @@ export default function Assessment() {
         ]);
         if (savedAnswers) setAnswers(savedAnswers);
         if (session?.currentQuestion) {
-          setCurrentIndex(Math.min(session.currentQuestion, totalQuestions - 1));
+          restoredIndex = Math.min(session.currentQuestion, totalQuestions - 1);
+          setCurrentIndex(restoredIndex);
         }
       } catch {}
+      // Show section intro only on fresh start (question 0)
+      setShowSectionIntro(restoredIndex === 0);
       setLoading(false);
     }
     restore();
   }, [userId, sessionId, totalQuestions]);
 
-  // 4-second minimum before Next
+  // 0.5-second minimum before Next
   useEffect(() => {
     setNextEnabled(false);
     clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setNextEnabled(true), 4000);
+    timerRef.current = setTimeout(() => setNextEnabled(true), 500);
     return () => clearTimeout(timerRef.current);
   }, [currentIndex]);
 
@@ -139,14 +117,22 @@ export default function Assessment() {
     return () => clearInterval(msgTimerRef.current);
   }, [cfg.supportMessages.length]);
 
-  const currentQuestion = allQuestions[currentIndex];
-  const currentSection = sections.find(s => s.id === currentQuestion?.sectionId);
-  const currentAnswer = answers[currentQuestion?.id];
-  const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
-  const sectionIdx = sections.findIndex(s => s.id === currentQuestion?.sectionId);
+  const currentQuestion  = allQuestions[currentIndex];
+  const currentSection   = sections.find(s => s.id === currentQuestion?.sectionId);
+  const currentAnswer    = answers[currentQuestion?.id];
+  const sectionIdx       = sections.findIndex(s => s.id === currentQuestion?.sectionId);
+  const overallProgress  = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
+
+  // Per-section progress
+  const sectionQuestions     = (currentSection?.questions || []).filter(Boolean);
+  const questionInSection    = sectionQuestions.findIndex(q => q.id === currentQuestion?.id);
+  const sectionProgress      = sectionQuestions.length > 0
+    ? ((questionInSection + 1) / sectionQuestions.length) * 100
+    : 0;
 
   const handleAnswerChange = useCallback((value) => {
-    const qId = allQuestions[currentIndex].id;
+    const qId = allQuestions[currentIndex]?.id;
+    if (!qId) return;
     setAnswers(prev => ({ ...prev, [qId]: value }));
   }, [currentIndex, allQuestions]);
 
@@ -178,20 +164,23 @@ export default function Assessment() {
     return !next || next.sectionId !== q.sectionId;
   }
 
-  async function handleNext() {
+  function handleNext() {
     if (!nextEnabled) return;
     const isLast = currentIndex === totalQuestions - 1;
     const lastInSection = isLastInSection(currentIndex);
-    try {
-      await updateSessionProgress(userId, sessionId, { currentQuestion: currentIndex + 1 });
-    } catch {}
+    // Fire-and-forget — never block navigation on a Firestore write
+    updateSessionProgress(userId, sessionId, { currentQuestion: currentIndex + 1 }).catch(() => {});
     if (isLast) {
+      console.log('[Submit] saving completed session', { userId, sessionId });
+      completeSessionImmediate(userId, sessionId)
+        .then(() => console.log('[Submit] session save success'))
+        .catch(err => console.error('[Submit] session save failed:', err));
       navigate(`/results/${userId}/${sessionId}`);
       return;
     }
     if (lastInSection) {
-      const nextSection = sections[sectionIdx + 1];
-      setPauseNextSection(nextSection?.title || '');
+      const nextSec = sections[sectionIdx + 1];
+      setPauseNextSection(nextSec || null);
       setShowPause(true);
       return;
     }
@@ -200,10 +189,6 @@ export default function Assessment() {
 
   function handleBack() {
     if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
-  }
-
-  function handleSaveExit() {
-    setShowSaveModal(true);
   }
 
   // multi_select stores an array — treat empty array as no answer
@@ -223,12 +208,40 @@ export default function Assessment() {
     );
   }
 
+  // Section intro screen — shown at start of each section
+  if (showSectionIntro && currentSection) {
+    const subsections = [...new Set(
+      sectionQuestions.map(q => q.subsection).filter(Boolean)
+    )];
+    return (
+      <SectionIntroScreen
+        cfg={cfg}
+        section={currentSection}
+        sectionNumber={sectionIdx + 1}
+        totalSections={sections.length}
+        subsections={subsections}
+        questionCount={sectionQuestions.length}
+        overallProgress={overallProgress}
+        onBegin={() => setShowSectionIntro(false)}
+      />
+    );
+  }
+
+  // Section transition screen — shown after last question in a section
   if (showPause) {
     return (
       <SectionTransition
         cfg={cfg}
-        nextSectionTitle={pauseNextSection}
-        onContinue={() => { setShowPause(false); setCurrentIndex(prev => prev + 1); }}
+        completedSection={currentSection}
+        nextSection={pauseNextSection}
+        completedNumber={sectionIdx + 1}
+        totalSections={sections.length}
+        overallProgress={overallProgress}
+        onContinue={() => {
+          setShowPause(false);
+          setCurrentIndex(prev => prev + 1);
+          setShowSectionIntro(true);
+        }}
       />
     );
   }
@@ -248,35 +261,55 @@ export default function Assessment() {
         backdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
-        {/* Progress bar */}
+        {/* Section progress bar */}
         <div style={{ height: 3, background: 'rgba(255,255,255,0.06)' }}>
           <div style={{
             height: '100%',
-            width: `${progress}%`,
+            width: `${sectionProgress}%`,
             background: cfg.accent,
             boxShadow: `0 0 10px ${cfg.accent}`,
-            transition: 'width 0.6s ease',
+            transition: 'width 0.4s ease',
           }} />
         </div>
-        <div style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ color: cfg.accent, fontSize: 12, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase' }}>
-              {currentSection?.title}
+        <div style={{ padding: '10px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          {/* Left: section + subsection */}
+          <div style={{ minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{
+                background: cfg.accentFaint,
+                border: `1px solid ${cfg.accentBorder}`,
+                color: cfg.accent,
+                fontSize: 10, fontWeight: 800, letterSpacing: 1.2,
+                textTransform: 'uppercase', borderRadius: 6, padding: '2px 8px',
+                whiteSpace: 'nowrap',
+              }}>
+                Section {sectionIdx + 1} of {sections.length}
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {currentSection?.title}
+              </span>
             </div>
-            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, marginTop: 2 }}>
-              Question {currentIndex + 1} of {totalQuestions}
+            <div style={{ marginTop: 3, display: 'flex', alignItems: 'center', gap: 6 }}>
+              {currentQuestion?.subsection && (
+                <span style={{ color: cfg.accent, fontSize: 12, fontWeight: 600 }}>
+                  {currentQuestion.subsection}
+                </span>
+              )}
+              {currentQuestion?.subsection && (
+                <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 11 }}>·</span>
+              )}
+              <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>
+                Q {questionInSection + 1} of {sectionQuestions.length} in this section
+              </span>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {/* Right: save status + overall % */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
             {saving && <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12 }}>saving…</span>}
             {justSaved && !saving && <span style={{ color: cfg.accent, fontSize: 12 }}>✓ saved</span>}
-            <div style={{
-              padding: '5px 12px', borderRadius: 999,
-              background: cfg.accentFaint,
-              border: `1px solid ${cfg.accentBorder}`,
-              color: cfg.accent, fontSize: 12, fontWeight: 800,
-            }}>
-              {Math.round(progress)}%
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ color: cfg.accent, fontSize: 13, fontWeight: 800 }}>{Math.round(sectionProgress)}%</div>
+              <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 10 }}>Overall {Math.round(overallProgress)}%</div>
             </div>
           </div>
         </div>
@@ -299,14 +332,24 @@ export default function Assessment() {
               borderRadius: 22,
               padding: 32,
             }}>
-              <h2 style={{ fontSize: 32, lineHeight: 1.25, margin: '0 0 10px', fontWeight: 800, color: '#F5F5F5' }}>
+              {/* Subsection label */}
+              {currentQuestion?.subsection && (
+                <div style={{
+                  display: 'inline-block',
+                  background: cfg.accentFaint,
+                  border: `1px solid ${cfg.accentBorder}`,
+                  color: cfg.accent,
+                  fontSize: 11, fontWeight: 700, letterSpacing: 1,
+                  textTransform: 'uppercase', borderRadius: 8,
+                  padding: '4px 12px', marginBottom: 16,
+                }}>
+                  {currentQuestion.subsection}
+                </div>
+              )}
+
+              <h2 style={{ fontSize: 28, lineHeight: 1.3, margin: '0 0 28px', fontWeight: 800, color: '#F5F5F5' }}>
                 {currentQuestion?.text}
               </h2>
-              {currentQuestion?.subsectionName && (
-                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14, margin: '0 0 28px' }}>
-                  {currentQuestion.subsectionName}
-                </p>
-              )}
 
               <QuestionInput
                 question={currentQuestion}
@@ -334,7 +377,7 @@ export default function Assessment() {
                 </button>
                 <div style={{ display: 'flex', gap: 10 }}>
                   <button
-                    onClick={handleSaveExit}
+                    onClick={() => setShowSaveModal(true)}
                     style={{
                       background: 'rgba(255,255,255,0.04)',
                       color: '#EAEAEA', fontWeight: 600, borderRadius: 14,
@@ -355,76 +398,84 @@ export default function Assessment() {
                       fontSize: 15, opacity: !nextEnabled || !hasAnswer ? 0.6 : 1,
                     }}
                   >
-                    {!nextEnabled ? 'Take your time…' : currentIndex === totalQuestions - 1 ? 'See My Results →' : 'Next →'}
+                    {currentIndex === totalQuestions - 1 ? 'See My Results →' : isLastInSection(currentIndex) ? 'Complete Section →' : 'Next →'}
                   </button>
                 </div>
               </div>
-              {!nextEnabled && (
-                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12, textAlign: 'center', marginTop: 10 }}>
-                  Reflect for a moment before moving on
-                </p>
-              )}
             </div>
 
             {/* RIGHT — Support Panel */}
             <div style={{
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: 22,
-              padding: 22,
-              display: 'grid',
-              gap: 16,
-              alignContent: 'start',
-              position: 'sticky',
-              top: 90,
+              borderRadius: 22, padding: 22,
+              display: 'grid', gap: 16, alignContent: 'start',
+              position: 'sticky', top: 90,
             }}>
               <div style={{ fontSize: 11, color: cfg.accent, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase' }}>
-                Support Panel
+                Your Guide
               </div>
-
-              {/* Avatar portrait */}
               <div style={{
-                borderRadius: 18,
-                overflow: 'hidden',
+                borderRadius: 18, overflow: 'hidden',
                 background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 40%)`,
                 border: `1px solid ${cfg.accentBorder}`,
-                height: 180,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                height: 160,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <img
                   src={cfg.avatarImg}
                   alt={cfg.avatarName}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-                  onError={e => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.style.background = `radial-gradient(circle, ${cfg.accentGlow}, transparent)`;
-                  }}
+                  onError={e => { e.target.style.display = 'none'; }}
                 />
               </div>
-
-              {/* Rotating message */}
               <div style={{
-                padding: 16,
-                borderRadius: 16,
+                padding: 14, borderRadius: 14,
                 background: 'rgba(255,255,255,0.04)',
-                color: '#EDEDED',
-                lineHeight: 1.65,
-                fontSize: 15,
-                fontStyle: 'italic',
-                minHeight: 64,
+                color: '#EDEDED', lineHeight: 1.65,
+                fontSize: 14, fontStyle: 'italic',
                 transition: 'opacity 0.35s ease',
                 opacity: msgVisible ? 1 : 0,
               }}>
                 "{cfg.supportMessages[msgIndex]}"
+              </div>
+              {/* Section mini-map */}
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14 }}>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+                  Assessment Progress
+                </div>
+                <div style={{ display: 'grid', gap: 4 }}>
+                  {sections.map((sec, i) => {
+                    const isActive = i === sectionIdx;
+                    const isPast = i < sectionIdx;
+                    return (
+                      <div key={sec.id} style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        opacity: isActive ? 1 : isPast ? 0.5 : 0.25,
+                      }}>
+                        <div style={{
+                          width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+                          background: isActive ? cfg.accent : isPast ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.15)',
+                        }} />
+                        <span style={{
+                          fontSize: 11,
+                          color: isActive ? cfg.accent : '#9CA3AF',
+                          fontWeight: isActive ? 700 : 400,
+                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                        }}>
+                          {sec.title}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Save & Exit Modal (Screen 06) ── */}
+      {/* ── Save & Exit Modal ── */}
       {showSaveModal && (
         <SaveModal
           cfg={cfg}
@@ -436,12 +487,189 @@ export default function Assessment() {
   );
 }
 
+// ─── Section Intro Screen — shown at start of each section ───────────────────
+function SectionIntroScreen({ cfg, section, sectionNumber, totalSections, subsections, questionCount, overallProgress, onBegin }) {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 30%), #08080A`,
+      color: '#F5F5F5',
+      fontFamily: 'Inter, sans-serif',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 32,
+    }}>
+      <div style={{ maxWidth: 680, width: '100%' }}>
+        {/* Overall progress bar */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>Overall Progress</span>
+            <span style={{ color: cfg.accent, fontSize: 12, fontWeight: 700 }}>{Math.round(overallProgress)}%</span>
+          </div>
+          <div style={{ height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 999 }}>
+            <div style={{ width: `${overallProgress}%`, height: '100%', background: cfg.accent, borderRadius: 999, transition: 'width 0.5s ease' }} />
+          </div>
+        </div>
+
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: `1px solid ${cfg.accentBorder}`,
+          borderRadius: 24, padding: '40px 36px',
+        }}>
+          {/* Section badge */}
+          <div style={{
+            display: 'inline-block',
+            background: cfg.accentFaint,
+            border: `1px solid ${cfg.accentBorder}`,
+            color: cfg.accent,
+            fontSize: 11, fontWeight: 800, letterSpacing: 1.4,
+            textTransform: 'uppercase', borderRadius: 999,
+            padding: '6px 16px', marginBottom: 20,
+          }}>
+            Section {sectionNumber} of {totalSections}
+          </div>
+
+          <h1 style={{ fontSize: 36, fontWeight: 900, margin: '0 0 12px', lineHeight: 1.15 }}>
+            {section.title}
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 16, margin: '0 0 28px' }}>
+            {questionCount} questions in this section
+          </p>
+
+          {/* Subsections */}
+          {subsections.length > 0 && (
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 12 }}>
+                Topics covered
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {subsections.map(sub => (
+                  <span key={sub} style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: '#D1D5DB',
+                    fontSize: 13, borderRadius: 8, padding: '5px 12px',
+                  }}>
+                    {sub}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={onBegin}
+            style={{
+              width: '100%', padding: '16px 24px',
+              background: cfg.accent, color: '#03131A',
+              fontWeight: 700, fontSize: 16, border: 'none',
+              borderRadius: 14, cursor: 'pointer',
+            }}
+          >
+            Begin Section {sectionNumber} →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Section Transition Screen — shown after completing a section ─────────────
+function SectionTransition({ cfg, completedSection, nextSection, completedNumber, totalSections, overallProgress, onContinue }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 1000);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 26%), #08080A`,
+      color: '#F5F5F5',
+      fontFamily: 'Inter, sans-serif',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 32,
+    }}>
+      <div style={{ maxWidth: 680, width: '100%' }}>
+        {/* Overall progress */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>Overall Progress</span>
+            <span style={{ color: cfg.accent, fontSize: 12, fontWeight: 700 }}>{Math.round(overallProgress)}%</span>
+          </div>
+          <div style={{ height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 999 }}>
+            <div style={{ width: `${overallProgress}%`, height: '100%', background: cfg.accent, borderRadius: 999 }} />
+          </div>
+        </div>
+
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: `1px solid ${cfg.accentBorder}`,
+          borderRadius: 24, padding: '40px 36px', textAlign: 'center',
+        }}>
+          <div style={{
+            width: 56, height: 56, borderRadius: '50%',
+            background: cfg.accentFaint, border: `2px solid ${cfg.accentBorder}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 24, margin: '0 auto 20px',
+          }}>
+            ✓
+          </div>
+
+          <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 12 }}>
+            Section {completedNumber} of {totalSections} Complete
+          </div>
+          <h2 style={{ fontSize: 32, fontWeight: 900, margin: '0 0 8px' }}>
+            {completedSection?.title}
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 16, margin: '0 0 28px' }}>
+            Well done. Take a breath before continuing.
+          </p>
+
+          {nextSection && (
+            <div style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 14, padding: '16px 20px',
+              marginBottom: 28, textAlign: 'left',
+            }}>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>
+                Up next — Section {completedNumber + 1}
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#F5F5F5' }}>
+                {nextSection.title}
+              </div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>
+                {nextSection.questions?.length} questions
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={onContinue}
+            disabled={!ready}
+            style={{
+              width: '100%', padding: '15px 24px',
+              background: ready ? cfg.accent : 'rgba(255,255,255,0.08)',
+              color: ready ? '#03131A' : 'rgba(255,255,255,0.4)',
+              fontWeight: 700, fontSize: 16, border: 'none',
+              borderRadius: 14, cursor: ready ? 'pointer' : 'not-allowed',
+              transition: 'all 0.3s',
+            }}
+          >
+            {ready ? `Continue to Section ${completedNumber + 1} →` : 'One moment…'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Question Input — handles all question types ──────────────────────────────
 function QuestionInput({ question, value, onChange, accent, accentFaint, accentBorder }) {
   if (!question) return null;
   const type = question.type;
 
-  // ── Text / open answer ────────────────────────────────────────────────────
   if (type === 'text' || type === 'open') {
     return (
       <textarea
@@ -461,7 +689,6 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // ── Slider (scale) ────────────────────────────────────────────────────────
   if (type === 'slider') {
     const min = question.min || 1;
     const max = question.max || 10;
@@ -496,7 +723,6 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // ── Yes / No ──────────────────────────────────────────────────────────────
   if (type === 'yes_no') {
     return (
       <div style={{ display: 'flex', gap: 14 }}>
@@ -512,7 +738,6 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
                 background: selected ? `${accent}18` : 'rgba(255,255,255,0.03)',
                 border: `2px solid ${selected ? accent : 'rgba(255,255,255,0.1)'}`,
                 color: selected ? accent : 'rgba(255,255,255,0.6)',
-                boxShadow: selected ? `0 0 24px ${accent}20` : 'none',
               }}
             >
               {opt}
@@ -523,47 +748,36 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // ── Multi-select — select all that apply ─────────────────────────────────
   if (type === 'multi_select') {
     const options = question.options || [];
     const selected = Array.isArray(value) ? value : [];
     function toggle(opt) {
-      if (selected.includes(opt)) {
-        onChange(selected.filter(v => v !== opt));
-      } else {
-        onChange([...selected, opt]);
-      }
+      selected.includes(opt) ? onChange(selected.filter(v => v !== opt)) : onChange([...selected, opt]);
     }
     return (
       <div style={{ display: 'grid', gap: 10 }}>
         <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, margin: '0 0 6px' }}>Select all that apply</p>
         {options.map((opt, i) => {
+          const label = typeof opt === 'object' && opt !== null ? opt.label : opt;
           const isSelected = selected.includes(opt);
           return (
-            <button
-              key={i}
-              onClick={() => toggle(opt)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '15px 18px', borderRadius: 16, textAlign: 'left',
-                background: isSelected ? `${accent}15` : 'rgba(255,255,255,0.025)',
-                border: `1.5px solid ${isSelected ? accent + '70' : 'rgba(255,255,255,0.09)'}`,
-                color: isSelected ? '#F5F5F5' : 'rgba(255,255,255,0.65)',
-                fontSize: 16, cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                boxShadow: isSelected ? `0 0 20px ${accent}15` : 'none',
-              }}
-            >
-              {/* Checkbox indicator */}
+            <button key={i} onClick={() => toggle(opt)} style={{
+              display: 'flex', alignItems: 'center', gap: 14,
+              padding: '15px 18px', borderRadius: 16, textAlign: 'left',
+              background: isSelected ? `${accent}15` : 'rgba(255,255,255,0.025)',
+              border: `1.5px solid ${isSelected ? accent + '70' : 'rgba(255,255,255,0.09)'}`,
+              color: isSelected ? '#F5F5F5' : 'rgba(255,255,255,0.65)',
+              fontSize: 16, cursor: 'pointer', transition: 'all 0.15s ease',
+            }}>
               <span style={{
                 width: 20, height: 20, borderRadius: 6, flexShrink: 0,
                 border: `2px solid ${isSelected ? accent : 'rgba(255,255,255,0.2)'}`,
                 background: isSelected ? accent : 'transparent',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                {isSelected && <span style={{ color: '#03131A', fontSize: 13, fontWeight: 900, lineHeight: 1 }}>✓</span>}
+                {isSelected && <span style={{ color: '#03131A', fontSize: 13, fontWeight: 900 }}>✓</span>}
               </span>
-              <span>{opt}</span>
+              <span>{label}</span>
             </button>
           );
         })}
@@ -571,33 +785,26 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // ── Single-select: multiple, likert, forced_choice, scenario w/ options ──
+  // Single-select: multiple, likert, forced_choice, scenario w/ options
   if (type === 'multiple' || type === 'likert' || type === 'forced_choice' ||
       (type === 'scenario' && question.options)) {
     const options = question.options || [];
     return (
       <div style={{ display: 'grid', gap: 12 }}>
         {options.map((opt, i) => {
-          // opt can be a plain string (shared sections) or {label, points} object (mk_*/mv_* sections)
           const label = typeof opt === 'object' && opt !== null ? opt.label : opt;
-          // Store by index; handles both object and string option formats for scoring
           const selected = value === i;
           return (
-            <button
-              key={i}
-              onClick={() => onChange(i)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '16px 18px', borderRadius: 16, textAlign: 'left',
-                background: selected ? `${accent}15` : 'rgba(255,255,255,0.025)',
-                border: `1.5px solid ${selected ? accent + '70' : 'rgba(255,255,255,0.09)'}`,
-                color: selected ? '#F5F5F5' : 'rgba(255,255,255,0.65)',
-                fontSize: 16, cursor: 'pointer',
-                transform: selected ? 'translateX(4px)' : 'none',
-                transition: 'all 0.15s ease',
-                boxShadow: selected ? `0 0 20px ${accent}15` : 'none',
-              }}
-            >
+            <button key={i} onClick={() => onChange(i)} style={{
+              display: 'flex', alignItems: 'center', gap: 14,
+              padding: '16px 18px', borderRadius: 16, textAlign: 'left',
+              background: selected ? `${accent}15` : 'rgba(255,255,255,0.025)',
+              border: `1.5px solid ${selected ? accent + '70' : 'rgba(255,255,255,0.09)'}`,
+              color: selected ? '#F5F5F5' : 'rgba(255,255,255,0.65)',
+              fontSize: 16, cursor: 'pointer',
+              transform: selected ? 'translateX(4px)' : 'none',
+              transition: 'all 0.15s ease',
+            }}>
               <span style={{
                 width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
                 border: `2px solid ${selected ? accent : 'rgba(255,255,255,0.2)'}`,
@@ -614,7 +821,7 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
     );
   }
 
-  // ── Scenario / fallback — text input ─────────────────────────────────────
+  // Fallback — text input
   return (
     <textarea
       placeholder="Describe what you would do…"
@@ -633,140 +840,35 @@ function QuestionInput({ question, value, onChange, accent, accentFaint, accentB
   );
 }
 
-// ─── Screen 05 — Section Transition ──────────────────────────────────────────
-function SectionTransition({ cfg, nextSectionTitle, onContinue }) {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setReady(true), 5000);
-    return () => clearTimeout(t);
-  }, []);
-
-  return (
-    <div style={{
-      minHeight: '100vh',
-      background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 26%), #08080A`,
-      color: '#F5F5F5',
-      fontFamily: 'Inter, sans-serif',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 32,
-    }}>
-      <div style={{ maxWidth: 860, width: '100%' }}>
-        <div style={{
-          textAlign: 'center',
-          padding: 40,
-          borderRadius: 24,
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.08)',
-        }}>
-          <div style={{ color: cfg.accent, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1.4 }}>
-            Section Complete
-          </div>
-          <h2 style={{ fontSize: 38, margin: '16px 0 10px', fontWeight: 900 }}>
-            You're making progress.
-          </h2>
-          {nextSectionTitle && (
-            <p style={{ color: '#C9C9C9', fontSize: 18, maxWidth: 520, margin: '0 auto' }}>
-              Next section: {nextSectionTitle}
-            </p>
-          )}
-
-          {/* Avatar message */}
-          <div style={{
-            margin: '28px auto 0',
-            maxWidth: 360,
-            padding: '16px 20px',
-            borderRadius: 16,
-            background: cfg.accentFaint,
-            border: `1px solid ${cfg.accentBorder}`,
-            color: '#EAFBFF',
-            fontSize: 16,
-            fontStyle: 'italic',
-          }}>
-            "Stay focused."
-          </div>
-
-          <div style={{ marginTop: 28 }}>
-            <button
-              onClick={onContinue}
-              disabled={!ready}
-              style={{
-                background: ready ? cfg.accent : 'rgba(255,255,255,0.08)',
-                color: ready ? '#03131A' : 'rgba(255,255,255,0.4)',
-                fontWeight: 700, borderRadius: 14,
-                padding: '15px 36px', border: 'none',
-                cursor: ready ? 'pointer' : 'not-allowed',
-                fontSize: 16, transition: 'all 0.3s',
-              }}
-            >
-              {ready ? 'Continue' : 'One moment…'}
-            </button>
-          </div>
-          {!ready && (
-            <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12, marginTop: 12 }}>
-              Take a breath before the next section
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Screen 06 — Save Progress Modal ─────────────────────────────────────────
+// ─── Save & Exit Modal ────────────────────────────────────────────────────────
 function SaveModal({ cfg, onKeepGoing, onDashboard }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(0,0,0,0.75)',
-      backdropFilter: 'blur(8px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 24,
+      background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
     }}>
       <div style={{
-        background: '#0E0E12',
-        border: '1px solid rgba(255,255,255,0.1)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
-        borderRadius: 24,
-        padding: 36,
-        maxWidth: 520,
-        width: '100%',
-        textAlign: 'center',
+        background: '#0E0E12', border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 24, padding: 36, maxWidth: 480, width: '100%', textAlign: 'center',
       }}>
-        <div style={{
-          width: 52, height: 52, borderRadius: '50%',
-          background: cfg.accentFaint,
-          border: `1px solid ${cfg.accentBorder}`,
-          margin: '0 auto 20px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 22,
-        }}>
-          ✓
-        </div>
-        <h2 style={{ margin: '0 0 12px', fontSize: 32, fontWeight: 900 }}>Progress Saved</h2>
-        <p style={{ color: '#C4C4C4', fontSize: 17, margin: '0 0 28px', lineHeight: 1.6 }}>
+        <h2 style={{ margin: '0 0 12px', fontSize: 28, fontWeight: 900 }}>Progress Saved</h2>
+        <p style={{ color: '#C4C4C4', fontSize: 16, margin: '0 0 28px', lineHeight: 1.6 }}>
           Your answers are saved. You can come back anytime and pick up right where you left off.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-          <button
-            onClick={onDashboard}
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              color: '#EAEAEA', fontWeight: 600, borderRadius: 14,
-              padding: '14px 22px', border: '1px solid rgba(255,255,255,0.1)',
-              cursor: 'pointer', fontSize: 15,
-            }}
-          >
+          <button onClick={onDashboard} style={{
+            background: 'rgba(255,255,255,0.05)', color: '#EAEAEA',
+            fontWeight: 600, borderRadius: 14, padding: '14px 22px',
+            border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', fontSize: 15,
+          }}>
             Return to Home
           </button>
-          <button
-            onClick={onKeepGoing}
-            style={{
-              background: cfg.accent,
-              color: '#03131A', fontWeight: 700, borderRadius: 14,
-              padding: '14px 22px', border: 'none',
-              cursor: 'pointer', fontSize: 15,
-            }}
-          >
+          <button onClick={onKeepGoing} style={{
+            background: cfg.accent, color: '#03131A',
+            fontWeight: 700, borderRadius: 14, padding: '14px 22px',
+            border: 'none', cursor: 'pointer', fontSize: 15,
+          }}>
             Keep Going
           </button>
         </div>

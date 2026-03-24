@@ -1,7 +1,7 @@
 // ─── RESULTS REVEAL — Score-first youth-facing comeback dashboard ──────────────
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAllAnswers, getAllSessions, completeSession, saveSessionScores } from '../hooks/useFirestore';
+import { getAllAnswers, getAllSessions, getSession, saveSessionScores, saveAnalysisResult, completeSessionImmediate } from '../hooks/useFirestore';
 import { getMekhiAnalysis } from '../agents/mekhiAgent';
 import { getMelvinAnalysis } from '../agents/melvinAgent';
 import { buildResultsPackage, getScoreLabel, inferTraits, deriveCareerFraming, buildStudentProfile } from '../engines/scoreEngine';
@@ -151,90 +151,185 @@ function getNextMoves(scores) {
 }
 
 // ── Main export ───────────────────────────────────────────────────────────────
+// NON-BLOCKING: Results shell renders immediately. AI generation runs in background.
+// blueprintStatus: 'pending' | 'generating' | 'success' | 'failed'
 export default function ResultsReveal() {
   const { userId, sessionId } = useParams();
   const navigate = useNavigate();
   const cfg = USER_CONFIG[userId] || USER_CONFIG.mekhi;
 
-  const [phase,            setPhase]            = useState('loading');
+  const [pageLoading,      setPageLoading]      = useState(true);
   const [analysis,         setAnalysis]         = useState('');
   const [scores,           setScores]           = useState(null);
-  const [error,            setError]            = useState('');
+  const [blueprintStatus,  setBlueprintStatus]  = useState('pending');
+  const [blueprintError,   setBlueprintError]   = useState('');
   const [previousSessions, setPreviousSessions] = useState([]);
-  const [savedAnswers,     setSavedAnswers]     = useState(null);
+
+  const savedAnswersRef = useRef(null);
+  const pollRef         = useRef(null);
 
   useEffect(() => {
-    async function load() {
-      try {
-        const [answers, sessions] = await Promise.all([
-          getAllAnswers(userId, sessionId),
-          getAllSessions(userId),
-        ]);
-        setSavedAnswers(answers);
-        const prev = sessions.filter(s => s.id !== sessionId && s.status === 'complete');
-        setPreviousSessions(prev);
-
-        const sections = USER_SECTIONS[userId];
-        if (sections) {
-          try {
-            const pkg = buildResultsPackage(answers, sections, userId);
-            setScores(pkg);
-            saveSessionScores(userId, sessionId, pkg).catch(err =>
-              console.error('[ResultsReveal] saveSessionScores failed:', err)
-            );
-          } catch (err) {
-            console.error('[ResultsReveal] buildResultsPackage failed:', err);
-          }
-        }
-
-        const currentSession = sessions.find(s => s.id === sessionId);
-        if (currentSession?.status === 'complete' && currentSession?.results) {
-          setAnalysis(currentSession.results);
-          setPhase('complete');
-          return;
-        }
-
-        setPhase('complete');
-        generateAnalysis(answers, prev);
-      } catch (err) {
-        console.error('[ResultsReveal] load failed:', err);
-        setError('Something went wrong loading your results.');
-        setPhase('results');
-      }
-    }
     load();
+    return () => stopPolling();
   }, [userId, sessionId]);
 
-  async function generateAnalysis(answers, prev) {
+  async function load() {
+    console.log('[Results] load start', { userId, sessionId });
+    try {
+      const [answers, sessions] = await Promise.all([
+        getAllAnswers(userId, sessionId),
+        getAllSessions(userId),
+      ]);
+      savedAnswersRef.current = answers;
+
+      const prev = sessions.filter(s => s.id !== sessionId && s.status === 'complete');
+      setPreviousSessions(prev);
+
+      // Build scores immediately — no AI dependency
+      const sections = USER_SECTIONS[userId];
+      if (sections) {
+        try {
+          const pkg = buildResultsPackage(answers, sections, userId);
+          setScores(pkg);
+          saveSessionScores(userId, sessionId, pkg).catch(err =>
+            console.error('[Results] saveSessionScores failed:', err)
+          );
+        } catch (err) {
+          console.error('[Results] buildResultsPackage failed:', err);
+        }
+      }
+
+      const currentSession = sessions.find(s => s.id === sessionId);
+      console.log('[Results] session status:', currentSession?.status, '| analysisStatus:', currentSession?.analysisStatus);
+
+      // Analysis already complete — load from Firebase immediately
+      if (currentSession?.analysisStatus === 'success' && (currentSession?.results || currentSession?.analysis)) {
+        console.log('[Results] analysisStatus = success, loading from Firebase');
+        setAnalysis(currentSession.results || currentSession.analysis);
+        setBlueprintStatus('success');
+        setPageLoading(false);
+        return;
+      }
+
+      // Previously failed — show error with retry
+      if (currentSession?.analysisStatus === 'failed') {
+        console.log('[Results] analysisStatus = failed:', currentSession.analysisError);
+        setBlueprintStatus('failed');
+        setBlueprintError(currentSession.analysisError || 'Blueprint generation failed. Tap Retry.');
+        setPageLoading(false);
+        return;
+      }
+
+      // Legacy: session completed with results but no analysisStatus field
+      if (currentSession?.status === 'complete' && currentSession?.results && !currentSession?.analysisStatus) {
+        console.log('[Results] legacy completed session found');
+        setAnalysis(currentSession.results);
+        setBlueprintStatus('success');
+        setPageLoading(false);
+        return;
+      }
+
+      // Session not yet marked complete — mark it now (handles legacy flow where Assessment.jsx
+      // didn't call completeSessionImmediate yet)
+      if (!currentSession || currentSession.status !== 'complete') {
+        console.log('[Results] session not complete — marking complete now');
+        completeSessionImmediate(userId, sessionId).catch(err =>
+          console.error('[Results] completeSessionImmediate failed:', err)
+        );
+      }
+
+      // Show results shell immediately, generate in background
+      setPageLoading(false);
+      setBlueprintStatus('generating');
+      console.log('[Submit] starting blueprint generation');
+      runGeneration(answers, prev);
+      startPolling();
+    } catch (err) {
+      console.error('[Results] load failed:', err);
+      setPageLoading(false);
+      setBlueprintStatus('failed');
+      setBlueprintError('Failed to load your results. Please refresh the page.');
+    }
+  }
+
+  async function runGeneration(answers, prev) {
+    console.log('[Results] runGeneration start', { userId });
     try {
       const fn = userId === 'mekhi' ? getMekhiAnalysis : getMelvinAnalysis;
       const result = await fn(answers, prev);
+      console.log('[Results] generation success — writing to Firebase');
       setAnalysis(result);
-      await completeSession(userId, sessionId, result);
+      setBlueprintStatus('success');
+      stopPolling();
+      await saveAnalysisResult(userId, sessionId, {
+        analysis: result,
+        analysisStatus: 'success',
+        blueprintStatus: 'success',
+        analysisCompletedAt: new Date().toISOString(),
+        analysisError: null,
+      });
+      console.log('[Results] Firebase write success');
     } catch (err) {
-      console.error('[ResultsReveal] generateAnalysis failed:', err);
-      setAnalysis('');
-      setError('We had an issue generating your full analysis. Your answers are saved — tap "Try Again" to retry.');
-      setPhase('results');
+      const msg = err.name === 'AbortError'
+        ? 'Blueprint timed out. Tap Retry to try again.'
+        : `Generation failed: ${err.message}`;
+      console.error('[Results] generation failed:', msg);
+      setBlueprintStatus('failed');
+      setBlueprintError(msg);
+      stopPolling();
+      saveAnalysisResult(userId, sessionId, {
+        analysisStatus: 'failed',
+        blueprintStatus: 'failed',
+        analysisError: msg,
+      }).catch(e => console.error('[Results] failed to write error to Firebase:', e));
     }
   }
 
-  function handleViewResults() {
-    setPhase(analysis ? 'results' : 'generating');
+  function startPolling() {
+    if (pollRef.current) return;
+    pollRef.current = setInterval(async () => {
+      try {
+        const session = await getSession(userId, sessionId);
+        console.log('[Results] polling analysisStatus:', session?.analysisStatus);
+        if (session?.analysisStatus === 'success' && (session?.results || session?.analysis)) {
+          console.log('[Results] analysisStatus = success (via poll)');
+          setAnalysis(session.results || session.analysis);
+          setBlueprintStatus('success');
+          stopPolling();
+        } else if (session?.analysisStatus === 'failed') {
+          console.log('[Results] analysisStatus = failed (via poll)');
+          setBlueprintStatus('failed');
+          setBlueprintError(session.analysisError || 'Generation failed. Tap Retry.');
+          stopPolling();
+        }
+      } catch (e) {
+        console.error('[Results] poll error:', e);
+      }
+    }, 3000);
+  }
+
+  function stopPolling() {
+    if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
   }
 
   async function handleRetry() {
-    if (!savedAnswers) return;
-    setError('');
-    setPhase('generating');
-    generateAnalysis(savedAnswers, previousSessions);
+    if (!savedAnswersRef.current) return;
+    console.log('[Retry] retry started');
+    setBlueprintError('');
+    setAnalysis('');
+    setBlueprintStatus('generating');
+    await saveAnalysisResult(userId, sessionId, {
+      analysisStatus: 'pending',
+      blueprintStatus: 'pending',
+      analysisError: null,
+    })
+      .then(() => console.log('[Retry] analysisStatus set to pending'))
+      .catch(e => console.error('[Retry] reset failed:', e));
+    runGeneration(savedAnswersRef.current, previousSessions);
+    startPolling();
   }
 
-  useEffect(() => {
-    if (phase === 'generating' && analysis) setPhase('results');
-  }, [phase, analysis]);
-
-  if (phase === 'loading') {
+  if (pageLoading) {
     return (
       <div style={{
         minHeight: '100vh', background: '#08080A',
@@ -246,37 +341,17 @@ export default function ResultsReveal() {
     );
   }
 
-  if (phase === 'complete') {
-    return <CompletionScreen cfg={cfg} previousSessions={previousSessions} onViewResults={handleViewResults} />;
-  }
-
-  if (phase === 'generating') {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: `radial-gradient(circle at top, ${cfg.accentGlow}, transparent 28%), #08080A`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'Inter, sans-serif', color: '#F5F5F5',
-      }}>
-        <div style={{ textAlign: 'center', maxWidth: 460 }}>
-          <div style={{
-            width: 56, height: 56, borderRadius: '50%',
-            background: cfg.accentFaint, border: `1px solid ${cfg.accentBorder}`,
-            margin: '0 auto 24px', animation: 'pulse 2s ease-in-out infinite',
-          }} />
-          <style>{`@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}`}</style>
-          <p style={{ fontSize: 20, color: 'rgba(255,255,255,0.75)', marginBottom: 10 }}>Building your blueprint…</p>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)' }}>Your answers are being analyzed. This takes a moment.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <ResultsDashboard
-      cfg={cfg} analysis={analysis} scores={scores} error={error}
-      userId={userId} sessionId={sessionId}
-      previousSessions={previousSessions} navigate={navigate}
+      cfg={cfg}
+      analysis={analysis}
+      blueprintStatus={blueprintStatus}
+      blueprintError={blueprintError}
+      scores={scores}
+      userId={userId}
+      sessionId={sessionId}
+      previousSessions={previousSessions}
+      navigate={navigate}
       onRetry={handleRetry}
     />
   );
@@ -339,7 +414,7 @@ function CompletionScreen({ cfg, previousSessions, onViewResults }) {
 }
 
 // ─── Results Dashboard ────────────────────────────────────────────────────────
-function ResultsDashboard({ cfg, analysis, scores, error, userId, sessionId, previousSessions, navigate, onRetry }) {
+function ResultsDashboard({ cfg, analysis, blueprintStatus, blueprintError, scores, userId, sessionId, previousSessions, navigate, onRetry }) {
   const [expanded,      setExpanded]      = useState(null);
   const [checkedMoves,  setCheckedMoves]  = useState([]);
 
@@ -358,20 +433,37 @@ function ResultsDashboard({ cfg, analysis, scores, error, userId, sessionId, pre
       fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif',
     }}>
 
-      {/* ── ERROR BANNER ──────────────────────────────────────────────────── */}
-      {error && !analysis && (
+      {/* ── BLUEPRINT STATUS BANNER (above fold, always visible) ────────── */}
+      {blueprintStatus !== 'success' && (
         <div style={{
-          background: 'rgba(255,80,80,0.08)', border: '1px solid rgba(255,80,80,0.25)',
-          padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '14px 20px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           gap: 12, flexWrap: 'wrap',
+          background: blueprintStatus === 'failed'
+            ? 'rgba(239,68,68,0.08)'
+            : 'rgba(255,255,255,0.04)',
+          borderBottom: `1px solid ${blueprintStatus === 'failed' ? 'rgba(239,68,68,0.25)' : 'rgba(255,255,255,0.07)'}`,
         }}>
-          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>{error}</span>
-          {onRetry && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {blueprintStatus !== 'failed' && (
+              <div style={{
+                width: 10, height: 10, borderRadius: '50%',
+                background: cfg.accent, opacity: 0.7,
+                animation: 'pulse 1.5s ease-in-out infinite',
+              }} />
+            )}
+            <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>
+              {blueprintStatus === 'failed'
+                ? (blueprintError || 'Blueprint generation failed.')
+                : 'Your blueprint is being generated. Your scores are ready below.'}
+            </span>
+          </div>
+          {blueprintStatus === 'failed' && onRetry && (
             <button onClick={onRetry} style={{
               background: cfg.accent, color: '#08080A', border: 'none', borderRadius: 8,
-              padding: '8px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer',
+              padding: '8px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer', flexShrink: 0,
             }}>
-              Try Again
+              Retry
             </button>
           )}
         </div>
@@ -698,20 +790,28 @@ function ResultsDashboard({ cfg, analysis, scores, error, userId, sessionId, pre
             id="ai-analysis" label="Full AI Analysis"
             expanded={expanded === 'analysis'} onToggle={() => toggleExpand('analysis')} cfg={cfg}
           >
-            {(analysis || error) ? (
-              <div>
-                {error && !analysis && <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 15 }}>{error}</div>}
-                {analysis && (
-                  <div
-                    style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, fontSize: 15 }}
-                    dangerouslySetInnerHTML={{ __html: formatAnalysis(analysis) }}
-                  />
+            {blueprintStatus === 'success' && analysis ? (
+              <div
+                style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, fontSize: 15 }}
+                dangerouslySetInnerHTML={{ __html: formatAnalysis(analysis) }}
+              />
+            ) : blueprintStatus === 'failed' ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ color: 'rgba(239,68,68,0.8)', fontSize: 14 }}>{blueprintError || 'Generation failed.'}</div>
+                {onRetry && (
+                  <button onClick={onRetry} style={{
+                    alignSelf: 'flex-start', background: cfg.accent, color: '#08080A',
+                    border: 'none', borderRadius: 8, padding: '8px 18px',
+                    fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                  }}>
+                    Retry
+                  </button>
                 )}
               </div>
             ) : (
               <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, display: 'flex', gap: 10, alignItems: 'center' }}>
                 <div style={{ width: 12, height: 12, borderRadius: '50%', background: cfg.accent, opacity: 0.6, animation: 'pulse 1.5s infinite' }} />
-                Analysis generating…
+                Your blueprint is being generated…
               </div>
             )}
           </Accordion>

@@ -23,6 +23,7 @@ exports.handler = async (event) => {
   }
 
   const { systemPrompt, messages, userId, maxTokens } = body;
+  console.log(`[claude-fn] request received — userId: ${userId}`);
 
   // Validate required fields
   if (!systemPrompt || !messages || !userId) {
@@ -48,24 +49,28 @@ exports.handler = async (event) => {
   try {
     const client = new Anthropic({ apiKey });
 
+    console.log(`[claude-fn] model call started — userId: ${userId}, maxTokens: ${tokenLimit}`);
     const response = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: tokenLimit,
       system: systemPrompt,
       messages,
     });
+    console.log(`[claude-fn] model call finished — userId: ${userId}`);
 
     // Validate response structure before accessing
     if (!response?.content || !Array.isArray(response.content) || response.content.length === 0) {
-      console.error('Unexpected Claude response structure:', JSON.stringify(response));
+      console.error('[claude-fn] Unexpected Claude response structure:', JSON.stringify(response));
       return { statusCode: 502, body: JSON.stringify({ error: 'Unexpected response from AI provider' }) };
     }
 
     const textBlock = response.content.find(b => b.type === 'text');
     if (!textBlock) {
+      console.error('[claude-fn] No text block in response');
       return { statusCode: 502, body: JSON.stringify({ error: 'No text content in AI response' }) };
     }
 
+    console.log(`[claude-fn] success — content length: ${textBlock.text.length}`);
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -74,7 +79,7 @@ exports.handler = async (event) => {
   } catch (err) {
     const status = err?.status || 500;
     const message = err?.message || 'Failed to get AI response';
-    console.error(`Claude API error [${status}]:`, message);
+    console.error(`[claude-fn] API error [${status}]:`, message);
     return {
       statusCode: status >= 400 && status < 600 ? status : 500,
       body: JSON.stringify({ error: message }),

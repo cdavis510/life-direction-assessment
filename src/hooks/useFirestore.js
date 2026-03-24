@@ -208,6 +208,53 @@ export async function saveAnalysisResult(userId, sessionId, fields) {
   await updateDoc(sessionRef, payload);
 }
 
+// ─── Question Bank ────────────────────────────────────────────────────────────
+// Loads questions from Firebase and groups them into sections.
+// Section boundaries are defined by the question ID number (mk_NNN).
+
+const MEKHI_SECTION_DEFS = [
+  { id: 'mekhi_section1',  title: 'Self-Awareness & Current Reality',          start: 1,   end: 48  },
+  { id: 'mekhi_section2',  title: 'Ownership & Accountability',                start: 49,  end: 96  },
+  { id: 'mekhi_section3',  title: 'Habits & Consistency',                      start: 97,  end: 144 },
+  { id: 'mekhi_section4',  title: 'Time, Focus & Follow-Through',              start: 145, end: 192 },
+  { id: 'mekhi_section5',  title: 'Academic Recovery & Learning Behaviors',    start: 193, end: 240 },
+  { id: 'mekhi_section6',  title: 'Emotional Regulation & Stress',             start: 241, end: 288 },
+  { id: 'mekhi_section7',  title: 'Support, Communication & Boundaries',       start: 289, end: 336 },
+  { id: 'mekhi_section8',  title: 'Resilience & Change Readiness',             start: 337, end: 384 },
+  { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivation',       start: 385, end: 432 },
+  { id: 'mekhi_section10', title: 'Integrity, Honesty & Contradiction Checks', start: 433, end: 501 },
+  { id: 'mekhi_section11', title: 'Truth Detection & Integrity Layer',         start: 502, end: 530 },
+];
+
+export async function loadUserQuestions(userId) {
+  const snap = await getDocs(
+    query(collection(db, 'questionBanks', userId, 'questions'), orderBy('importIndex'))
+  );
+  const allQuestions = snap.docs.map(d => {
+    const data = d.data();
+    let options = data.options;
+    if (typeof options === 'string') {
+      try { options = JSON.parse(options); } catch { options = []; }
+    }
+    return { ...data, id: d.id, options };
+  });
+
+  const defs = userId === 'mekhi' ? MEKHI_SECTION_DEFS : null;
+  if (!defs) {
+    return [{ id: `${userId}_section1`, title: 'Assessment', questions: allQuestions }];
+  }
+
+  return defs
+    .map(sec => ({
+      ...sec,
+      questions: allQuestions.filter(q => {
+        const num = parseInt(q.id.replace(/\D/g, ''), 10);
+        return num >= sec.start && num <= sec.end;
+      }),
+    }))
+    .filter(sec => sec.questions.length > 0);
+}
+
 // ─── Last Activity ────────────────────────────────────────────────────────────
 
 export async function getLastActivity(userId) {

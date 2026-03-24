@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { USER_SECTIONS } from '../data/questions';
-import { saveAnswer, updateSessionProgress, getSession, getAllAnswers, completeSessionImmediate } from '../hooks/useFirestore';
+import { saveAnswer, updateSessionProgress, getSession, getAllAnswers, completeSessionImmediate, loadUserQuestions } from '../hooks/useFirestore';
 
 const USER_CONFIG = {
   mekhi: {
@@ -53,13 +53,8 @@ export default function Assessment() {
   const { userId, sessionId } = useParams();
   const navigate = useNavigate();
   const cfg = USER_CONFIG[userId] || USER_CONFIG.mekhi;
-  const sections = USER_SECTIONS[userId] || USER_SECTIONS.mekhi;
 
-  const allQuestions = sections.flatMap(section =>
-    section.questions.filter(Boolean).map(q => ({ ...q, sectionId: section.id, sectionTitle: section.title }))
-  );
-  const totalQuestions = allQuestions.length;
-
+  const [sections, setSections]                 = useState(USER_SECTIONS[userId] || USER_SECTIONS.mekhi);
   const [currentIndex, setCurrentIndex]         = useState(0);
   const [answers, setAnswers]                   = useState({});
   const [saving, setSaving]                     = useState(false);
@@ -75,9 +70,26 @@ export default function Assessment() {
   const timerRef    = useRef(null);
   const msgTimerRef = useRef(null);
 
-  // Restore progress
+  const allQuestions = sections.flatMap(section =>
+    section.questions.filter(Boolean).map(q => ({ ...q, sectionId: section.id, sectionTitle: section.title }))
+  );
+  const totalQuestions = allQuestions.length;
+
+  // Load questions from Firebase, then restore progress
   useEffect(() => {
-    async function restore() {
+    async function init() {
+      // 1. Load question bank from Firebase (Mekhi uses Firebase source of truth)
+      let activeSections = USER_SECTIONS[userId] || USER_SECTIONS.mekhi;
+      try {
+        const fbSections = await loadUserQuestions(userId);
+        if (fbSections?.length > 0) activeSections = fbSections;
+      } catch (err) {
+        console.warn('[Assessment] Firebase question load failed, using hardcoded fallback:', err.message);
+      }
+      setSections(activeSections);
+
+      // 2. Restore saved progress
+      const fbTotal = activeSections.flatMap(s => s.questions.filter(Boolean)).length;
       let restoredIndex = 0;
       try {
         const [session, savedAnswers] = await Promise.all([
@@ -86,16 +98,15 @@ export default function Assessment() {
         ]);
         if (savedAnswers) setAnswers(savedAnswers);
         if (session?.currentQuestion) {
-          restoredIndex = Math.min(session.currentQuestion, totalQuestions - 1);
+          restoredIndex = Math.min(session.currentQuestion, fbTotal - 1);
           setCurrentIndex(restoredIndex);
         }
       } catch {}
-      // Show section intro only on fresh start (question 0)
       setShowSectionIntro(restoredIndex === 0);
       setLoading(false);
     }
-    restore();
-  }, [userId, sessionId, totalQuestions]);
+    init();
+  }, [userId, sessionId]);
 
   // 0.5-second minimum before Next
   useEffect(() => {

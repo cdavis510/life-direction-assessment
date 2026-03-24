@@ -212,19 +212,36 @@ export async function saveAnalysisResult(userId, sessionId, fields) {
 // Loads questions from Firebase and groups them into sections.
 // Section boundaries are defined by the question ID number (mk_NNN).
 
-const MEKHI_SECTION_DEFS = [
-  { id: 'mekhi_section1',  title: 'Self-Awareness & Current Reality',          start: 1,   end: 48  },
-  { id: 'mekhi_section2',  title: 'Ownership & Accountability',                start: 49,  end: 96  },
-  { id: 'mekhi_section3',  title: 'Habits & Consistency',                      start: 97,  end: 144 },
-  { id: 'mekhi_section4',  title: 'Time, Focus & Follow-Through',              start: 145, end: 192 },
-  { id: 'mekhi_section5',  title: 'Academic Recovery & Learning Behaviors',    start: 193, end: 240 },
-  { id: 'mekhi_section6',  title: 'Emotional Regulation & Stress',             start: 241, end: 288 },
-  { id: 'mekhi_section7',  title: 'Support, Communication & Boundaries',       start: 289, end: 336 },
-  { id: 'mekhi_section8',  title: 'Resilience & Change Readiness',             start: 337, end: 384 },
-  { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivation',       start: 385, end: 432 },
-  { id: 'mekhi_section10', title: 'Integrity, Honesty & Contradiction Checks', start: 433, end: 501 },
-  { id: 'mekhi_section11', title: 'Truth Detection & Integrity Layer',         start: 502, end: 530 },
-];
+const SECTION_DEFS = {
+  mekhi: [
+    { id: 'mekhi_section1',  title: 'Self-Awareness & Current Reality',          start: 1,   end: 48  },
+    { id: 'mekhi_section2',  title: 'Ownership & Accountability',                start: 49,  end: 96  },
+    { id: 'mekhi_section3',  title: 'Habits & Consistency',                      start: 97,  end: 144 },
+    { id: 'mekhi_section4',  title: 'Time, Focus & Follow-Through',              start: 145, end: 192 },
+    { id: 'mekhi_section5',  title: 'Academic Recovery & Learning Behaviors',    start: 193, end: 240 },
+    { id: 'mekhi_section6',  title: 'Emotional Regulation & Stress',             start: 241, end: 288 },
+    { id: 'mekhi_section7',  title: 'Support, Communication & Boundaries',       start: 289, end: 336 },
+    { id: 'mekhi_section8',  title: 'Resilience & Change Readiness',             start: 337, end: 384 },
+    { id: 'mekhi_section9',  title: 'Future Vision, Purpose & Motivation',       start: 385, end: 432 },
+    { id: 'mekhi_section10', title: 'Integrity, Honesty & Contradiction Checks', start: 433, end: 501 },
+    { id: 'mekhi_section11', title: 'Truth Detection & Integrity Layer',         start: 502, end: 530 },
+  ],
+  // Boundaries are importIndex positions (1-520 in load order).
+  // melvinS5 has 68 questions (48 core + 20 extra academic = importIndex 193-260).
+  melvin: [
+    { id: 'melvin_section1',  title: 'Self-Awareness & Current Reality',          start: 1,   end: 48  },
+    { id: 'melvin_section2',  title: 'Ownership & Accountability',                start: 49,  end: 96  },
+    { id: 'melvin_section3',  title: 'Habits & Consistency',                      start: 97,  end: 144 },
+    { id: 'melvin_section4',  title: 'Time, Focus & Follow-Through',              start: 145, end: 192 },
+    { id: 'melvin_section5',  title: 'Academic Recovery & Learning Behaviors',    start: 193, end: 260 },
+    { id: 'melvin_section6',  title: 'Emotional Regulation & Stress',             start: 261, end: 308 },
+    { id: 'melvin_section7',  title: 'Support, Communication & Boundaries',       start: 309, end: 356 },
+    { id: 'melvin_section8',  title: 'Resilience & Change Readiness',             start: 357, end: 404 },
+    { id: 'melvin_section9',  title: 'Future Vision, Purpose & Motivation',       start: 405, end: 452 },
+    { id: 'melvin_section10', title: 'Integrity, Honesty & Contradiction Checks', start: 453, end: 500 },
+    { id: 'melvin_section11', title: 'Truth Detection & Integrity Layer',         start: 501, end: 530 },
+  ],
+};
 
 export async function loadUserQuestions(userId) {
   const snap = await getDocs(
@@ -239,7 +256,7 @@ export async function loadUserQuestions(userId) {
     return { ...data, id: d.id, options };
   });
 
-  const defs = userId === 'mekhi' ? MEKHI_SECTION_DEFS : null;
+  const defs = SECTION_DEFS[userId];
   if (!defs) {
     return [{ id: `${userId}_section1`, title: 'Assessment', questions: allQuestions }];
   }
@@ -248,8 +265,12 @@ export async function loadUserQuestions(userId) {
     .map(sec => ({
       ...sec,
       questions: allQuestions.filter(q => {
-        const num = parseInt(q.id.replace(/\D/g, ''), 10);
-        return num >= sec.start && num <= sec.end;
+        // Use importIndex (position in the original load order) when available.
+        // Falls back to the number extracted from the document ID for backwards compat.
+        const idx = q.importIndex != null
+          ? q.importIndex
+          : parseInt(q.id.replace(/\D/g, ''), 10);
+        return idx >= sec.start && idx <= sec.end;
       }),
     }))
     .filter(sec => sec.questions.length > 0);

@@ -650,15 +650,25 @@ export async function getMekhiAnalysis(answers, previousSessions = []) {
     },
   ];
 
-  const response = await fetch('/.netlify/functions/claude', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      userId: 'mekhi',
-      systemPrompt: `${MEKHI_SYSTEM_PROMPT}\n\n${MEKHI_AI_PERSONA_RULES}`,
-      messages,
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 24000);
+
+  let response;
+  try {
+    response = await fetch('/.netlify/functions/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: 'mekhi',
+        systemPrompt: `${MEKHI_SYSTEM_PROMPT}\n\n${MEKHI_AI_PERSONA_RULES}`,
+        messages,
+        maxTokens: 2000,
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!response.ok) throw new Error('Failed to get analysis');
   const data = await response.json();

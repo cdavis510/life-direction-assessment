@@ -1,0 +1,158 @@
+{
+  "reassessmentScoringLogic": {
+    "monthlyMiniAssessment": {
+      "questionCount": 12,
+      "minScore": 12,
+      "maxScore": 48,
+      "scoreBands": [
+        {
+          "label": "critical",
+          "min": 12,
+          "max": 21,
+          "meaning": "High concern. Low follow-through, low honesty, low motivation, or emotional instability.",
+          "aiAction": [
+            "Flag immediate intervention",
+            "Reduce weekly goals to 1 small personal goal",
+            "Use gentle accountability language",
+            "Prioritize emotional stabilization and truth-checking"
+          ]
+        },
+        {
+          "label": "fragile",
+          "min": 22,
+          "max": 30,
+          "meaning": "Some effort is present but instability and inconsistency are still strong.",
+          "aiAction": [
+            "Assign 1 personal skill and 1 family support task",
+            "Watch for avoidance and shutdown behavior",
+            "Use weekly check-ins with low-pressure language"
+          ]
+        },
+        {
+          "label": "building",
+          "min": 31,
+          "max": 39,
+          "meaning": "Real progress is showing, but consistency still needs strengthening.",
+          "aiAction": [
+            "Increase expectations slightly",
+            "Reinforce follow-through and self-awareness",
+            "Keep skill builder focused on discipline and communication"
+          ]
+        },
+        {
+          "label": "strong",
+          "min": 40,
+          "max": 48,
+          "meaning": "Strong month. Good effort, ownership, and recovery pattern.",
+          "aiAction": [
+            "Recognize progress clearly",
+            "Increase challenge level of weekly growth task",
+            "Focus on long-term planning and higher-level habits"
+          ]
+        }
+      ],
+      "traitAlerts": {
+        "truthfulness": {
+          "lowThreshold": 2,
+          "meaning": "Possible hiding, minimizing, or emotional masking."
+        },
+        "emotional_regulation": {
+          "lowThreshold": 2,
+          "meaning": "High overwhelm may be interfering with follow-through."
+        },
+        "accountability": {
+          "lowThreshold": 2,
+          "meaning": "Excuse patterns or blame shifting may still be active."
+        }
+      }
+    },
+    "quarterlyReassessment": {
+      "questionCount": 20,
+      "minScore": 20,
+      "maxScore": 80,
+      "scoreBands": [
+        {
+          "label": "regression",
+          "min": 20,
+          "max": 35,
+          "meaning": "Quarter shows serious regression or very limited growth.",
+          "aiAction": [
+            "Flag major concern",
+            "Reassess environment, emotional health, and support strategy",
+            "Lower pressure and increase structure",
+            "Prompt parent review and intervention plan"
+          ]
+        },
+        {
+          "label": "stalled",
+          "min": 36,
+          "max": 50,
+          "meaning": "Little change. Some effort may exist, but patterns are still controlling outcomes.",
+          "aiAction": [
+            "Identify top 2 recurring weak traits",
+            "Assign targeted quarterly rebuild goals",
+            "Use stronger accountability plus support"
+          ]
+        },
+        {
+          "label": "progressing",
+          "min": 51,
+          "max": 65,
+          "meaning": "Meaningful progress is visible, though not fully stable yet.",
+          "aiAction": [
+            "Highlight specific wins",
+            "Push growth in decision-making, consistency, and future direction",
+            "Adjust weekly builder to next-level skill development"
+          ]
+        },
+        {
+          "label": "breakthrough",
+          "min": 66,
+          "max": 80,
+          "meaning": "Strong quarter. Clear improvement in accountability, direction, and resilience.",
+          "aiAction": [
+            "Recognize breakthrough clearly",
+            "Shift more focus to long-term planning and leadership habits",
+            "Build future/career confidence tasks into weekly system"
+          ]
+        }
+      ],
+      "traitAlerts": {
+        "direction": {
+          "lowThreshold": 2,
+          "meaning": "Still unclear about future path."
+        },
+        "discipline": {
+          "lowThreshold": 2,
+          "meaning": "Routine and follow-through remain unstable."
+        },
+        "truthfulness": {
+          "lowThreshold": 2,
+          "meaning": "Self-report may still be softened, hidden, or defensive."
+        },
+        "support_connection": {
+          "lowThreshold": 2,
+          "meaning": "Relationship strain may be blocking growth."
+        }
+      }
+    },
+    "comparisonLogic": {
+      "monthly": {
+        "compareTo": "previous monthlyMiniAssessment",
+        "rules": [
+          "If totalScore drops by 5 or more, flag decline",
+          "If totalScore increases by 5 or more, flag positive momentum",
+          "If truthfulness or accountability drop by 2 band levels, flag possible masking"
+        ]
+      },
+      "quarterly": {
+        "compareTo": "initialAssessment and previous quarterlyReassessment",
+        "rules": [
+          "If score is higher than previous quarter, note growth direction",
+          "If score is flat for 2 quarters, flag stalled development",
+          "If score drops and emotional_regulation is also low, flag deeper support need"
+        ]
+      }
+    }
+  }
+}

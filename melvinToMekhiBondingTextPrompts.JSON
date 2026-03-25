@@ -1,0 +1,94 @@
+{
+  "melvinToMekhiBondingTextPrompts": [
+    {
+      "id": "mtk_001",
+      "message": "You good? You been kinda quiet.",
+      "tone": "low_pressure",
+      "goal": "check_in",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["shy", "withdrawn"],
+      "useWhen": ["silence", "withdrawal"]
+    },
+    {
+      "id": "mtk_002",
+      "message": "You ain’t gotta say much, just making sure you straight.",
+      "tone": "gentle",
+      "goal": "support",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["shy", "insecure"],
+      "useWhen": ["low_energy"]
+    },
+    {
+      "id": "mtk_003",
+      "message": "You be knowing sports fr, you just don’t say it enough.",
+      "tone": "confidence_build",
+      "goal": "confidence",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["insecure"],
+      "useWhen": ["self_doubt"]
+    },
+    {
+      "id": "mtk_004",
+      "message": "You don’t gotta prove nothing, just be consistent.",
+      "tone": "steady",
+      "goal": "reduce_pressure",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["overthinking"],
+      "useWhen": ["stress"]
+    },
+    {
+      "id": "mtk_005",
+      "message": "You be overthinking, just start with something small.",
+      "tone": "direct_support",
+      "goal": "action",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["overwhelmed"],
+      "useWhen": ["stuck"]
+    },
+    {
+      "id": "mtk_006",
+      "message": "You actually smarter than you be acting.",
+      "tone": "real_talk",
+      "goal": "confidence",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["low_confidence"],
+      "useWhen": ["self_doubt"]
+    },
+    {
+      "id": "mtk_007",
+      "message": "Let’s just both lock in for a little bit.",
+      "tone": "team_based",
+      "goal": "accountability",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["needs_push"],
+      "useWhen": ["procrastination"]
+    },
+    {
+      "id": "mtk_008",
+      "message": "You don’t gotta be loud to be right.",
+      "tone": "reassuring",
+      "goal": "confidence",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["shy"],
+      "useWhen": ["debate_insecurity"]
+    },
+    {
+      "id": "mtk_009",
+      "message": "You just need to trust yourself more.",
+      "tone": "supportive",
+      "goal": "confidence",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["insecure"],
+      "useWhen": ["hesitation"]
+    },
+    {
+      "id": "mtk_010",
+      "message": "You not behind, you just ain’t started yet.",
+      "tone": "motivational",
+      "goal": "start_action",
+      "bestFor": ["mekhi"],
+      "personalityFit": ["discouraged"],
+      "useWhen": ["avoidance"]
+    }
+  ]
+}

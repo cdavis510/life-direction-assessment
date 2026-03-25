@@ -1,0 +1,364 @@
+{
+  "melvinFamilyLifestyleTruthSection": [
+    {
+      "id": "mflt_001",
+      "category": "lifestyle_vision",
+      "question": "What kind of adult life sounds best to you right now?",
+      "type": "multiple_choice",
+      "options": [
+        "High income even if the work is stressful",
+        "Stable income with structure and balance",
+        "Freedom and flexibility even if money is less consistent",
+        "I really do not know yet"
+      ]
+    },
+    {
+      "id": "mflt_002",
+      "category": "lifestyle_vision",
+      "question": "Which matters most to you right now?",
+      "type": "multiple_choice",
+      "options": [
+        "Making good money",
+        "Having peace of mind",
+        "Having freedom",
+        "Making family proud"
+      ]
+    },
+    {
+      "id": "mflt_003",
+      "category": "lifestyle_vision",
+      "question": "How do you picture yourself living in your 20s?",
+      "type": "multiple_choice",
+      "options": [
+        "Career-focused and disciplined",
+        "Still figuring things out but improving",
+        "Going with the flow and seeing what happens",
+        "I honestly have not pictured it clearly"
+      ]
+    },
+    {
+      "id": "mflt_004",
+      "category": "lifestyle_vision",
+      "question": "What kind of work life sounds most realistic for you?",
+      "type": "multiple_choice",
+      "options": [
+        "Office or professional setting",
+        "Business or finance path",
+        "A mix of structure and independence",
+        "I do not know yet"
+      ]
+    },
+    {
+      "id": "mflt_005",
+      "category": "discipline_identity",
+      "question": "When you think about your future, what worries you the most?",
+      "type": "multiple_choice",
+      "options": [
+        "Failing because I do not stay consistent",
+        "Choosing the wrong path",
+        "Not making enough money",
+        "Letting people down"
+      ]
+    },
+    {
+      "id": "mflt_006",
+      "category": "discipline_identity",
+      "question": "Which statement feels most true?",
+      "type": "multiple_choice",
+      "options": [
+        "I need more structure",
+        "I need more confidence",
+        "I need more discipline",
+        "I need more clarity"
+      ]
+    },
+    {
+      "id": "mflt_007",
+      "category": "self_awareness",
+      "question": "What gets in your way the most?",
+      "type": "multiple_choice",
+      "options": [
+        "Putting things off",
+        "Overthinking",
+        "Lack of direction",
+        "Lack of energy"
+      ]
+    },
+    {
+      "id": "mflt_008",
+      "category": "self_awareness",
+      "question": "How much do you believe your daily habits are shaping your future?",
+      "type": "multiple_choice",
+      "options": [
+        "A lot",
+        "Some",
+        "Not much",
+        "I do not really think about it"
+      ]
+    },
+    {
+      "id": "mflt_009",
+      "category": "family_connection",
+      "question": "How connected do you feel to your mom right now?",
+      "type": "multiple_choice",
+      "options": [
+        "Very connected",
+        "Somewhat connected",
+        "Not very connected",
+        "Disconnected"
+      ]
+    },
+    {
+      "id": "mflt_010",
+      "category": "family_connection",
+      "question": "Which best describes how you feel when your mom checks on you?",
+      "type": "multiple_choice",
+      "options": [
+        "Supported",
+        "Sometimes supported, sometimes pressured",
+        "Mostly pressured",
+        "Misunderstood"
+      ]
+    },
+    {
+      "id": "mflt_011",
+      "category": "family_connection",
+      "question": "What do you think your mom wants most from you?",
+      "type": "multiple_choice",
+      "options": [
+        "For me to be disciplined and successful",
+        "For me to communicate more",
+        "For me to do things without being pushed",
+        "For me to become more responsible overall"
+      ]
+    },
+    {
+      "id": "mflt_012",
+      "category": "family_truth",
+      "question": "What do you most wish your mom understood about you?",
+      "type": "multiple_choice",
+      "options": [
+        "I am trying more than it looks like",
+        "I need space sometimes",
+        "I feel pressure even when I do not say it",
+        "I am still figuring myself out"
+      ]
+    },
+    {
+      "id": "mflt_013",
+      "category": "family_truth",
+      "question": "What do you need more of from your mom?",
+      "type": "multiple_choice",
+      "options": [
+        "Patience",
+        "Clearer guidance",
+        "Trust",
+        "Emotional support"
+      ]
+    },
+    {
+      "id": "mflt_014",
+      "category": "family_truth",
+      "question": "What do you need less of from your mom?",
+      "type": "multiple_choice",
+      "options": [
+        "Pressure",
+        "Repeating herself",
+        "Criticism",
+        "Control"
+      ]
+    },
+    {
+      "id": "mflt_015",
+      "category": "family_truth",
+      "question": "How easy is it for you to be honest with your mom when you are struggling?",
+      "type": "multiple_choice",
+      "options": [
+        "Very easy",
+        "Somewhat easy",
+        "Hard",
+        "Very hard"
+      ]
+    },
+    {
+      "id": "mflt_016",
+      "category": "family_truth",
+      "question": "When you hide things from your mom, what is usually the reason?",
+      "type": "multiple_choice",
+      "options": [
+        "I do not want to disappoint her",
+        "I do not want pressure",
+        "I want to handle it myself",
+        "I do not think she will understand"
+      ]
+    },
+    {
+      "id": "mflt_017",
+      "category": "parent_impact",
+      "question": "How much do you think your mom's habits or stress affect you?",
+      "type": "multiple_choice",
+      "options": [
+        "A lot",
+        "Some",
+        "A little",
+        "Not really"
+      ]
+    },
+    {
+      "id": "mflt_018",
+      "category": "parent_impact",
+      "question": "Which feels most true?",
+      "type": "multiple_choice",
+      "options": [
+        "I learned some bad habits by watching home life",
+        "I learned both good and bad habits at home",
+        "Home pushed me to be stronger",
+        "My choices are mostly separate from home"
+      ]
+    },
+    {
+      "id": "mflt_019",
+      "category": "parent_impact",
+      "question": "Do you think your mom's own struggles ever make it harder for you to grow?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes, often",
+        "Sometimes",
+        "Rarely",
+        "No"
+      ]
+    },
+    {
+      "id": "mflt_020",
+      "category": "responsibility_split",
+      "question": "When your life is off track, who do you believe is most responsible?",
+      "type": "multiple_choice",
+      "options": [
+        "Mostly me",
+        "Me, but family affects it too",
+        "A mix of everything around me",
+        "Mostly outside pressure and circumstances"
+      ]
+    },
+    {
+      "id": "mflt_021",
+      "category": "responsibility_split",
+      "question": "Which statement is most honest?",
+      "type": "multiple_choice",
+      "options": [
+        "I need to stop making excuses",
+        "I need better support",
+        "I need both accountability and support",
+        "I am not sure what I need"
+      ]
+    },
+    {
+      "id": "mflt_022",
+      "category": "support_style",
+      "question": "What kind of support works best for you?",
+      "type": "multiple_choice",
+      "options": [
+        "Clear structure and reminders",
+        "Calm check-ins without pressure",
+        "Direct honesty even if it is uncomfortable",
+        "Space first, then support"
+      ]
+    },
+    {
+      "id": "mflt_023",
+      "category": "support_style",
+      "question": "How should your mom push you when you are slipping?",
+      "type": "multiple_choice",
+      "options": [
+        "Be direct immediately",
+        "Ask questions first",
+        "Give me a little space, then check back",
+        "Help me make a plan instead of lecturing me"
+      ]
+    },
+    {
+      "id": "mflt_024",
+      "category": "resentment_disconnection",
+      "question": "Do you carry any resentment toward your mom that you do not usually say out loud?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes, a lot",
+        "Some",
+        "A little",
+        "No"
+      ]
+    },
+    {
+      "id": "mflt_025",
+      "category": "resentment_disconnection",
+      "question": "If there is distance between you and your mom, what is the biggest reason?",
+      "type": "multiple_choice",
+      "options": [
+        "Pressure",
+        "Misunderstanding",
+        "My own withdrawal",
+        "Past hurt"
+      ]
+    },
+    {
+      "id": "mflt_026",
+      "category": "trust",
+      "question": "How much do you trust your mom's intentions toward you?",
+      "type": "multiple_choice",
+      "options": [
+        "A lot",
+        "Mostly",
+        "Only some",
+        "Not much"
+      ]
+    },
+    {
+      "id": "mflt_027",
+      "category": "trust",
+      "question": "How respected do you feel by your mom as a growing young man?",
+      "type": "multiple_choice",
+      "options": [
+        "Very respected",
+        "Somewhat respected",
+        "Not very respected",
+        "Not respected"
+      ]
+    },
+    {
+      "id": "mflt_028",
+      "category": "future_family",
+      "question": "What kind of relationship do you want with your mom a year from now?",
+      "type": "multiple_choice",
+      "options": [
+        "Closer and more honest",
+        "Still close but with more independence",
+        "Less conflict and more peace",
+        "I do not know"
+      ]
+    },
+    {
+      "id": "mflt_029",
+      "category": "future_family",
+      "question": "What would improve your relationship with your mom the fastest?",
+      "type": "multiple_choice",
+      "options": [
+        "Better communication",
+        "More trust",
+        "Less pressure",
+        "More consistency from both of us"
+      ]
+    },
+    {
+      "id": "mflt_030",
+      "category": "truth_check",
+      "question": "Which statement is most true right now?",
+      "type": "multiple_choice",
+      "options": [
+        "I know what to do but I do not always do it",
+        "I want better but I feel stuck",
+        "I need stronger structure to grow",
+        "I need to fully own my choices"
+      ]
+    }
+  ]
+}

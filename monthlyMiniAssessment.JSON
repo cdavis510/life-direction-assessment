@@ -1,0 +1,160 @@
+{
+  "monthlyMiniAssessment": [
+    {
+      "id": "mma_001",
+      "category": "follow_through",
+      "question": "This month, how often did you finish what you started?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Almost never", "score": 1 },
+        { "text": "Sometimes", "score": 2 },
+        { "text": "Usually", "score": 3 },
+        { "text": "Almost always", "score": 4 }
+      ],
+      "trait": "consistency"
+    },
+    {
+      "id": "mma_002",
+      "category": "time_management",
+      "question": "How often were you on time for class, work, or important responsibilities?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Almost never", "score": 1 },
+        { "text": "Sometimes", "score": 2 },
+        { "text": "Usually", "score": 3 },
+        { "text": "Almost always", "score": 4 }
+      ],
+      "trait": "discipline"
+    },
+    {
+      "id": "mma_003",
+      "category": "avoidance",
+      "question": "When something felt stressful, what did you most often do?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Avoided it completely", "score": 1 },
+        { "text": "Put it off for a while", "score": 2 },
+        { "text": "Handled part of it", "score": 3 },
+        { "text": "Dealt with it directly", "score": 4 }
+      ],
+      "trait": "coping"
+    },
+    {
+      "id": "mma_004",
+      "category": "honesty",
+      "question": "How honest were you this month about what you were really doing and feeling?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not very honest", "score": 1 },
+        { "text": "Somewhat honest", "score": 2 },
+        { "text": "Mostly honest", "score": 3 },
+        { "text": "Fully honest", "score": 4 }
+      ],
+      "trait": "truthfulness"
+    },
+    {
+      "id": "mma_005",
+      "category": "motivation",
+      "question": "How motivated did you feel to improve your situation this month?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not motivated", "score": 1 },
+        { "text": "A little motivated", "score": 2 },
+        { "text": "Mostly motivated", "score": 3 },
+        { "text": "Very motivated", "score": 4 }
+      ],
+      "trait": "drive"
+    },
+    {
+      "id": "mma_006",
+      "category": "emotional_state",
+      "question": "How often did you feel overwhelmed this month?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Almost every day", "score": 1 },
+        { "text": "A lot of days", "score": 2 },
+        { "text": "Some days", "score": 3 },
+        { "text": "Rarely", "score": 4 }
+      ],
+      "trait": "emotional_regulation"
+    },
+    {
+      "id": "mma_007",
+      "category": "support",
+      "question": "How willing were you to ask for help when you needed it?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "I avoided asking", "score": 1 },
+        { "text": "Only if pushed", "score": 2 },
+        { "text": "Sometimes asked", "score": 3 },
+        { "text": "Asked when needed", "score": 4 }
+      ],
+      "trait": "help_seeking"
+    },
+    {
+      "id": "mma_008",
+      "category": "self_awareness",
+      "question": "How clearly did you understand what was holding you back this month?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not clear at all", "score": 1 },
+        { "text": "A little clear", "score": 2 },
+        { "text": "Mostly clear", "score": 3 },
+        { "text": "Very clear", "score": 4 }
+      ],
+      "trait": "insight"
+    },
+    {
+      "id": "mma_009",
+      "category": "relationships",
+      "question": "How well did you communicate with the people trying to support you?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very poorly", "score": 1 },
+        { "text": "Not great", "score": 2 },
+        { "text": "Pretty well", "score": 3 },
+        { "text": "Very well", "score": 4 }
+      ],
+      "trait": "communication"
+    },
+    {
+      "id": "mma_010",
+      "category": "effort",
+      "question": "Looking at the whole month, how much real effort did you give?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very little", "score": 1 },
+        { "text": "Some effort", "score": 2 },
+        { "text": "Strong effort", "score": 3 },
+        { "text": "My best effort", "score": 4 }
+      ],
+      "trait": "effort"
+    },
+    {
+      "id": "mma_011",
+      "category": "confidence",
+      "question": "How much did you believe you could still improve things this month?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "I did not believe that", "score": 1 },
+        { "text": "Barely believed it", "score": 2 },
+        { "text": "Mostly believed it", "score": 3 },
+        { "text": "Strongly believed it", "score": 4 }
+      ],
+      "trait": "hope"
+    },
+    {
+      "id": "mma_012",
+      "category": "accountability",
+      "question": "When you made mistakes this month, what did you usually do?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Blamed others or avoided it", "score": 1 },
+        { "text": "Partly owned it", "score": 2 },
+        { "text": "Mostly owned it", "score": 3 },
+        { "text": "Owned it and tried to fix it", "score": 4 }
+      ],
+      "trait": "accountability"
+    }
+  ]
+}

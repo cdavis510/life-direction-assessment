@@ -1,0 +1,354 @@
+{
+  "collegeTermsAssessment": [
+    {
+      "id": "ct_001",
+      "term": "Academic advisor",
+      "question": "What does an academic advisor help a student do?",
+      "type": "multiple_choice",
+      "options": [
+        "Choose classes and stay on track for graduation",
+        "Fix dorm furniture",
+        "Coach athletic teams",
+        "Approve financial aid refunds"
+      ],
+      "correctAnswer": "Choose classes and stay on track for graduation",
+      "category": "academic"
+    },
+    {
+      "id": "ct_002",
+      "term": "Add/drop period",
+      "question": "What is the add/drop period?",
+      "type": "multiple_choice",
+      "options": [
+        "A time when students can change classes without major consequences",
+        "A time when graduation tickets are given out",
+        "A program for part-time jobs",
+        "A deadline for dorm move-out"
+      ],
+      "correctAnswer": "A time when students can change classes without major consequences",
+      "category": "academic"
+    },
+    {
+      "id": "ct_003",
+      "term": "Core courses",
+      "question": "What are core courses?",
+      "type": "multiple_choice",
+      "options": [
+        "Basic foundation classes like English, math, science, and history",
+        "Only classes in a student’s major",
+        "Classes taken after graduation",
+        "Weekend classes only"
+      ],
+      "correctAnswer": "Basic foundation classes like English, math, science, and history",
+      "category": "academic"
+    },
+    {
+      "id": "ct_004",
+      "term": "Credits",
+      "question": "In college, what are credits?",
+      "type": "multiple_choice",
+      "options": [
+        "A way schools measure the amount of coursework for a class",
+        "Money given to students",
+        "Extra points added to GPA",
+        "A dorm reward system"
+      ],
+      "correctAnswer": "A way schools measure the amount of coursework for a class",
+      "category": "academic"
+    },
+    {
+      "id": "ct_005",
+      "term": "Electives",
+      "question": "What is an elective?",
+      "type": "multiple_choice",
+      "options": [
+        "A class a student chooses outside required core or major classes",
+        "A class that has no teacher",
+        "A required math class",
+        "A class only freshmen can take"
+      ],
+      "correctAnswer": "A class a student chooses outside required core or major classes",
+      "category": "academic"
+    },
+    {
+      "id": "ct_006",
+      "term": "Prerequisites",
+      "question": "What is a prerequisite?",
+      "type": "multiple_choice",
+      "options": [
+        "A class you must complete before taking a more advanced class",
+        "A penalty for missing class",
+        "A type of final exam",
+        "A housing requirement"
+      ],
+      "correctAnswer": "A class you must complete before taking a more advanced class",
+      "category": "academic"
+    },
+    {
+      "id": "ct_007",
+      "term": "Registrar",
+      "question": "What does the registrar’s office usually handle?",
+      "type": "multiple_choice",
+      "options": [
+        "Class registration, transcripts, and schedules",
+        "Food plans only",
+        "Sports tryouts",
+        "Campus police reports"
+      ],
+      "correctAnswer": "Class registration, transcripts, and schedules",
+      "category": "administrative"
+    },
+    {
+      "id": "ct_008",
+      "term": "Transcript",
+      "question": "What is a transcript?",
+      "type": "multiple_choice",
+      "options": [
+        "An official record of classes taken and grades earned",
+        "A list of dorm rules",
+        "A school club application",
+        "A campus map"
+      ],
+      "correctAnswer": "An official record of classes taken and grades earned",
+      "category": "administrative"
+    },
+    {
+      "id": "ct_009",
+      "term": "GPA",
+      "question": "What does GPA mean?",
+      "type": "multiple_choice",
+      "options": [
+        "Grade point average",
+        "General program access",
+        "Graduate placement approval",
+        "Group performance assessment"
+      ],
+      "correctAnswer": "Grade point average",
+      "category": "academic"
+    },
+    {
+      "id": "ct_010",
+      "term": "Probation",
+      "question": "What does academic probation usually mean?",
+      "type": "multiple_choice",
+      "options": [
+        "A student is at risk because their academic standing dropped too low",
+        "A student won an award",
+        "A student changed majors",
+        "A student got accepted into graduate school"
+      ],
+      "correctAnswer": "A student is at risk because their academic standing dropped too low",
+      "category": "academic"
+    },
+    {
+      "id": "ct_011",
+      "term": "Withdraw",
+      "question": "What does it mean to withdraw from a class?",
+      "type": "multiple_choice",
+      "options": [
+        "Drop a class after the add/drop period, often getting a W",
+        "Graduate early",
+        "Move off campus",
+        "Retake a class immediately"
+      ],
+      "correctAnswer": "Drop a class after the add/drop period, often getting a W",
+      "category": "academic"
+    },
+    {
+      "id": "ct_012",
+      "term": "Waitlist",
+      "question": "What is a waitlist for a class?",
+      "type": "multiple_choice",
+      "options": [
+        "A line for students hoping to get into a full class if a spot opens",
+        "A punishment list",
+        "A scholarship list",
+        "A list of failing students"
+      ],
+      "correctAnswer": "A line for students hoping to get into a full class if a spot opens",
+      "category": "registration"
+    },
+    {
+      "id": "ct_013",
+      "term": "Work-study program",
+      "question": "What is a work-study program?",
+      "type": "multiple_choice",
+      "options": [
+        "A financial aid program that helps students get part-time jobs",
+        "A mandatory internship",
+        "A study abroad trip",
+        "A tutoring punishment"
+      ],
+      "correctAnswer": "A financial aid program that helps students get part-time jobs",
+      "category": "financial"
+    },
+    {
+      "id": "ct_014",
+      "term": "Orientation",
+      "question": "What is orientation?",
+      "type": "multiple_choice",
+      "options": [
+        "A beginning-of-year period that helps new students learn the school",
+        "A graduation test",
+        "A major exam for seniors",
+        "A parent-only meeting"
+      ],
+      "correctAnswer": "A beginning-of-year period that helps new students learn the school",
+      "category": "campus_life"
+    },
+    {
+      "id": "ct_015",
+      "term": "Career services",
+      "question": "What does career services help students with?",
+      "type": "multiple_choice",
+      "options": [
+        "Resumes, job searches, interviews, and networking",
+        "Dorm repairs",
+        "Meal plans",
+        "Parking tickets"
+      ],
+      "correctAnswer": "Resumes, job searches, interviews, and networking",
+      "category": "career"
+    },
+    {
+      "id": "ct_016",
+      "term": "College vs. university",
+      "question": "What is a common difference between a college and a university?",
+      "type": "multiple_choice",
+      "options": [
+        "Universities are often larger and offer more graduate programs",
+        "Colleges do not offer degrees",
+        "Universities only teach online",
+        "Colleges are only for sports"
+      ],
+      "correctAnswer": "Universities are often larger and offer more graduate programs",
+      "category": "general"
+    },
+    {
+      "id": "ct_017",
+      "term": "Private college vs. public college",
+      "question": "What is a main difference between public and private colleges?",
+      "type": "multiple_choice",
+      "options": [
+        "Public colleges are state-funded, private colleges are not publicly owned",
+        "Private colleges do not give grades",
+        "Public colleges do not have dorms",
+        "Private colleges only allow graduate students"
+      ],
+      "correctAnswer": "Public colleges are state-funded, private colleges are not publicly owned",
+      "category": "general"
+    },
+    {
+      "id": "ct_018",
+      "term": "ACT / SAT",
+      "question": "What are the ACT and SAT mainly used for?",
+      "type": "multiple_choice",
+      "options": [
+        "Standardized tests that may be used for college admissions",
+        "Tests for graduating college seniors",
+        "Housing placement exams",
+        "Financial aid refund forms"
+      ],
+      "correctAnswer": "Standardized tests that may be used for college admissions",
+      "category": "admissions"
+    },
+    {
+      "id": "ct_019",
+      "term": "Early action vs. early decision",
+      "question": "What is the key difference between early action and early decision?",
+      "type": "multiple_choice",
+      "options": [
+        "Early decision is usually binding if accepted, early action is not",
+        "Early action is only for athletes",
+        "Early decision is only for graduate school",
+        "There is no difference"
+      ],
+      "correctAnswer": "Early decision is usually binding if accepted, early action is not",
+      "category": "admissions"
+    },
+    {
+      "id": "ct_020",
+      "term": "Rolling admission",
+      "question": "What is rolling admission?",
+      "type": "multiple_choice",
+      "options": [
+        "Applications are reviewed as they come in instead of waiting for one deadline",
+        "Students must reapply every semester",
+        "Only transfer students can apply",
+        "Admissions decisions happen after graduation"
+      ],
+      "correctAnswer": "Applications are reviewed as they come in instead of waiting for one deadline",
+      "category": "admissions"
+    },
+    {
+      "id": "ct_021",
+      "term": "The AUC",
+      "question": "What does AUC stand for at Morehouse?",
+      "type": "multiple_choice",
+      "options": [
+        "Atlanta University Center",
+        "Academic University Council",
+        "Advanced Undergraduate Campus",
+        "Atlanta Unified College"
+      ],
+      "correctAnswer": "Atlanta University Center",
+      "category": "morehouse_specific"
+    },
+    {
+      "id": "ct_022",
+      "term": "Cross-Registration",
+      "question": "What does cross-registration allow a student to do?",
+      "type": "multiple_choice",
+      "options": [
+        "Take classes at another partner school like another AUC school",
+        "Skip final exams",
+        "Register for dorm housing twice",
+        "Change majors automatically"
+      ],
+      "correctAnswer": "Take classes at another partner school like another AUC school",
+      "category": "morehouse_specific"
+    },
+    {
+      "id": "ct_023",
+      "term": "Crown Forum",
+      "question": "What is Crown Forum at Morehouse?",
+      "type": "multiple_choice",
+      "options": [
+        "A major campus assembly for speakers and community gathering",
+        "A dorm check-in event",
+        "A basketball practice",
+        "A financial aid workshop only"
+      ],
+      "correctAnswer": "A major campus assembly for speakers and community gathering",
+      "category": "morehouse_specific"
+    },
+    {
+      "id": "ct_024",
+      "term": "The Five Wells",
+      "question": "What are The Five Wells at Morehouse?",
+      "type": "multiple_choice",
+      "options": [
+        "A philosophy that students should be well-read, well-spoken, well-traveled, well-dressed, and well-balanced",
+        "Five campus buildings for freshmen",
+        "A financial aid policy",
+        "A list of required science classes"
+      ],
+      "correctAnswer": "A philosophy that students should be well-read, well-spoken, well-traveled, well-dressed, and well-balanced",
+      "category": "morehouse_specific"
+    },
+    {
+      "id": "ct_025",
+      "term": "Overload",
+      "question": "At Morehouse, what does overload usually mean?",
+      "type": "multiple_choice",
+      "options": [
+        "Taking more than 19 semester hours, usually needing approval",
+        "Being on academic probation",
+        "Having too many absences",
+        "Repeating a class twice"
+      ],
+      "correctAnswer": "Taking more than 19 semester hours, usually needing approval",
+      "category": "morehouse_specific"
+    }
+  ]
+}

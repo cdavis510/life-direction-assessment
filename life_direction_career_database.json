@@ -1,0 +1,3618 @@
+{
+  "degreePaths": [
+    {
+      "id": "business_finance_bba",
+      "name": "BBA Finance",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Sociology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Pre-Calculus or Statistics",
+          "U.S. History or World History",
+          "Public Speaking",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Principles of Accounting I",
+          "Microeconomics",
+          "Business Communication",
+          "Computer Applications for Business",
+          "General Education Elective"
+        ],
+        "semester4": [
+          "Principles of Accounting II",
+          "Macroeconomics",
+          "Business Statistics",
+          "Principles of Management",
+          "General Education Elective"
+        ],
+        "semester5": [
+          "Corporate Finance",
+          "Financial Markets and Institutions",
+          "Business Law",
+          "Marketing Principles",
+          "Elective"
+        ],
+        "semester6": [
+          "Investment Analysis",
+          "Managerial Finance",
+          "International Business",
+          "Spreadsheet Modeling or Data Analytics",
+          "Elective"
+        ],
+        "semester7": [
+          "Risk Management",
+          "Banking or FinTech",
+          "Advanced Finance Elective",
+          "Internship or Practicum",
+          "Elective"
+        ],
+        "semester8": [
+          "Capstone in Finance",
+          "Career Preparation",
+          "Advanced Finance Elective",
+          "Internship or Independent Study",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "business_accounting_bba",
+      "name": "BBA Accounting",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Psychology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Statistics",
+          "U.S. History or World History",
+          "Public Speaking",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Principles of Accounting I",
+          "Microeconomics",
+          "Business Communication",
+          "Computer Applications",
+          "General Education Elective"
+        ],
+        "semester4": [
+          "Principles of Accounting II",
+          "Macroeconomics",
+          "Business Statistics",
+          "Principles of Management",
+          "General Education Elective"
+        ],
+        "semester5": [
+          "Intermediate Accounting I",
+          "Cost Accounting",
+          "Business Law",
+          "Finance Principles",
+          "Elective"
+        ],
+        "semester6": [
+          "Intermediate Accounting II",
+          "Tax Accounting",
+          "Auditing",
+          "Information Systems",
+          "Elective"
+        ],
+        "semester7": [
+          "Advanced Accounting",
+          "Government or Nonprofit Accounting",
+          "Accounting Analytics",
+          "Internship",
+          "Elective"
+        ],
+        "semester8": [
+          "Accounting Capstone",
+          "CPA Prep Elective",
+          "Career Preparation",
+          "Internship or Independent Study",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "economics_ba",
+      "name": "BA Economics",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Sociology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Statistics",
+          "Public Speaking",
+          "U.S. History or World History",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Principles of Microeconomics",
+          "Principles of Macroeconomics",
+          "Introduction to Political Science",
+          "Computer Applications",
+          "Elective"
+        ],
+        "semester4": [
+          "Intermediate Microeconomics",
+          "Intermediate Macroeconomics",
+          "Research Writing",
+          "General Education Elective",
+          "Elective"
+        ],
+        "semester5": [
+          "Econometrics I",
+          "Money and Banking",
+          "Business Statistics",
+          "Elective",
+          "Elective"
+        ],
+        "semester6": [
+          "Econometrics II",
+          "Public Finance",
+          "International Economics",
+          "Elective",
+          "Elective"
+        ],
+        "semester7": [
+          "Labor Economics or Industrial Organization",
+          "Policy Analysis",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester8": [
+          "Economics Capstone",
+          "Career Preparation",
+          "Advanced Econ Elective",
+          "Elective",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "data_analytics_bs",
+      "name": "BS Data Analytics",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Psychology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Pre-Calculus",
+          "Public Speaking",
+          "U.S. History or World History",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Statistics I",
+          "Introduction to Programming",
+          "Microeconomics",
+          "Data Literacy",
+          "Elective"
+        ],
+        "semester4": [
+          "Statistics II",
+          "Database Fundamentals",
+          "Macroeconomics",
+          "Data Visualization",
+          "Elective"
+        ],
+        "semester5": [
+          "Python for Analytics",
+          "SQL for Analytics",
+          "Probability",
+          "Business Communication",
+          "Elective"
+        ],
+        "semester6": [
+          "Predictive Analytics",
+          "Machine Learning Foundations",
+          "Spreadsheet Modeling",
+          "Research Methods",
+          "Elective"
+        ],
+        "semester7": [
+          "Applied Analytics Project",
+          "Sports Analytics or Business Analytics",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester8": [
+          "Analytics Capstone",
+          "Career Preparation",
+          "Advanced Analytics Elective",
+          "Internship or Independent Study",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "marketing_bba",
+      "name": "BBA Marketing",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Sociology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Statistics",
+          "Public Speaking",
+          "U.S. History or World History",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Principles of Marketing",
+          "Microeconomics",
+          "Business Communication",
+          "Computer Applications",
+          "Elective"
+        ],
+        "semester4": [
+          "Consumer Behavior",
+          "Macroeconomics",
+          "Principles of Management",
+          "Accounting I",
+          "Elective"
+        ],
+        "semester5": [
+          "Digital Marketing",
+          "Marketing Research",
+          "Sales Management",
+          "Business Law",
+          "Elective"
+        ],
+        "semester6": [
+          "Brand Management",
+          "Social Media Strategy",
+          "Data Analytics for Marketing",
+          "Finance Principles",
+          "Elective"
+        ],
+        "semester7": [
+          "Sports Marketing or Entertainment Marketing",
+          "Partnership Strategy",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester8": [
+          "Marketing Capstone",
+          "Career Preparation",
+          "Advanced Marketing Elective",
+          "Internship or Independent Study",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "communications_ba",
+      "name": "BA Communications",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Psychology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Statistics or Quantitative Reasoning",
+          "Public Speaking",
+          "U.S. History or World History",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Mass Communication Foundations",
+          "Media Writing",
+          "Public Relations Principles",
+          "Elective",
+          "Elective"
+        ],
+        "semester4": [
+          "Interpersonal Communication",
+          "Digital Storytelling",
+          "Media Ethics",
+          "Elective",
+          "Elective"
+        ],
+        "semester5": [
+          "Broadcast Production",
+          "Sports Communication",
+          "Social Media Strategy",
+          "Elective",
+          "Elective"
+        ],
+        "semester6": [
+          "Audience Analysis",
+          "Interviewing",
+          "Content Production",
+          "Internship",
+          "Elective"
+        ],
+        "semester7": [
+          "Advanced Media Production",
+          "Sports Debate and Commentary",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester8": [
+          "Communications Capstone",
+          "Career Preparation",
+          "Portfolio Development",
+          "Elective",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "sport_management_bs",
+      "name": "BS Sport Management",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "Introduction to Sociology",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Statistics",
+          "Public Speaking",
+          "U.S. History or World History",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Introduction to Sport Management",
+          "Microeconomics",
+          "Business Communication",
+          "Computer Applications",
+          "Elective"
+        ],
+        "semester4": [
+          "Sport Governance",
+          "Macroeconomics",
+          "Principles of Management",
+          "Accounting I",
+          "Elective"
+        ],
+        "semester5": [
+          "Sport Marketing",
+          "Sport Finance",
+          "Event Management",
+          "Business Law",
+          "Elective"
+        ],
+        "semester6": [
+          "Facility and Arena Management",
+          "Ticketing and Revenue",
+          "Partnership Sales",
+          "Internship",
+          "Elective"
+        ],
+        "semester7": [
+          "Athlete Representation",
+          "Sport Analytics",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester8": [
+          "Sport Management Capstone",
+          "Career Preparation",
+          "Advanced Sport Elective",
+          "Internship or Independent Study",
+          "Elective"
+        ]
+      }
+    },
+    {
+      "id": "political_science_prelaw_ba",
+      "name": "BA Political Science / Pre-Law",
+      "schoolFit": [
+        "Morehouse",
+        "Clark Atlanta"
+      ],
+      "coreFirstYear": {
+        "semester1": [
+          "English Composition I",
+          "College Algebra",
+          "First-Year Seminar",
+          "U.S. Government",
+          "General Education Elective"
+        ],
+        "semester2": [
+          "English Composition II",
+          "Statistics or Logic",
+          "Public Speaking",
+          "U.S. History or World History",
+          "General Education Elective"
+        ]
+      },
+      "majorSequence": {
+        "semester3": [
+          "Introduction to Political Science",
+          "Microeconomics",
+          "Critical Thinking",
+          "Research Methods",
+          "Elective"
+        ],
+        "semester4": [
+          "Constitutional Law",
+          "Macroeconomics",
+          "Ethics",
+          "Debate or Argumentation",
+          "Elective"
+        ],
+        "semester5": [
+          "Public Policy",
+          "Negotiation",
+          "Media and Politics",
+          "Elective",
+          "Elective"
+        ],
+        "semester6": [
+          "Legal Research and Writing",
+          "Civil Rights or Criminal Justice",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester7": [
+          "Advanced Debate",
+          "Law and Society",
+          "Internship",
+          "Elective",
+          "Elective"
+        ],
+        "semester8": [
+          "Capstone",
+          "Career or Law School Preparation",
+          "Advanced Elective",
+          "Elective",
+          "Elective"
+        ]
+      }
+    }
+  ],
+  "careerRoles": [
+    {
+      "id": "finance_001",
+      "title": "Financial Analyst",
+      "subtitle": "Corporate Finance Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Bank",
+        "Corporate Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Build financial reports",
+        "Review budgets and spending",
+        "Track company performance",
+        "Make recommendations to managers"
+      ],
+      "requirements": [
+        "Strong Excel skills",
+        "Comfort with numbers",
+        "Business writing",
+        "Attention to detail"
+      ],
+      "fitTags": [
+        "analytical",
+        "structured",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_002",
+      "title": "Budget Analyst",
+      "subtitle": "Department Budget Planner",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Government",
+        "University",
+        "Corporate Office"
+      ],
+      "dailyDuties": [
+        "Create budget plans",
+        "Track department spending",
+        "Review requests for funding",
+        "Prepare budget summaries"
+      ],
+      "requirements": [
+        "Math accuracy",
+        "Spreadsheet skills",
+        "Planning ability",
+        "Professional communication"
+      ],
+      "fitTags": [
+        "organized",
+        "responsible",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_003",
+      "title": "Treasury Analyst",
+      "subtitle": "Cash Management Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Bank",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Monitor company cash flow",
+        "Track bank activity",
+        "Assist with forecasts",
+        "Support payment planning"
+      ],
+      "requirements": [
+        "Finance knowledge",
+        "Attention to detail",
+        "Forecasting ability",
+        "Excel skills"
+      ],
+      "fitTags": [
+        "analytical",
+        "steady",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_004",
+      "title": "Credit Analyst",
+      "subtitle": "Borrower Risk Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Bank",
+        "Lender",
+        "Credit Union"
+      ],
+      "dailyDuties": [
+        "Review loan applications",
+        "Analyze risk levels",
+        "Check credit histories",
+        "Recommend approval or denial"
+      ],
+      "requirements": [
+        "Decision-making",
+        "Math skills",
+        "Written analysis",
+        "Risk awareness"
+      ],
+      "fitTags": [
+        "analytical",
+        "careful",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_005",
+      "title": "Investment Operations Analyst",
+      "subtitle": "Back Office Investment Support",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Investment Firm",
+        "Bank",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Process trades",
+        "Reconcile transactions",
+        "Check reporting accuracy",
+        "Support portfolio teams"
+      ],
+      "requirements": [
+        "Precision",
+        "Excel skills",
+        "Finance basics",
+        "Deadline management"
+      ],
+      "fitTags": [
+        "detailFocused",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_006",
+      "title": "Commercial Banking Analyst",
+      "subtitle": "Business Lending Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Bank",
+        "Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Review business accounts",
+        "Help analyze loan packages",
+        "Prepare reports for bankers",
+        "Track financial trends"
+      ],
+      "requirements": [
+        "Finance and accounting basics",
+        "Professional writing",
+        "Client service",
+        "Risk analysis"
+      ],
+      "fitTags": [
+        "analytical",
+        "professional",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_007",
+      "title": "Corporate Development Analyst",
+      "subtitle": "Growth Strategy Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Consulting",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Research acquisition targets",
+        "Build valuation models",
+        "Prepare strategy presentations",
+        "Analyze market opportunities"
+      ],
+      "requirements": [
+        "Excel modeling",
+        "Presentation skills",
+        "Research skills",
+        "Business judgment"
+      ],
+      "fitTags": [
+        "strategic",
+        "analytical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "high"
+      ]
+    },
+    {
+      "id": "finance_008",
+      "title": "FP&A Analyst",
+      "subtitle": "Financial Planning and Analysis Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Build forecasts",
+        "Compare actual vs planned spending",
+        "Create dashboards",
+        "Support decision-making"
+      ],
+      "requirements": [
+        "Forecasting",
+        "Excel and reporting",
+        "Clear communication",
+        "Attention to patterns"
+      ],
+      "fitTags": [
+        "analytical",
+        "structured",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_009",
+      "title": "Risk Analyst",
+      "subtitle": "Operational Risk Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Bank",
+        "Corporate Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Identify business risks",
+        "Review controls",
+        "Document issues",
+        "Help teams reduce exposure"
+      ],
+      "requirements": [
+        "Critical thinking",
+        "Documentation",
+        "Professional judgment",
+        "Analysis skills"
+      ],
+      "fitTags": [
+        "careful",
+        "logical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_010",
+      "title": "Private Wealth Associate",
+      "subtitle": "Client Portfolio Support Associate",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Wealth Firm",
+        "Office"
+      ],
+      "dailyDuties": [
+        "Help prepare client reviews",
+        "Track portfolios",
+        "Answer service questions",
+        "Support advisors"
+      ],
+      "requirements": [
+        "Client service",
+        "Professional communication",
+        "Finance basics",
+        "Organization"
+      ],
+      "fitTags": [
+        "professional",
+        "serviceOriented",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_011",
+      "title": "Portfolio Analyst",
+      "subtitle": "Investment Performance Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Investment Firm",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track portfolio performance",
+        "Create reports for clients",
+        "Compare returns to benchmarks",
+        "Check data quality"
+      ],
+      "requirements": [
+        "Excel and reporting",
+        "Investment basics",
+        "Accuracy",
+        "Analysis skills"
+      ],
+      "fitTags": [
+        "detailFocused",
+        "analytical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_012",
+      "title": "Investor Relations Analyst",
+      "subtitle": "Shareholder Communications Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Help prepare earnings materials",
+        "Track investor questions",
+        "Support executive presentations",
+        "Research peer companies"
+      ],
+      "requirements": [
+        "Presentation skills",
+        "Writing",
+        "Finance knowledge",
+        "Professional presence"
+      ],
+      "fitTags": [
+        "professional",
+        "finance",
+        "communications",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "high"
+      ]
+    },
+    {
+      "id": "finance_013",
+      "title": "Business Intelligence Analyst",
+      "subtitle": "Finance Reporting Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Corporate Office",
+        "Tech",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Build dashboards",
+        "Analyze financial and business trends",
+        "Prepare executive reporting",
+        "Support strategy teams"
+      ],
+      "requirements": [
+        "SQL or dashboard tools",
+        "Data analysis",
+        "Business understanding",
+        "Clear reporting"
+      ],
+      "fitTags": [
+        "data",
+        "analytical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_014",
+      "title": "Revenue Analyst",
+      "subtitle": "Pricing and Revenue Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Corporate Office",
+        "Hospitality",
+        "Sports Business"
+      ],
+      "dailyDuties": [
+        "Track sales and revenue trends",
+        "Review pricing strategies",
+        "Forecast performance",
+        "Support business planning"
+      ],
+      "requirements": [
+        "Data analysis",
+        "Spreadsheet skills",
+        "Economic thinking",
+        "Reporting skills"
+      ],
+      "fitTags": [
+        "analytical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_015",
+      "title": "Audit Associate",
+      "subtitle": "Internal Audit Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_accounting_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Accounting Firm",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Review records",
+        "Test controls",
+        "Document findings",
+        "Support compliance reviews"
+      ],
+      "requirements": [
+        "Accounting knowledge",
+        "Professional writing",
+        "Attention to detail",
+        "Organization"
+      ],
+      "fitTags": [
+        "careful",
+        "detailFocused",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_016",
+      "title": "Tax Associate",
+      "subtitle": "Corporate Tax Support Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_accounting_bba",
+      "workSettings": [
+        "Accounting Firm",
+        "Corporate Office"
+      ],
+      "dailyDuties": [
+        "Prepare tax workpapers",
+        "Check filings",
+        "Research tax rules",
+        "Support tax planning"
+      ],
+      "requirements": [
+        "Accounting skills",
+        "Research ability",
+        "Organization",
+        "Deadline management"
+      ],
+      "fitTags": [
+        "structured",
+        "detailFocused",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_017",
+      "title": "Forensic Accounting Analyst",
+      "subtitle": "Fraud Review Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_accounting_bba",
+      "workSettings": [
+        "Accounting Firm",
+        "Consulting",
+        "Government"
+      ],
+      "dailyDuties": [
+        "Review suspicious records",
+        "Find irregular patterns",
+        "Support investigations",
+        "Summarize financial evidence"
+      ],
+      "requirements": [
+        "Accounting knowledge",
+        "Analytical thinking",
+        "Investigation mindset",
+        "Attention to detail"
+      ],
+      "fitTags": [
+        "investigative",
+        "analytical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "high"
+      ]
+    },
+    {
+      "id": "finance_018",
+      "title": "Procurement Analyst",
+      "subtitle": "Spend and Vendor Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "University",
+        "Government"
+      ],
+      "dailyDuties": [
+        "Analyze purchasing data",
+        "Track vendors",
+        "Review costs",
+        "Support contract decisions"
+      ],
+      "requirements": [
+        "Spreadsheet skills",
+        "Negotiation awareness",
+        "Organization",
+        "Reporting"
+      ],
+      "fitTags": [
+        "organized",
+        "analytical",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_019",
+      "title": "Compensation Analyst",
+      "subtitle": "Pay and Incentive Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Human Resources",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Analyze salaries",
+        "Review compensation trends",
+        "Support pay structure planning",
+        "Build reports"
+      ],
+      "requirements": [
+        "Spreadsheet analysis",
+        "Confidentiality",
+        "Math accuracy",
+        "Clear reporting"
+      ],
+      "fitTags": [
+        "analytical",
+        "steady",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "finance_020",
+      "title": "Financial Compliance Analyst",
+      "subtitle": "Regulatory Reporting Analyst",
+      "industryGroup": "Finance",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Bank",
+        "Insurance",
+        "Corporate Office"
+      ],
+      "dailyDuties": [
+        "Check compliance requirements",
+        "Prepare regulatory reports",
+        "Review internal records",
+        "Support audits"
+      ],
+      "requirements": [
+        "Attention to detail",
+        "Professional writing",
+        "Regulatory mindset",
+        "Organization"
+      ],
+      "fitTags": [
+        "careful",
+        "structured",
+        "finance",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_001",
+      "title": "Sportsbook Odds Analyst",
+      "subtitle": "Pregame Line Analyst",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Sportsbook",
+        "Betting App",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Study matchups and player data",
+        "Help set betting lines",
+        "Track line movement",
+        "Compare odds across markets"
+      ],
+      "requirements": [
+        "Statistics",
+        "Fast pattern recognition",
+        "Sports knowledge",
+        "Calm under pressure"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "analytics",
+        "mekhiStrongFit",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_002",
+      "title": "Live Betting Trader",
+      "subtitle": "In-Game Odds Trader",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Sportsbook",
+        "Betting App",
+        "Live Trading Room"
+      ],
+      "dailyDuties": [
+        "Adjust odds during games",
+        "Monitor injuries and game flow",
+        "Manage real-time risk",
+        "React quickly to breaking events"
+      ],
+      "requirements": [
+        "Fast decision-making",
+        "Sports awareness",
+        "Math confidence",
+        "Focus under pressure"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "fastPaced",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_003",
+      "title": "Sportsbook Risk Analyst",
+      "subtitle": "Bet Exposure Analyst",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Sportsbook",
+        "Betting App",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track company exposure",
+        "Identify risky betting patterns",
+        "Adjust limits",
+        "Support risk decisions"
+      ],
+      "requirements": [
+        "Risk thinking",
+        "Math and finance basics",
+        "Sportsbook understanding",
+        "Reporting skills"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "risk",
+        "mekhiStrongFit",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_004",
+      "title": "Sportsbook Fraud Analyst",
+      "subtitle": "Account Integrity Analyst",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Betting App",
+        "Fraud Team",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Review suspicious account activity",
+        "Flag unusual betting patterns",
+        "Document investigations",
+        "Work with compliance teams"
+      ],
+      "requirements": [
+        "Pattern recognition",
+        "Attention to detail",
+        "Analytical writing",
+        "Comfort reviewing data"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "investigative",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_005",
+      "title": "Betting Content Researcher",
+      "subtitle": "Sports Picks Research Analyst",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Company",
+        "Betting App",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Research teams and trends",
+        "Write betting previews",
+        "Track player news",
+        "Support content creators"
+      ],
+      "requirements": [
+        "Research skills",
+        "Writing",
+        "Sports knowledge",
+        "Consistency"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "research",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_006",
+      "title": "Fantasy Sports Analyst",
+      "subtitle": "Player Projection Analyst",
+      "industryGroup": "Sports Media",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Media Company",
+        "Fantasy Platform",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Project player performance",
+        "Research injuries and usage",
+        "Create rankings",
+        "Explain picks to users"
+      ],
+      "requirements": [
+        "Data comfort",
+        "Sports knowledge",
+        "Research discipline",
+        "Clear explanations"
+      ],
+      "fitTags": [
+        "sports",
+        "analytics",
+        "debate",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_007",
+      "title": "Sports Debate Producer",
+      "subtitle": "Debate Segment Research Producer",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Studio",
+        "Remote",
+        "Broadcast"
+      ],
+      "dailyDuties": [
+        "Research debate topics",
+        "Pull stats for hosts",
+        "Prepare talking points",
+        "Track breaking sports news"
+      ],
+      "requirements": [
+        "Research speed",
+        "Sports knowledge",
+        "Writing",
+        "Ability to support strong arguments"
+      ],
+      "fitTags": [
+        "sports",
+        "debate",
+        "research",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_008",
+      "title": "Sports Research Assistant",
+      "subtitle": "Team and Player Trends Assistant",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Company",
+        "Remote",
+        "Team Office"
+      ],
+      "dailyDuties": [
+        "Track stats and notes",
+        "Update research sheets",
+        "Organize matchup trends",
+        "Support analysts and hosts"
+      ],
+      "requirements": [
+        "Organization",
+        "Sports interest",
+        "Attention to detail",
+        "Dependability"
+      ],
+      "fitTags": [
+        "sports",
+        "research",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_009",
+      "title": "Player Props Analyst",
+      "subtitle": "Prop Market Research Analyst",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Betting App",
+        "Sportsbook",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Study player performance trends",
+        "Compare props across books",
+        "Flag pricing mistakes",
+        "Support prop line decisions"
+      ],
+      "requirements": [
+        "Statistics",
+        "Sports knowledge",
+        "Fast research",
+        "Pattern recognition"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "analytics",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_010",
+      "title": "Sports Trading Assistant",
+      "subtitle": "Odds Desk Assistant",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "Sportsbook",
+        "Betting App",
+        "Office"
+      ],
+      "dailyDuties": [
+        "Support traders",
+        "Monitor line changes",
+        "Update market notes",
+        "Handle routine trading tasks"
+      ],
+      "requirements": [
+        "Sports understanding",
+        "Organization",
+        "Calm under pressure",
+        "Team communication"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "entryLevel",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_011",
+      "title": "Sports Data Coordinator",
+      "subtitle": "Stats and Feeds Coordinator",
+      "industryGroup": "Sports Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Sports Tech",
+        "Media Company",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Maintain sports data feeds",
+        "Check stat accuracy",
+        "Update databases",
+        "Support analysts and content teams"
+      ],
+      "requirements": [
+        "Attention to detail",
+        "Data comfort",
+        "Dependability",
+        "Sports knowledge"
+      ],
+      "fitTags": [
+        "sports",
+        "data",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_012",
+      "title": "Scouting Data Analyst",
+      "subtitle": "Player Evaluation Analyst",
+      "industryGroup": "Sports Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Team Office",
+        "Scouting Department",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Study player data",
+        "Build scouting reports",
+        "Compare prospects",
+        "Support decision-makers"
+      ],
+      "requirements": [
+        "Analytics",
+        "Sports IQ",
+        "Report writing",
+        "Pattern recognition"
+      ],
+      "fitTags": [
+        "sports",
+        "analytics",
+        "research",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_013",
+      "title": "Video Breakdown Analyst",
+      "subtitle": "Game Film Analyst",
+      "industryGroup": "Sports Analytics",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Team Office",
+        "Media Company",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Watch game film",
+        "Tag plays and trends",
+        "Build clips for coaches or media",
+        "Support scouting or debate content"
+      ],
+      "requirements": [
+        "Sports understanding",
+        "Patience",
+        "Attention to detail",
+        "Basic editing tools"
+      ],
+      "fitTags": [
+        "sports",
+        "filmStudy",
+        "debate",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_014",
+      "title": "Sports Statistician",
+      "subtitle": "Performance Metrics Analyst",
+      "industryGroup": "Sports Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "League Office",
+        "Team Office",
+        "Media Company"
+      ],
+      "dailyDuties": [
+        "Track official stats",
+        "Build advanced metrics",
+        "Create data summaries",
+        "Support broadcasters and teams"
+      ],
+      "requirements": [
+        "Strong math skills",
+        "Data accuracy",
+        "Sports knowledge",
+        "Research discipline"
+      ],
+      "fitTags": [
+        "sports",
+        "math",
+        "analytics",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_015",
+      "title": "Betting Market Research Associate",
+      "subtitle": "Sportsbook Competitive Research Associate",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Betting App",
+        "Remote",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track competitor promos",
+        "Compare app offerings",
+        "Research betting customer behavior",
+        "Support product and marketing teams"
+      ],
+      "requirements": [
+        "Research skills",
+        "Organization",
+        "Sports betting familiarity",
+        "Presentation skills"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "research",
+        "mekhiStrongFit",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_016",
+      "title": "Sportsbook VIP Support Associate",
+      "subtitle": "High-Value Player Support Associate",
+      "industryGroup": "Sports Betting",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Betting App",
+        "Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Support high-value customers",
+        "Handle account questions",
+        "Track service issues",
+        "Work with retention teams"
+      ],
+      "requirements": [
+        "Professional communication",
+        "Customer support",
+        "Problem solving",
+        "Discretion"
+      ],
+      "fitTags": [
+        "sports",
+        "betting",
+        "service",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_017",
+      "title": "Sports Podcast Researcher",
+      "subtitle": "Show Notes and Topic Researcher",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Company",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Research game topics",
+        "Prepare topic sheets",
+        "Gather quotes and stats",
+        "Support hosts before recording"
+      ],
+      "requirements": [
+        "Writing",
+        "Research",
+        "Sports knowledge",
+        "Dependability"
+      ],
+      "fitTags": [
+        "sports",
+        "debate",
+        "research",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_018",
+      "title": "Sports Social Insights Analyst",
+      "subtitle": "Fan Conversation Analyst",
+      "industryGroup": "Sports Media",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Team Office",
+        "Media Company",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track fan reactions online",
+        "Summarize conversation trends",
+        "Help social teams respond",
+        "Report audience sentiment"
+      ],
+      "requirements": [
+        "Social media fluency",
+        "Research skills",
+        "Clear reporting",
+        "Pattern recognition"
+      ],
+      "fitTags": [
+        "sports",
+        "socialMedia",
+        "analytics",
+        "mekhiPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_019",
+      "title": "Ticket Revenue Analyst",
+      "subtitle": "Arena Pricing Analyst",
+      "industryGroup": "Sports Business",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Arena",
+        "Team Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track ticket sales",
+        "Review pricing trends",
+        "Forecast event demand",
+        "Support revenue strategy"
+      ],
+      "requirements": [
+        "Math and economics",
+        "Spreadsheet analysis",
+        "Reporting",
+        "Business judgment"
+      ],
+      "fitTags": [
+        "sports",
+        "finance",
+        "analytics",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_020",
+      "title": "Partnership Sales Analyst",
+      "subtitle": "Sponsorship Revenue Analyst",
+      "industryGroup": "Sports Business",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Team Office",
+        "Arena",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Research sponsor opportunities",
+        "Build sales materials",
+        "Track partnership value",
+        "Support sponsor meetings"
+      ],
+      "requirements": [
+        "Presentation skills",
+        "Research",
+        "Professional communication",
+        "Business awareness"
+      ],
+      "fitTags": [
+        "sports",
+        "business",
+        "sales",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_021",
+      "title": "Game Day Operations Coordinator",
+      "subtitle": "Arena Operations Coordinator",
+      "industryGroup": "Arena Operations",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "Arena",
+        "Stadium",
+        "On-Site"
+      ],
+      "dailyDuties": [
+        "Coordinate staff on event day",
+        "Handle setup timelines",
+        "Support vendor and security communication",
+        "Solve game day issues"
+      ],
+      "requirements": [
+        "Organization",
+        "Calm under pressure",
+        "Team communication",
+        "Problem solving"
+      ],
+      "fitTags": [
+        "sports",
+        "operations",
+        "onSite",
+        "mekhiPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_022",
+      "title": "Team Travel Coordinator",
+      "subtitle": "Athletics Travel Planner",
+      "industryGroup": "Sports Operations",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "Team Office",
+        "League Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Book flights and hotels",
+        "Manage schedules",
+        "Coordinate transportation",
+        "Support travel changes"
+      ],
+      "requirements": [
+        "Organization",
+        "Travel coordination",
+        "Communication",
+        "Flexibility"
+      ],
+      "fitTags": [
+        "sports",
+        "operations",
+        "organized"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_023",
+      "title": "Team Services Coordinator",
+      "subtitle": "Player Support Coordinator",
+      "industryGroup": "Sports Operations",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "Team Office",
+        "Arena",
+        "On-Site"
+      ],
+      "dailyDuties": [
+        "Handle player logistics",
+        "Coordinate schedules",
+        "Support off-court needs",
+        "Track requests and follow-up"
+      ],
+      "requirements": [
+        "Professional conduct",
+        "Organization",
+        "Responsiveness",
+        "Discretion"
+      ],
+      "fitTags": [
+        "sports",
+        "operations",
+        "service"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_024",
+      "title": "Facility Scheduling Analyst",
+      "subtitle": "Venue Calendar Analyst",
+      "industryGroup": "Arena Operations",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "Arena",
+        "Venue Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Manage venue calendars",
+        "Track booking conflicts",
+        "Support event planning",
+        "Report venue usage"
+      ],
+      "requirements": [
+        "Scheduling",
+        "Organization",
+        "Spreadsheet skills",
+        "Detail tracking"
+      ],
+      "fitTags": [
+        "sports",
+        "operations",
+        "organized"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_025",
+      "title": "Athletics Compliance Coordinator",
+      "subtitle": "Eligibility and Rules Coordinator",
+      "industryGroup": "College Athletics",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "College Athletics",
+        "University Office"
+      ],
+      "dailyDuties": [
+        "Track athlete eligibility",
+        "Review documentation",
+        "Support rules compliance",
+        "Communicate deadlines"
+      ],
+      "requirements": [
+        "Organization",
+        "Rule-following",
+        "Documentation",
+        "Professional communication"
+      ],
+      "fitTags": [
+        "sports",
+        "collegeAthletics",
+        "careful"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_026",
+      "title": "Recruiting Operations Assistant",
+      "subtitle": "Athlete Recruiting Support Assistant",
+      "industryGroup": "College Athletics",
+      "degreePathId": "sport_management_bs",
+      "workSettings": [
+        "College Athletics",
+        "Team Office"
+      ],
+      "dailyDuties": [
+        "Track recruiting visits",
+        "Update athlete information",
+        "Organize schedules",
+        "Support coaching staff"
+      ],
+      "requirements": [
+        "Organization",
+        "Database accuracy",
+        "Communication",
+        "Dependability"
+      ],
+      "fitTags": [
+        "sports",
+        "collegeAthletics",
+        "organized"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_027",
+      "title": "Arena Guest Experience Analyst",
+      "subtitle": "Fan Experience Analyst",
+      "industryGroup": "Arena Operations",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Arena",
+        "Team Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Review fan feedback",
+        "Track service issues",
+        "Recommend improvements",
+        "Report customer trends"
+      ],
+      "requirements": [
+        "Research",
+        "Customer insight",
+        "Reporting",
+        "Problem solving"
+      ],
+      "fitTags": [
+        "sports",
+        "fanExperience",
+        "analytics"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_028",
+      "title": "Merchandise Operations Analyst",
+      "subtitle": "Retail Performance Analyst",
+      "industryGroup": "Sports Business",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Arena",
+        "Team Store",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track merchandise sales",
+        "Analyze top products",
+        "Forecast inventory needs",
+        "Support retail decisions"
+      ],
+      "requirements": [
+        "Spreadsheet skills",
+        "Business awareness",
+        "Reporting",
+        "Organization"
+      ],
+      "fitTags": [
+        "sports",
+        "retail",
+        "analytics"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_029",
+      "title": "Sports Marketing Coordinator",
+      "subtitle": "Team Campaign Coordinator",
+      "industryGroup": "Sports Marketing",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Team Office",
+        "Arena",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Help run promotions",
+        "Support campaigns",
+        "Coordinate deadlines",
+        "Track marketing results"
+      ],
+      "requirements": [
+        "Creativity",
+        "Organization",
+        "Communication",
+        "Follow-through"
+      ],
+      "fitTags": [
+        "sports",
+        "marketing",
+        "creative"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "sports_030",
+      "title": "Sponsorship Activation Coordinator",
+      "subtitle": "Brand Activation Coordinator",
+      "industryGroup": "Sports Marketing",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Arena",
+        "Team Office",
+        "On-Site"
+      ],
+      "dailyDuties": [
+        "Coordinate sponsor activations",
+        "Support event setup",
+        "Track sponsor deliverables",
+        "Report activation results"
+      ],
+      "requirements": [
+        "Project coordination",
+        "Communication",
+        "Organization",
+        "Professional conduct"
+      ],
+      "fitTags": [
+        "sports",
+        "marketing",
+        "events"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_001",
+      "title": "Sports Copywriter",
+      "subtitle": "Team Content Writer",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Company",
+        "Team Office",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Write articles and posts",
+        "Draft game previews",
+        "Support social content",
+        "Edit copy for clarity"
+      ],
+      "requirements": [
+        "Strong writing",
+        "Sports knowledge",
+        "Research",
+        "Dependability"
+      ],
+      "fitTags": [
+        "sports",
+        "writing",
+        "shyFriendly",
+        "mekhiPossibleFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_002",
+      "title": "Stats Graphics Researcher",
+      "subtitle": "Broadcast Graphics Research Assistant",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Broadcast",
+        "Media Studio",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Gather stats for TV graphics",
+        "Verify facts",
+        "Support producers",
+        "Track records and milestones"
+      ],
+      "requirements": [
+        "Accuracy",
+        "Research speed",
+        "Sports knowledge",
+        "Attention to detail"
+      ],
+      "fitTags": [
+        "sports",
+        "research",
+        "broadcast",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_003",
+      "title": "Sports Segment Producer",
+      "subtitle": "Debate Show Segment Producer",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Studio",
+        "Broadcast",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Build show segments",
+        "Research debate angles",
+        "Prepare talking point sheets",
+        "Coordinate host needs"
+      ],
+      "requirements": [
+        "Sports knowledge",
+        "Research",
+        "Deadline management",
+        "Strong judgment"
+      ],
+      "fitTags": [
+        "sports",
+        "debate",
+        "media",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_004",
+      "title": "Sports Social Media Producer",
+      "subtitle": "Team Social Content Producer",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Team Office",
+        "Media Company",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Post social content",
+        "Track engagement",
+        "Clip highlights",
+        "Support game day coverage"
+      ],
+      "requirements": [
+        "Social media skills",
+        "Creativity",
+        "Sports knowledge",
+        "Fast execution"
+      ],
+      "fitTags": [
+        "sports",
+        "socialMedia",
+        "creative"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_005",
+      "title": "Audio Production Assistant",
+      "subtitle": "Sports Podcast Production Assistant",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Studio",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Prep audio sessions",
+        "Organize notes",
+        "Track episode content",
+        "Support producers and hosts"
+      ],
+      "requirements": [
+        "Organization",
+        "Basic production tools",
+        "Dependability",
+        "Communication"
+      ],
+      "fitTags": [
+        "sports",
+        "audio",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_006",
+      "title": "Editorial Research Assistant",
+      "subtitle": "Sports News Research Assistant",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Media Company",
+        "Remote",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Support writers and editors",
+        "Find stats and quotes",
+        "Verify claims",
+        "Update topic files"
+      ],
+      "requirements": [
+        "Research",
+        "Writing basics",
+        "Organization",
+        "Attention to detail"
+      ],
+      "fitTags": [
+        "sports",
+        "research",
+        "writing",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_007",
+      "title": "Debate Research Analyst",
+      "subtitle": "Opinion and Argument Research Analyst",
+      "industryGroup": "Sports Media",
+      "degreePathId": "political_science_prelaw_ba",
+      "workSettings": [
+        "Media Company",
+        "Broadcast",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Build argument frameworks",
+        "Research evidence for opinions",
+        "Track both sides of sports debates",
+        "Support hosts and producers"
+      ],
+      "requirements": [
+        "Critical thinking",
+        "Research discipline",
+        "Argument building",
+        "Sports knowledge"
+      ],
+      "fitTags": [
+        "sports",
+        "debate",
+        "argument",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_008",
+      "title": "Public Relations Assistant",
+      "subtitle": "Team Communications Assistant",
+      "industryGroup": "Sports Communications",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Team Office",
+        "College Athletics",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Prepare press materials",
+        "Help manage media requests",
+        "Support game notes",
+        "Track press coverage"
+      ],
+      "requirements": [
+        "Writing",
+        "Professional communication",
+        "Organization",
+        "Sports awareness"
+      ],
+      "fitTags": [
+        "sports",
+        "communications",
+        "professional"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_009",
+      "title": "Media Relations Coordinator",
+      "subtitle": "Athletics Media Relations Coordinator",
+      "industryGroup": "Sports Communications",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "College Athletics",
+        "Team Office",
+        "On-Site"
+      ],
+      "dailyDuties": [
+        "Coordinate interviews",
+        "Manage media access",
+        "Prepare notes and stats",
+        "Support press conferences"
+      ],
+      "requirements": [
+        "Professional presence",
+        "Writing",
+        "Scheduling",
+        "Sports knowledge"
+      ],
+      "fitTags": [
+        "sports",
+        "communications",
+        "organized"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "comm_010",
+      "title": "Broadcast Notes Coordinator",
+      "subtitle": "Game Notes Coordinator",
+      "industryGroup": "Sports Media",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "Broadcast",
+        "Team Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Prepare notes for broadcasters",
+        "Update records and trends",
+        "Track stats packets",
+        "Support broadcast teams"
+      ],
+      "requirements": [
+        "Writing",
+        "Research",
+        "Stats accuracy",
+        "Dependability"
+      ],
+      "fitTags": [
+        "sports",
+        "research",
+        "broadcast",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_001",
+      "title": "Policy Analyst",
+      "subtitle": "Economic Policy Analyst",
+      "industryGroup": "Economics",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Government",
+        "Think Tank",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Research policy effects",
+        "Analyze trends",
+        "Write policy summaries",
+        "Support leaders with findings"
+      ],
+      "requirements": [
+        "Research",
+        "Writing",
+        "Economic reasoning",
+        "Clear communication"
+      ],
+      "fitTags": [
+        "economics",
+        "research",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_002",
+      "title": "Market Research Analyst",
+      "subtitle": "Consumer Insights Analyst",
+      "industryGroup": "Business Research",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Corporate Office",
+        "Agency",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Study customer trends",
+        "Analyze market data",
+        "Prepare reports",
+        "Support business strategy"
+      ],
+      "requirements": [
+        "Research methods",
+        "Data interpretation",
+        "Presentation skills",
+        "Writing"
+      ],
+      "fitTags": [
+        "research",
+        "analytics",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_003",
+      "title": "Economic Research Assistant",
+      "subtitle": "Data and Policy Research Assistant",
+      "industryGroup": "Economics",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "University",
+        "Research Institute",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Collect data",
+        "Support economic studies",
+        "Review literature",
+        "Help prepare reports"
+      ],
+      "requirements": [
+        "Research discipline",
+        "Data handling",
+        "Writing",
+        "Curiosity"
+      ],
+      "fitTags": [
+        "economics",
+        "research",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_004",
+      "title": "Pricing Analyst",
+      "subtitle": "Business Pricing Analyst",
+      "industryGroup": "Economics",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Corporate Office",
+        "Retail",
+        "Sports Business"
+      ],
+      "dailyDuties": [
+        "Analyze price sensitivity",
+        "Track competitors",
+        "Support pricing decisions",
+        "Prepare trend reports"
+      ],
+      "requirements": [
+        "Math comfort",
+        "Analysis",
+        "Business judgment",
+        "Reporting"
+      ],
+      "fitTags": [
+        "economics",
+        "analytics",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_005",
+      "title": "Labor Market Analyst",
+      "subtitle": "Workforce Trends Analyst",
+      "industryGroup": "Economics",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Government",
+        "Consulting",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track workforce trends",
+        "Analyze labor data",
+        "Write summaries",
+        "Support planning decisions"
+      ],
+      "requirements": [
+        "Research",
+        "Data interpretation",
+        "Writing",
+        "Critical thinking"
+      ],
+      "fitTags": [
+        "economics",
+        "research"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_006",
+      "title": "Sports Economics Analyst",
+      "subtitle": "Sports Revenue and Demand Analyst",
+      "industryGroup": "Sports Business",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "League Office",
+        "Team Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Analyze attendance and demand",
+        "Review pricing and revenue",
+        "Study fan behavior",
+        "Support business decisions"
+      ],
+      "requirements": [
+        "Economics",
+        "Sports interest",
+        "Data analysis",
+        "Reporting"
+      ],
+      "fitTags": [
+        "sports",
+        "economics",
+        "analytics",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_007",
+      "title": "Banking Research Associate",
+      "subtitle": "Financial Markets Research Associate",
+      "industryGroup": "Finance",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Bank",
+        "Research Desk",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Research market conditions",
+        "Track economic indicators",
+        "Write internal summaries",
+        "Support analysts and managers"
+      ],
+      "requirements": [
+        "Economics knowledge",
+        "Writing",
+        "Research",
+        "Data interpretation"
+      ],
+      "fitTags": [
+        "finance",
+        "research",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_008",
+      "title": "Forecasting Analyst",
+      "subtitle": "Economic Forecasting Analyst",
+      "industryGroup": "Economics",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Consulting",
+        "Corporate Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Build forecasts",
+        "Track key indicators",
+        "Test assumptions",
+        "Support planning teams"
+      ],
+      "requirements": [
+        "Math and data skills",
+        "Economic reasoning",
+        "Modeling basics",
+        "Reporting"
+      ],
+      "fitTags": [
+        "economics",
+        "analytics",
+        "melvinStrongFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "econ_009",
+      "title": "Business Strategy Analyst",
+      "subtitle": "Corporate Strategy Analyst",
+      "industryGroup": "Business Strategy",
+      "degreePathId": "economics_ba",
+      "workSettings": [
+        "Corporate Office",
+        "Consulting",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Research competitors",
+        "Build strategy reports",
+        "Analyze market trends",
+        "Support leadership decisions"
+      ],
+      "requirements": [
+        "Research",
+        "Presentation skills",
+        "Analytical thinking",
+        "Business writing"
+      ],
+      "fitTags": [
+        "strategy",
+        "analytics",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "high"
+      ]
+    },
+    {
+      "id": "econ_010",
+      "title": "Operations Research Assistant",
+      "subtitle": "Business Process Analytics Assistant",
+      "industryGroup": "Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Corporate Office",
+        "Tech",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Analyze workflows",
+        "Find inefficiencies",
+        "Support process improvement",
+        "Create reports"
+      ],
+      "requirements": [
+        "Analysis",
+        "Curiosity",
+        "Data tools",
+        "Problem solving"
+      ],
+      "fitTags": [
+        "analytics",
+        "operations",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "law_001",
+      "title": "Compliance Analyst",
+      "subtitle": "Business Compliance Analyst",
+      "industryGroup": "Compliance",
+      "degreePathId": "political_science_prelaw_ba",
+      "workSettings": [
+        "Corporate Office",
+        "Bank",
+        "Government"
+      ],
+      "dailyDuties": [
+        "Track compliance requirements",
+        "Review documentation",
+        "Support internal policies",
+        "Prepare reports"
+      ],
+      "requirements": [
+        "Attention to detail",
+        "Writing",
+        "Policy awareness",
+        "Professional judgment"
+      ],
+      "fitTags": [
+        "policy",
+        "careful",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "law_002",
+      "title": "Contract Analyst",
+      "subtitle": "Agreement Review Analyst",
+      "industryGroup": "Legal Support",
+      "degreePathId": "political_science_prelaw_ba",
+      "workSettings": [
+        "Corporate Office",
+        "Legal Department",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Review contract language",
+        "Track deadlines",
+        "Support legal and business teams",
+        "Maintain records"
+      ],
+      "requirements": [
+        "Reading comprehension",
+        "Organization",
+        "Attention to detail",
+        "Professional communication"
+      ],
+      "fitTags": [
+        "legal",
+        "organized",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "law_003",
+      "title": "Policy Research Assistant",
+      "subtitle": "Public Affairs Research Assistant",
+      "industryGroup": "Policy",
+      "degreePathId": "political_science_prelaw_ba",
+      "workSettings": [
+        "Government",
+        "Nonprofit",
+        "Think Tank"
+      ],
+      "dailyDuties": [
+        "Research policy issues",
+        "Track legislation",
+        "Write summaries",
+        "Support advocacy teams"
+      ],
+      "requirements": [
+        "Research",
+        "Writing",
+        "Critical thinking",
+        "Organization"
+      ],
+      "fitTags": [
+        "policy",
+        "research",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "law_004",
+      "title": "Debate Coach Assistant",
+      "subtitle": "Argument and Research Assistant",
+      "industryGroup": "Education",
+      "degreePathId": "political_science_prelaw_ba",
+      "workSettings": [
+        "School",
+        "College Program",
+        "Part-Time"
+      ],
+      "dailyDuties": [
+        "Help students prepare arguments",
+        "Research both sides of topics",
+        "Build evidence packets",
+        "Support practice sessions"
+      ],
+      "requirements": [
+        "Research",
+        "Argument building",
+        "Patience",
+        "Communication"
+      ],
+      "fitTags": [
+        "debate",
+        "research",
+        "mekhiPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "law_005",
+      "title": "Athletics Compliance Researcher",
+      "subtitle": "College Sports Rules Researcher",
+      "industryGroup": "College Athletics",
+      "degreePathId": "political_science_prelaw_ba",
+      "workSettings": [
+        "College Athletics",
+        "University Office"
+      ],
+      "dailyDuties": [
+        "Research athletics rules",
+        "Track rule changes",
+        "Support compliance reviews",
+        "Prepare summaries"
+      ],
+      "requirements": [
+        "Research",
+        "Policy reading",
+        "Organization",
+        "Writing"
+      ],
+      "fitTags": [
+        "sports",
+        "policy",
+        "research",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "tech_001",
+      "title": "Sports Data QA Analyst",
+      "subtitle": "Sports Feeds Quality Analyst",
+      "industryGroup": "Sports Tech",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Sports Tech",
+        "Remote",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Check sports data feeds",
+        "Catch errors",
+        "Report issues to engineers",
+        "Validate outputs"
+      ],
+      "requirements": [
+        "Attention to detail",
+        "Data comfort",
+        "Sports understanding",
+        "Patience"
+      ],
+      "fitTags": [
+        "sports",
+        "data",
+        "tech",
+        "shyFriendly",
+        "mekhiStrongFit"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "tech_002",
+      "title": "CRM Analyst",
+      "subtitle": "Customer Relationship Data Analyst",
+      "industryGroup": "Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Corporate Office",
+        "Sports Business",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Study customer behavior",
+        "Segment users",
+        "Support retention campaigns",
+        "Build performance reports"
+      ],
+      "requirements": [
+        "Data analysis",
+        "Marketing awareness",
+        "Spreadsheet or SQL skills",
+        "Reporting"
+      ],
+      "fitTags": [
+        "analytics",
+        "marketing",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "tech_003",
+      "title": "User Insights Analyst",
+      "subtitle": "Product Behavior Analyst",
+      "industryGroup": "Product Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Tech",
+        "Betting App",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Analyze user behavior",
+        "Review product funnel data",
+        "Support product decisions",
+        "Present findings"
+      ],
+      "requirements": [
+        "Analytics tools",
+        "Curiosity",
+        "Clear reporting",
+        "Pattern recognition"
+      ],
+      "fitTags": [
+        "analytics",
+        "tech",
+        "sportsPossible",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "tech_004",
+      "title": "Fraud Operations Specialist",
+      "subtitle": "Account Review Specialist",
+      "industryGroup": "Fraud Operations",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Bank",
+        "Betting App",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Review flagged activity",
+        "Investigate unusual behavior",
+        "Document findings",
+        "Coordinate with security teams"
+      ],
+      "requirements": [
+        "Attention to detail",
+        "Professional writing",
+        "Judgment",
+        "Confidentiality"
+      ],
+      "fitTags": [
+        "investigative",
+        "risk",
+        "sportsPossible",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "tech_005",
+      "title": "Data Visualization Specialist",
+      "subtitle": "Dashboard Reporting Specialist",
+      "industryGroup": "Analytics",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Corporate Office",
+        "Media Company",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Build dashboards",
+        "Turn data into visuals",
+        "Support decision-makers",
+        "Maintain reporting tools"
+      ],
+      "requirements": [
+        "Visualization tools",
+        "Data accuracy",
+        "Design sense",
+        "Reporting"
+      ],
+      "fitTags": [
+        "analytics",
+        "data",
+        "creative"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "biz_001",
+      "title": "Sales Operations Analyst",
+      "subtitle": "Revenue Operations Analyst",
+      "industryGroup": "Business Operations",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Sports Business",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track sales performance",
+        "Review pipeline data",
+        "Prepare reports",
+        "Support managers with insights"
+      ],
+      "requirements": [
+        "Excel",
+        "Organization",
+        "Reporting",
+        "Business judgment"
+      ],
+      "fitTags": [
+        "business",
+        "finance",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "biz_002",
+      "title": "Vendor Management Analyst",
+      "subtitle": "Supplier Performance Analyst",
+      "industryGroup": "Business Operations",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "University",
+        "Government"
+      ],
+      "dailyDuties": [
+        "Track vendor performance",
+        "Review contracts and costs",
+        "Prepare summaries",
+        "Support sourcing decisions"
+      ],
+      "requirements": [
+        "Organization",
+        "Spreadsheet skills",
+        "Professional communication",
+        "Attention to detail"
+      ],
+      "fitTags": [
+        "business",
+        "organized",
+        "melvinPossibleFit"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "biz_003",
+      "title": "Operations Coordinator",
+      "subtitle": "Business Operations Coordinator",
+      "industryGroup": "Business Operations",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "Corporate Office",
+        "Team Office",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track tasks and timelines",
+        "Support cross-team work",
+        "Organize updates",
+        "Help solve workflow issues"
+      ],
+      "requirements": [
+        "Organization",
+        "Communication",
+        "Follow-through",
+        "Problem solving"
+      ],
+      "fitTags": [
+        "operations",
+        "organized"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "biz_004",
+      "title": "Customer Success Analyst",
+      "subtitle": "Retention and Support Analyst",
+      "industryGroup": "Business Operations",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Tech",
+        "Betting App",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track customer health",
+        "Review support issues",
+        "Analyze retention trends",
+        "Recommend improvements"
+      ],
+      "requirements": [
+        "Customer awareness",
+        "Reporting",
+        "Communication",
+        "Problem solving"
+      ],
+      "fitTags": [
+        "service",
+        "analytics",
+        "sportsPossible"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "biz_005",
+      "title": "Brand Partnerships Analyst",
+      "subtitle": "Sponsorship Performance Analyst",
+      "industryGroup": "Marketing",
+      "degreePathId": "marketing_bba",
+      "workSettings": [
+        "Media Company",
+        "Sports Business",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Track sponsor performance",
+        "Build recap reports",
+        "Measure campaign success",
+        "Support brand partnerships"
+      ],
+      "requirements": [
+        "Reporting",
+        "Presentation skills",
+        "Organization",
+        "Marketing awareness"
+      ],
+      "fitTags": [
+        "marketing",
+        "business",
+        "sportsPossible"
+      ],
+      "confidenceFit": [
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "entry_001",
+      "title": "Research Coordinator",
+      "subtitle": "General Research Support Coordinator",
+      "industryGroup": "Research",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "University",
+        "Media Company",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Organize files and notes",
+        "Track assignments",
+        "Support research projects",
+        "Maintain databases"
+      ],
+      "requirements": [
+        "Organization",
+        "Dependability",
+        "Basic writing",
+        "Follow-through"
+      ],
+      "fitTags": [
+        "research",
+        "entryLevel",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "entry_002",
+      "title": "Data Entry Quality Coordinator",
+      "subtitle": "Records Accuracy Coordinator",
+      "industryGroup": "Operations",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Office",
+        "Remote",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Check records",
+        "Update systems",
+        "Correct errors",
+        "Maintain accuracy standards"
+      ],
+      "requirements": [
+        "Attention to detail",
+        "Patience",
+        "Basic tech comfort",
+        "Consistency"
+      ],
+      "fitTags": [
+        "entryLevel",
+        "data",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "entry_003",
+      "title": "Program Assistant",
+      "subtitle": "Office and Program Support Assistant",
+      "industryGroup": "Administration",
+      "degreePathId": "business_finance_bba",
+      "workSettings": [
+        "University",
+        "Nonprofit",
+        "Corporate Office"
+      ],
+      "dailyDuties": [
+        "Support schedules and records",
+        "Prepare materials",
+        "Track tasks",
+        "Help teams stay organized"
+      ],
+      "requirements": [
+        "Organization",
+        "Professional behavior",
+        "Communication",
+        "Reliability"
+      ],
+      "fitTags": [
+        "entryLevel",
+        "organized"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "entry_004",
+      "title": "Reporting Assistant",
+      "subtitle": "Operations Reporting Assistant",
+      "industryGroup": "Reporting",
+      "degreePathId": "data_analytics_bs",
+      "workSettings": [
+        "Corporate Office",
+        "Hybrid",
+        "Remote"
+      ],
+      "dailyDuties": [
+        "Pull simple reports",
+        "Update dashboards",
+        "Check numbers",
+        "Support analysts"
+      ],
+      "requirements": [
+        "Excel",
+        "Accuracy",
+        "Data comfort",
+        "Organization"
+      ],
+      "fitTags": [
+        "entryLevel",
+        "analytics",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    {
+      "id": "entry_005",
+      "title": "Communications Assistant",
+      "subtitle": "Content and Messaging Assistant",
+      "industryGroup": "Communications",
+      "degreePathId": "communications_ba",
+      "workSettings": [
+        "University",
+        "Media Company",
+        "Hybrid"
+      ],
+      "dailyDuties": [
+        "Draft short content",
+        "Support communications plans",
+        "Track deadlines",
+        "Help with research and editing"
+      ],
+      "requirements": [
+        "Writing",
+        "Organization",
+        "Communication",
+        "Dependability"
+      ],
+      "fitTags": [
+        "entryLevel",
+        "communications",
+        "shyFriendly"
+      ],
+      "confidenceFit": [
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  ],
+  "aiMatchNotes": {
+    "melvinPriorityTags": [
+      "melvinStrongFit",
+      "finance",
+      "structured",
+      "analytical",
+      "professional",
+      "organized"
+    ],
+    "mekhiPriorityTags": [
+      "mekhiStrongFit",
+      "sports",
+      "betting",
+      "debate",
+      "research",
+      "shyFriendly",
+      "analytics"
+    ],
+    "logicHints": [
+      "If user scores high in confidence and communication, boost roles with public-facing work.",
+      "If user is shy or insecure, boost analyst, researcher, coordinator, editor, or support roles before host-facing roles.",
+      "If user loves sports betting, boost sportsbook analyst, risk analyst, props analyst, fraud analyst, trading assistant, and betting researcher roles.",
+      "If user loves arguing sports points, boost debate producer, research producer, segment producer, sports researcher, and broadcast notes roles.",
+      "If user likes money, structure, and stability, boost finance analyst, budget analyst, treasury analyst, audit, and FP&A roles."
+    ]
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "quarterlyReassessment": [
+    {
+      "id": "qra_001",
+      "category": "direction",
+      "question": "Compared to three months ago, how clear are you now about what you want for your future?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Less clear", "score": 1 },
+        { "text": "Still confused", "score": 2 },
+        { "text": "Somewhat clear", "score": 3 },
+        { "text": "Much more clear", "score": 4 }
+      ],
+      "trait": "direction"
+    },
+    {
+      "id": "qra_002",
+      "category": "habits",
+      "question": "How much have your daily habits improved over the last three months?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "They got worse", "score": 1 },
+        { "text": "Not much improvement", "score": 2 },
+        { "text": "Some improvement", "score": 3 },
+        { "text": "Major improvement", "score": 4 }
+      ],
+      "trait": "habit_growth"
+    },
+    {
+      "id": "qra_003",
+      "category": "discipline",
+      "question": "How dependable have you been over the last three months?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not dependable", "score": 1 },
+        { "text": "Sometimes dependable", "score": 2 },
+        { "text": "Usually dependable", "score": 3 },
+        { "text": "Very dependable", "score": 4 }
+      ],
+      "trait": "discipline"
+    },
+    {
+      "id": "qra_004",
+      "category": "emotional_health",
+      "question": "Over the last three months, how often did your emotions stop you from doing what you needed to do?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very often", "score": 1 },
+        { "text": "Often", "score": 2 },
+        { "text": "Sometimes", "score": 3 },
+        { "text": "Rarely", "score": 4 }
+      ],
+      "trait": "emotional_regulation"
+    },
+    {
+      "id": "qra_005",
+      "category": "truthfulness",
+      "question": "How honest have you been with yourself about your choices and behavior?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not honest", "score": 1 },
+        { "text": "Somewhat honest", "score": 2 },
+        { "text": "Mostly honest", "score": 3 },
+        { "text": "Very honest", "score": 4 }
+      ],
+      "trait": "truthfulness"
+    },
+    {
+      "id": "qra_006",
+      "category": "follow_through",
+      "question": "How often did you actually follow through on your plans?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Almost never", "score": 1 },
+        { "text": "Sometimes", "score": 2 },
+        { "text": "Usually", "score": 3 },
+        { "text": "Almost always", "score": 4 }
+      ],
+      "trait": "consistency"
+    },
+    {
+      "id": "qra_007",
+      "category": "resilience",
+      "question": "When something went wrong, how did you usually respond?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Shut down", "score": 1 },
+        { "text": "Stayed stuck for a while", "score": 2 },
+        { "text": "Recovered slowly", "score": 3 },
+        { "text": "Recovered and kept moving", "score": 4 }
+      ],
+      "trait": "resilience"
+    },
+    {
+      "id": "qra_008",
+      "category": "motivation",
+      "question": "How strong has your desire been to improve your life?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very weak", "score": 1 },
+        { "text": "Up and down", "score": 2 },
+        { "text": "Mostly steady", "score": 3 },
+        { "text": "Strong and steady", "score": 4 }
+      ],
+      "trait": "drive"
+    },
+    {
+      "id": "qra_009",
+      "category": "ownership",
+      "question": "How often did you take responsibility instead of making excuses?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Rarely", "score": 1 },
+        { "text": "Sometimes", "score": 2 },
+        { "text": "Usually", "score": 3 },
+        { "text": "Almost always", "score": 4 }
+      ],
+      "trait": "accountability"
+    },
+    {
+      "id": "qra_010",
+      "category": "communication",
+      "question": "How much better have you gotten at expressing what is really going on with you?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "No better", "score": 1 },
+        { "text": "A little better", "score": 2 },
+        { "text": "Noticeably better", "score": 3 },
+        { "text": "Much better", "score": 4 }
+      ],
+      "trait": "communication"
+    },
+    {
+      "id": "qra_011",
+      "category": "relationships",
+      "question": "How healthy has your connection been with the people trying to help you?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very unhealthy", "score": 1 },
+        { "text": "Up and down", "score": 2 },
+        { "text": "Mostly healthy", "score": 3 },
+        { "text": "Very healthy", "score": 4 }
+      ],
+      "trait": "support_connection"
+    },
+    {
+      "id": "qra_012",
+      "category": "stress",
+      "question": "How well did you manage stress over the last three months?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very poorly", "score": 1 },
+        { "text": "Not well", "score": 2 },
+        { "text": "Pretty well", "score": 3 },
+        { "text": "Very well", "score": 4 }
+      ],
+      "trait": "stress_management"
+    },
+    {
+      "id": "qra_013",
+      "category": "self_awareness",
+      "question": "How well do you now understand your biggest pattern or weakness?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "I still do not know", "score": 1 },
+        { "text": "I kind of know", "score": 2 },
+        { "text": "I mostly know", "score": 3 },
+        { "text": "I know it clearly", "score": 4 }
+      ],
+      "trait": "insight"
+    },
+    {
+      "id": "qra_014",
+      "category": "decision_making",
+      "question": "How much better have your decisions been lately?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Worse than before", "score": 1 },
+        { "text": "About the same", "score": 2 },
+        { "text": "Somewhat better", "score": 3 },
+        { "text": "Much better", "score": 4 }
+      ],
+      "trait": "judgment"
+    },
+    {
+      "id": "qra_015",
+      "category": "confidence",
+      "question": "How much do you believe you can build a better version of your life from here?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "I barely believe it", "score": 1 },
+        { "text": "I somewhat believe it", "score": 2 },
+        { "text": "I mostly believe it", "score": 3 },
+        { "text": "I strongly believe it", "score": 4 }
+      ],
+      "trait": "hope"
+    },
+    {
+      "id": "qra_016",
+      "category": "effort",
+      "question": "If you are being real, how much effort have you given across this whole quarter?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very low effort", "score": 1 },
+        { "text": "Mixed effort", "score": 2 },
+        { "text": "Strong effort", "score": 3 },
+        { "text": "High consistent effort", "score": 4 }
+      ],
+      "trait": "effort"
+    },
+    {
+      "id": "qra_017",
+      "category": "avoidance",
+      "question": "How often did you avoid important problems hoping they would disappear?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Very often", "score": 1 },
+        { "text": "Often", "score": 2 },
+        { "text": "Sometimes", "score": 3 },
+        { "text": "Rarely", "score": 4 }
+      ],
+      "trait": "avoidance"
+    },
+    {
+      "id": "qra_018",
+      "category": "help_seeking",
+      "question": "How willing were you to use support, resources, or guidance when it was available?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not willing", "score": 1 },
+        { "text": "A little willing", "score": 2 },
+        { "text": "Mostly willing", "score": 3 },
+        { "text": "Very willing", "score": 4 }
+      ],
+      "trait": "help_seeking"
+    },
+    {
+      "id": "qra_019",
+      "category": "growth",
+      "question": "What best describes your growth this quarter?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "I went backwards", "score": 1 },
+        { "text": "I barely changed", "score": 2 },
+        { "text": "I made some progress", "score": 3 },
+        { "text": "I made strong progress", "score": 4 }
+      ],
+      "trait": "growth"
+    },
+    {
+      "id": "qra_020",
+      "category": "future_readiness",
+      "question": "How ready do you feel to handle the next three months better than the last three?",
+      "type": "multiple_choice",
+      "options": [
+        { "text": "Not ready", "score": 1 },
+        { "text": "A little ready", "score": 2 },
+        { "text": "Mostly ready", "score": 3 },
+        { "text": "Very ready", "score": 4 }
+      ],
+      "trait": "readiness"
+    }
+  ]
+}

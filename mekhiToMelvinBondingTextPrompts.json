@@ -1,0 +1,94 @@
+{
+  "mekhiToMelvinBondingTextPrompts": [
+    {
+      "id": "mtm_001",
+      "message": "I’m not judging you, I just wanted to check if you good.",
+      "tone": "low_pressure",
+      "goal": "check_in",
+      "bestFor": ["melvin"],
+      "personalityFit": ["independent", "guarded"],
+      "useWhen": ["distance", "silence"]
+    },
+    {
+      "id": "mtm_002",
+      "message": "You don’t gotta explain everything, just making sure you straight.",
+      "tone": "low_pressure",
+      "goal": "support",
+      "bestFor": ["melvin"],
+      "personalityFit": ["private", "reserved"],
+      "useWhen": ["withdrawal"]
+    },
+    {
+      "id": "mtm_003",
+      "message": "You got a plan today or just going with it?",
+      "tone": "casual_direct",
+      "goal": "structure",
+      "bestFor": ["melvin"],
+      "personalityFit": ["needs_direction"],
+      "useWhen": ["unfocused_day"]
+    },
+    {
+      "id": "mtm_004",
+      "message": "I know you got it, you just gotta lock in.",
+      "tone": "motivational",
+      "goal": "encourage",
+      "bestFor": ["melvin"],
+      "personalityFit": ["capable", "needs_push"],
+      "useWhen": ["procrastination"]
+    },
+    {
+      "id": "mtm_005",
+      "message": "What you trying to do long term fr?",
+      "tone": "real_talk",
+      "goal": "direction",
+      "bestFor": ["melvin"],
+      "personalityFit": ["thinking", "uncertain"],
+      "useWhen": ["future_talk"]
+    },
+    {
+      "id": "mtm_006",
+      "message": "You don’t gotta have everything figured out right now.",
+      "tone": "reassuring",
+      "goal": "reduce_pressure",
+      "bestFor": ["melvin"],
+      "personalityFit": ["overthinking"],
+      "useWhen": ["stress"]
+    },
+    {
+      "id": "mtm_007",
+      "message": "Let’s both just get one thing done today.",
+      "tone": "team_based",
+      "goal": "accountability",
+      "bestFor": ["melvin"],
+      "personalityFit": ["competitive"],
+      "useWhen": ["lack_of_motivation"]
+    },
+    {
+      "id": "mtm_008",
+      "message": "I see you trying, even if it don’t feel like it.",
+      "tone": "supportive",
+      "goal": "confidence",
+      "bestFor": ["melvin"],
+      "personalityFit": ["low_confidence"],
+      "useWhen": ["discouraged"]
+    },
+    {
+      "id": "mtm_009",
+      "message": "You straight, just don’t overthink it.",
+      "tone": "casual_support",
+      "goal": "calm",
+      "bestFor": ["melvin"],
+      "personalityFit": ["anxious"],
+      "useWhen": ["stress"]
+    },
+    {
+      "id": "mtm_010",
+      "message": "We both just gotta tighten up a little.",
+      "tone": "brother_accountability",
+      "goal": "shared_growth",
+      "bestFor": ["melvin"],
+      "personalityFit": ["competitive"],
+      "useWhen": ["reset"]
+    }
+  ]
+}

@@ -1,0 +1,364 @@
+{
+  "mekhiFamilyLifestyleTruthSection": [
+    {
+      "id": "kflt_001",
+      "category": "lifestyle_vision",
+      "question": "What kind of adult life sounds best to you right now?",
+      "type": "multiple_choice",
+      "options": [
+        "A life with good money and freedom",
+        "A life where I feel secure and stable",
+        "A life where I do work I enjoy even if it takes time",
+        "I honestly do not know yet"
+      ]
+    },
+    {
+      "id": "kflt_002",
+      "category": "lifestyle_vision",
+      "question": "Which matters most to you right now?",
+      "type": "multiple_choice",
+      "options": [
+        "Feeling confident in myself",
+        "Making good money",
+        "Having peace and less stress",
+        "Finding something I am actually good at"
+      ]
+    },
+    {
+      "id": "kflt_003",
+      "category": "lifestyle_vision",
+      "question": "When you think about your future, which feeling shows up first?",
+      "type": "multiple_choice",
+      "options": [
+        "Pressure",
+        "Fear",
+        "Hope",
+        "Confusion"
+      ]
+    },
+    {
+      "id": "kflt_004",
+      "category": "lifestyle_vision",
+      "question": "What kind of work sounds most like you right now?",
+      "type": "multiple_choice",
+      "options": [
+        "Something around sports, analysis, or debate",
+        "Something stable with clear structure",
+        "Something flexible where I can grow slowly",
+        "I do not know yet"
+      ]
+    },
+    {
+      "id": "kflt_005",
+      "category": "confidence_identity",
+      "question": "What holds you back the most?",
+      "type": "multiple_choice",
+      "options": [
+        "Low confidence",
+        "Overthinking",
+        "Feeling behind",
+        "Fear of failing"
+      ]
+    },
+    {
+      "id": "kflt_006",
+      "category": "confidence_identity",
+      "question": "Which statement feels most true?",
+      "type": "multiple_choice",
+      "options": [
+        "I know more than I show",
+        "I doubt myself too much",
+        "I get overwhelmed and freeze",
+        "I avoid things when I feel pressure"
+      ]
+    },
+    {
+      "id": "kflt_007",
+      "category": "self_awareness",
+      "question": "When you feel behind, what do you usually do?",
+      "type": "multiple_choice",
+      "options": [
+        "Avoid it",
+        "Get quiet",
+        "Stress about it but do little",
+        "Try to handle part of it"
+      ]
+    },
+    {
+      "id": "kflt_008",
+      "category": "self_awareness",
+      "question": "How much do you feel your own mindset affects your progress?",
+      "type": "multiple_choice",
+      "options": [
+        "A lot",
+        "Some",
+        "A little",
+        "I do not know"
+      ]
+    },
+    {
+      "id": "kflt_009",
+      "category": "family_connection",
+      "question": "How connected do you feel to your mom right now?",
+      "type": "multiple_choice",
+      "options": [
+        "Very connected",
+        "Somewhat connected",
+        "Not very connected",
+        "Disconnected"
+      ]
+    },
+    {
+      "id": "kflt_010",
+      "category": "family_connection",
+      "question": "What do you usually feel when your mom checks on you?",
+      "type": "multiple_choice",
+      "options": [
+        "Supported",
+        "Seen but pressured",
+        "Misunderstood",
+        "Overwhelmed"
+      ]
+    },
+    {
+      "id": "kflt_011",
+      "category": "family_truth",
+      "question": "What do you think your mom most wants from you?",
+      "type": "multiple_choice",
+      "options": [
+        "For me to be honest",
+        "For me to take life more seriously",
+        "For me to communicate more",
+        "For me to stop wasting potential"
+      ]
+    },
+    {
+      "id": "kflt_012",
+      "category": "family_truth",
+      "question": "What do you most wish your mom understood about you?",
+      "type": "multiple_choice",
+      "options": [
+        "I feel more pressure than I say",
+        "I get overwhelmed fast",
+        "I do care even when I do not show it well",
+        "I need help without feeling judged"
+      ]
+    },
+    {
+      "id": "kflt_013",
+      "category": "family_truth",
+      "question": "What do you need more of from your mom?",
+      "type": "multiple_choice",
+      "options": [
+        "Patience",
+        "Encouragement",
+        "Calm support",
+        "Trust"
+      ]
+    },
+    {
+      "id": "kflt_014",
+      "category": "family_truth",
+      "question": "What do you need less of from your mom?",
+      "type": "multiple_choice",
+      "options": [
+        "Pressure",
+        "Criticism",
+        "Repeated reminders",
+        "Feeling watched"
+      ]
+    },
+    {
+      "id": "kflt_015",
+      "category": "family_truth",
+      "question": "How easy is it for you to be fully honest with your mom when you are struggling?",
+      "type": "multiple_choice",
+      "options": [
+        "Very easy",
+        "Somewhat easy",
+        "Hard",
+        "Very hard"
+      ]
+    },
+    {
+      "id": "kflt_016",
+      "category": "family_truth",
+      "question": "When you do not tell your mom the full truth, what is usually the reason?",
+      "type": "multiple_choice",
+      "options": [
+        "I do not want to disappoint her",
+        "I do not want more pressure",
+        "I do not know how to explain what I feel",
+        "I want to avoid the conversation"
+      ]
+    },
+    {
+      "id": "kflt_017",
+      "category": "parent_impact",
+      "question": "How much do you think your mom's stress or struggles affect you?",
+      "type": "multiple_choice",
+      "options": [
+        "A lot",
+        "Some",
+        "A little",
+        "Not really"
+      ]
+    },
+    {
+      "id": "kflt_018",
+      "category": "parent_impact",
+      "question": "Which feels most true?",
+      "type": "multiple_choice",
+      "options": [
+        "Some of my habits were shaped by what I saw at home",
+        "Home affected me, but my choices are still mine",
+        "Home pushed me to grow stronger",
+        "My behavior has little to do with home"
+      ]
+    },
+    {
+      "id": "kflt_019",
+      "category": "parent_impact",
+      "question": "Do you think your mom's own struggles ever make it harder for you to become who you want to be?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes, often",
+        "Sometimes",
+        "Rarely",
+        "No"
+      ]
+    },
+    {
+      "id": "kflt_020",
+      "category": "responsibility_split",
+      "question": "When your life feels off track, who do you believe is most responsible?",
+      "type": "multiple_choice",
+      "options": [
+        "Mostly me",
+        "Me, but family affects it too",
+        "A mix of everything around me",
+        "Mostly pressure and circumstances"
+      ]
+    },
+    {
+      "id": "kflt_021",
+      "category": "responsibility_split",
+      "question": "Which statement is most honest right now?",
+      "type": "multiple_choice",
+      "options": [
+        "I need to stop avoiding things",
+        "I need stronger support",
+        "I need both accountability and support",
+        "I am still trying to understand myself"
+      ]
+    },
+    {
+      "id": "kflt_022",
+      "category": "support_style",
+      "question": "What kind of support works best for you?",
+      "type": "multiple_choice",
+      "options": [
+        "Calm check-ins",
+        "Clear structure and step-by-step help",
+        "Encouragement without pressure",
+        "Space first, then support"
+      ]
+    },
+    {
+      "id": "kflt_023",
+      "category": "support_style",
+      "question": "How should your mom handle it when you are slipping?",
+      "type": "multiple_choice",
+      "options": [
+        "Be direct right away",
+        "Ask how I am first",
+        "Help me make one small plan",
+        "Give me some space, then come back"
+      ]
+    },
+    {
+      "id": "kflt_024",
+      "category": "resentment_disconnection",
+      "question": "Do you carry hurt or resentment toward your mom that you do not say much about?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes, a lot",
+        "Some",
+        "A little",
+        "No"
+      ]
+    },
+    {
+      "id": "kflt_025",
+      "category": "resentment_disconnection",
+      "question": "If there is distance between you and your mom, what is the biggest reason?",
+      "type": "multiple_choice",
+      "options": [
+        "Pressure",
+        "Misunderstanding",
+        "My shutting down",
+        "Past hurt"
+      ]
+    },
+    {
+      "id": "kflt_026",
+      "category": "trust",
+      "question": "How much do you trust your mom's intentions toward you?",
+      "type": "multiple_choice",
+      "options": [
+        "A lot",
+        "Mostly",
+        "Only some",
+        "Not much"
+      ]
+    },
+    {
+      "id": "kflt_027",
+      "category": "trust",
+      "question": "How safe do you feel being emotionally real with your mom?",
+      "type": "multiple_choice",
+      "options": [
+        "Very safe",
+        "Somewhat safe",
+        "Not very safe",
+        "Not safe"
+      ]
+    },
+    {
+      "id": "kflt_028",
+      "category": "future_family",
+      "question": "What kind of relationship do you want with your mom a year from now?",
+      "type": "multiple_choice",
+      "options": [
+        "Closer and more honest",
+        "More peaceful and less tense",
+        "Supportive but with more independence",
+        "I do not know"
+      ]
+    },
+    {
+      "id": "kflt_029",
+      "category": "future_family",
+      "question": "What would improve your relationship with your mom the fastest?",
+      "type": "multiple_choice",
+      "options": [
+        "Better communication",
+        "Less pressure",
+        "More trust",
+        "More consistency from both of us"
+      ]
+    },
+    {
+      "id": "kflt_030",
+      "category": "truth_check",
+      "question": "Which statement is most true right now?",
+      "type": "multiple_choice",
+      "options": [
+        "I know I have more in me than I am showing",
+        "I feel stuck and do not always know how to move",
+        "I need confidence more than anything",
+        "I need to fully own my choices"
+      ]
+    }
+  ]
+}

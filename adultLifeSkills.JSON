@@ -1,0 +1,277 @@
+{
+  "adultLifeSkills": [
+    {
+      "id": "als_001",
+      "skill": "Writing a Professional Email",
+      "category": "communication",
+      "question": "What is the correct way to start a professional email to a professor?",
+      "options": [
+        "Hey what's up",
+        "Dear Professor [Name]",
+        "Yo",
+        "Hi bro"
+      ],
+      "correctAnswer": "Dear Professor [Name]"
+    },
+    {
+      "id": "als_002",
+      "skill": "Mailing a Letter",
+      "category": "mail_documents",
+      "question": "Where does the stamp go on an envelope?",
+      "options": [
+        "Top right corner",
+        "Bottom left",
+        "Center",
+        "Back of envelope"
+      ],
+      "correctAnswer": "Top right corner"
+    },
+    {
+      "id": "als_003",
+      "skill": "Filling Out a Check",
+      "category": "money_finance",
+      "question": "What makes a check valid?",
+      "options": [
+        "A memo",
+        "A signature",
+        "A date only",
+        "The amount only"
+      ],
+      "correctAnswer": "A signature"
+    },
+    {
+      "id": "als_004",
+      "skill": "Understanding Your Paystub",
+      "category": "money_finance",
+      "question": "What is net pay?",
+      "options": [
+        "Money before taxes",
+        "Money after taxes and deductions",
+        "Bonus pay",
+        "Hourly rate"
+      ],
+      "correctAnswer": "Money after taxes and deductions"
+    },
+    {
+      "id": "als_005",
+      "skill": "Professional Email Etiquette",
+      "category": "communication",
+      "question": "What should you avoid in a professional email?",
+      "options": [
+        "Clear subject line",
+        "Formal greeting",
+        "Text slang like LOL",
+        "Your name"
+      ],
+      "correctAnswer": "Text slang like LOL"
+    },
+    {
+      "id": "als_006",
+      "skill": "Public Speaking",
+      "category": "communication",
+      "question": "What should you do in the first 30 seconds of speaking?",
+      "options": [
+        "Apologize",
+        "Grab attention",
+        "Read slides only",
+        "Talk quietly"
+      ],
+      "correctAnswer": "Grab attention"
+    },
+    {
+      "id": "als_007",
+      "skill": "Small Talk",
+      "category": "communication",
+      "question": "What is the best way to keep a conversation going?",
+      "options": [
+        "Ask open-ended questions",
+        "Say nothing",
+        "Talk only about yourself",
+        "End it fast"
+      ],
+      "correctAnswer": "Ask open-ended questions"
+    },
+    {
+      "id": "als_008",
+      "skill": "Phone Etiquette",
+      "category": "communication",
+      "question": "What should you say when answering the phone professionally?",
+      "options": [
+        "Yeah?",
+        "Hello, this is [Your Name]",
+        "What?",
+        "Who is this?"
+      ],
+      "correctAnswer": "Hello, this is [Your Name]"
+    },
+    {
+      "id": "als_009",
+      "skill": "Making Appointments",
+      "category": "health_life",
+      "question": "What should you have ready before calling to make an appointment?",
+      "options": [
+        "Nothing",
+        "Insurance info and reason for visit",
+        "Music playlist",
+        "Social media"
+      ],
+      "correctAnswer": "Insurance info and reason for visit"
+    },
+    {
+      "id": "als_010",
+      "skill": "Insurance Basics",
+      "category": "health_life",
+      "question": "What is a deductible?",
+      "options": [
+        "Monthly payment",
+        "Amount you pay before insurance covers costs",
+        "Doctor fee",
+        "Hospital bill"
+      ],
+      "correctAnswer": "Amount you pay before insurance covers costs"
+    },
+    {
+      "id": "als_011",
+      "skill": "Recognizing Burnout",
+      "category": "mental_health",
+      "question": "What is a sign of burnout?",
+      "options": [
+        "Feeling energized",
+        "Constant exhaustion and stress",
+        "Sleeping well",
+        "Being excited daily"
+      ],
+      "correctAnswer": "Constant exhaustion and stress"
+    },
+    {
+      "id": "als_012",
+      "skill": "Meal Planning",
+      "category": "home_living",
+      "question": "What helps reduce food waste and save money?",
+      "options": [
+        "Shopping randomly",
+        "Meal planning",
+        "Eating out daily",
+        "Skipping meals"
+      ],
+      "correctAnswer": "Meal planning"
+    },
+    {
+      "id": "als_013",
+      "skill": "Time Blocking",
+      "category": "productivity",
+      "question": "What is time blocking?",
+      "options": [
+        "Ignoring tasks",
+        "Scheduling tasks like appointments",
+        "Working randomly",
+        "Only studying at night"
+      ],
+      "correctAnswer": "Scheduling tasks like appointments"
+    },
+    {
+      "id": "als_014",
+      "skill": "Setting Boundaries",
+      "category": "personal_growth",
+      "question": "What is a healthy boundary?",
+      "options": [
+        "Saying yes to everything",
+        "Clearly saying no when needed",
+        "Avoiding people",
+        "Ignoring problems"
+      ],
+      "correctAnswer": "Clearly saying no when needed"
+    },
+    {
+      "id": "als_015",
+      "skill": "Basic First Aid",
+      "category": "health_safety",
+      "question": "What should you do for a minor burn?",
+      "options": [
+        "Use ice",
+        "Run cool water over it",
+        "Ignore it",
+        "Put butter on it"
+      ],
+      "correctAnswer": "Run cool water over it"
+    },
+    {
+      "id": "als_016",
+      "skill": "Parallel Parking",
+      "category": "driving",
+      "question": "What is the first step in parallel parking?",
+      "options": [
+        "Drive away",
+        "Pull next to the car",
+        "Turn off engine",
+        "Reverse immediately"
+      ],
+      "correctAnswer": "Pull next to the car"
+    },
+    {
+      "id": "als_017",
+      "skill": "Packing a Suitcase",
+      "category": "travel",
+      "question": "What method saves space when packing clothes?",
+      "options": [
+        "Throwing clothes in",
+        "Rolling clothes",
+        "Folding randomly",
+        "Packing last minute"
+      ],
+      "correctAnswer": "Rolling clothes"
+    },
+    {
+      "id": "als_018",
+      "skill": "Booking Travel",
+      "category": "travel",
+      "question": "What is a smart way to save money on flights?",
+      "options": [
+        "Book last minute",
+        "Use flexible dates",
+        "Ignore prices",
+        "Only use one day"
+      ],
+      "correctAnswer": "Use flexible dates"
+    },
+    {
+      "id": "als_019",
+      "skill": "Digital Literacy",
+      "category": "technology",
+      "question": "What is a sign of a phishing email?",
+      "options": [
+        "Official domain",
+        "Strange sender email",
+        "Correct branding",
+        "Known contact"
+      ],
+      "correctAnswer": "Strange sender email"
+    },
+    {
+      "id": "als_020",
+      "skill": "Exercise Consistency",
+      "category": "health",
+      "question": "What helps maintain exercise consistency?",
+      "options": [
+        "Only working out once",
+        "Scheduling workouts",
+        "Skipping days",
+        "Waiting for motivation"
+      ],
+      "correctAnswer": "Scheduling workouts"
+    },
+    {
+      "id": "als_021",
+      "skill": "Gratitude",
+      "category": "mental_health",
+      "question": "What is a simple way to practice gratitude?",
+      "options": [
+        "Ignore good things",
+        "Write down 3 good things daily",
+        "Complain daily",
+        "Avoid reflection"
+      ],
+      "correctAnswer": "Write down 3 good things daily"
+    }
+  ]
+}
